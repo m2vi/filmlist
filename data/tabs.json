@@ -1,0 +1,33 @@
+{
+  "browse": {},
+  "tv shows": {
+    "filter": {
+      "type": 0
+    }
+  },
+  "movies": {
+    "filter": {
+      "type": 1
+    }
+  },
+  "latest": {
+    "sort": "release_date",
+    "reverse": true
+  },
+  "anime": {
+    "includeGenres": [7424]
+  },
+  "kids": {
+    "includeGenres": [10751, 10762]
+  },
+  "my-list": {
+    "filter": {
+      "watched": false
+    }
+  },
+  "favoured": {
+    "filter": {
+      "favoured": true
+    }
+  }
+}
