@@ -3,8 +3,8 @@ import { jsonResponse } from '../../../utils/fetch';
 
 export function middleware(req: NextRequest, ev: NextFetchEvent) {
   if (process.env.NODE_ENV !== 'development') {
-    return jsonResponse(423, {
-      error: 'This route is for development purposes only.',
+    return jsonResponse(425, {
+      error: 'This route is currently being maintained ',
     });
   }
 
