@@ -1,5 +1,5 @@
 import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
-import { jsonResponse } from '../../../utils/fetch';
+import { jsonResponse } from '@utils/fetch';
 
 export function middleware(req: NextRequest, ev: NextFetchEvent) {
   if (process.env.NODE_ENV !== 'development') {

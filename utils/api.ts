@@ -1,9 +1,9 @@
 import { Connection, FilterQuery, ObjectId, Schema } from 'mongoose';
 import { connectToDatabase } from './database';
 import { sortByKey } from './array';
-import genreList from '../data/genres.json';
-import tabs from '../data/tabs.json';
-import itemSchema from '../models/itemSchema';
+import genreList from '@data/genres.json';
+import tabs from '@data/tabs.json';
+import itemSchema from '@models/itemSchema';
 import _ from 'underscore';
 import { GenreProps, InsertProps, ItemProps, Tabs } from './types';
 
