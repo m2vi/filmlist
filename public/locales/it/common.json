@@ -1,0 +1,75 @@
+{
+  "pages": {
+    "login": {
+      "title": "Iscrizione",
+      "secret": "passwort"
+    },
+    "filmlist": {
+      "default": "Filmlist",
+      "name": "filmlist",
+      "menu": {
+        "browse": "Home",
+        "series": "Serie",
+        "films": "Film",
+        "anime": "Anime",
+        "kids": "Kids",
+        "list": "La mia lista",
+        "favourites": "Preferiti",
+        "new": "Nuovo"
+      },
+      "genres": {
+        "default": "Generi",
+        "action": "Azione",
+        "action & adventure": "Action & Adventure",
+        "adventure": "Avventura",
+        "animation": "Animazione",
+        "comedy": "Commedia",
+        "crime": "Crime",
+        "documentary": "Documentario",
+        "drama": "Dramma",
+        "family": "Famiglia",
+        "fantasy": "Fantasy",
+        "history": "Storia",
+        "horror": "Horror",
+        "kids": "Kids",
+        "music": "Musica",
+        "mystery": "Mistero",
+        "news": "News",
+        "reality": "Reality",
+        "romance": "Romance",
+        "sci-fi & fantasy": "Sci-Fi & Fantasy",
+        "science fiction": "Fantascienza",
+        "soap": "Soap",
+        "talk": "Talk",
+        "thriller": "Thriller",
+        "tv movie": "Televisione Film",
+        "war": "Guerra",
+        "war & politics": "War & Politics",
+        "western": "Western"
+      },
+      "languages": {
+        "default": "Lingua originale",
+        "da": "Danese",
+        "de": "Tedesca",
+        "en": "Inglese",
+        "es": "Spagnola",
+        "fr": "Francese",
+        "id": "Indonesiana",
+        "it": "Italiana",
+        "ja": "Giapponese",
+        "ko": "Coreana",
+        "no": "Norvegese",
+        "pl": "Polacca",
+        "sv": "Svedese",
+        "th": "Tailandese",
+        "tr": "Turca",
+        "zh": "Cinese",
+        "cy": "Gallese"
+      },
+      "items": {
+        "released": "Rilasciato",
+        "format": "MMM D, YYYY"
+      }
+    }
+  }
+}

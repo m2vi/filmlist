@@ -1,0 +1,75 @@
+{
+  "pages": {
+    "login": {
+      "title": "Login",
+      "secret": "password"
+    },
+    "filmlist": {
+      "default": "Filmlist",
+      "name": "filmlist",
+      "menu": {
+        "browse": "Home",
+        "series": "Series",
+        "films": "Films",
+        "kids": "Kids",
+        "anime": "Anime",
+        "list": "My List",
+        "favourites": "Favourites",
+        "new": "New"
+      },
+      "genres": {
+        "default": "Genres",
+        "action": "Action",
+        "action & adventure": "Action & Adventure",
+        "adventure": "Adventure",
+        "animation": "Animation",
+        "comedy": "Comedy",
+        "crime": "Crime",
+        "documentary": "Documentary",
+        "drama": "Drama",
+        "family": "Family",
+        "fantasy": "Fantasy",
+        "history": "History",
+        "horror": "Horror",
+        "kids": "Kids",
+        "music": "Music",
+        "mystery": "Mystery",
+        "news": "News",
+        "reality": "Reality",
+        "romance": "Romance",
+        "sci-fi & fantasy": "Sci-Fi & Fantasy",
+        "science fiction": "Science Fiction",
+        "soap": "Soap",
+        "talk": "Talk",
+        "thriller": "Thriller",
+        "tv movie": "TV Movie",
+        "war": "War",
+        "war & politics": "War & Politics",
+        "western": "Western"
+      },
+      "languages": {
+        "default": "Original Language",
+        "da": "Danish",
+        "de": "German",
+        "en": "English",
+        "es": "Spanish",
+        "fr": "French",
+        "id": "Indonesian",
+        "it": "Italian",
+        "ja": "Japanese",
+        "ko": "Korean",
+        "no": "Norwegian",
+        "pl": "Polish",
+        "sv": "Swedish",
+        "th": "Thai",
+        "tr": "Turkish",
+        "zh": "Chinese",
+        "cy": "Welsh"
+      },
+      "items": {
+        "released": "Released",
+        "format": "MMM D, YYYY"
+      }
+    }
+  }
+}

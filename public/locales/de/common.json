@@ -1,0 +1,93 @@
+{
+  "pages": {
+    "login": {
+      "title": "Anmeldung",
+      "secret": "passwort"
+    },
+    "filmlist": {
+      "default": "Filmliste",
+      "name": "filmliste",
+      "menu": {
+        "browse": "Startseite",
+        "series": "Serien",
+        "films": "Filme",
+        "kids": "Kids",
+        "anime": "Anime",
+        "list": "Meine Liste",
+        "favourites": "Favouriten",
+        "new": "Neu"
+      },
+      "sections": {
+        "list": "Meine Liste",
+        "soon": "Bald Verfügbar",
+        "horror": "Horror",
+        "animation": "Animationen",
+        "anime": "Anime",
+        "fantasy": "Fantasy",
+        "science fiction": "Science Fiction",
+        "comedy": "Komödien",
+        "adventure": "Abenteuer",
+        "action": "Action",
+        "drama": "Drama",
+        "romance": "Liebesfilme",
+        "mystery": "Mystery",
+        "thriller": "Thriller",
+        "family": "Familie",
+        "crime": "Krimis"
+      },
+      "genres": {
+        "default": "Genres",
+        "action": "Action",
+        "action & adventure": "Action & Adventure",
+        "adventure": "Abenteuer",
+        "animation": "Animation",
+        "comedy": "Komödie",
+        "crime": "Krimi",
+        "documentary": "Dokumentarfilm",
+        "drama": "Drama",
+        "family": "Familie",
+        "fantasy": "Fantasy",
+        "history": "Historie",
+        "horror": "Horror",
+        "kids": "Kids",
+        "music": "Musik",
+        "mystery": "Mystery",
+        "news": "News",
+        "reality": "Reality",
+        "romance": "Liebesfilm",
+        "sci-fi & fantasy": "Sci-Fi & Fantasy",
+        "science fiction": "Science Fiction",
+        "soap": "Soap",
+        "talk": "Talk",
+        "thriller": "Thriller",
+        "tv movie": "TV-Film",
+        "war": "Kriegsfilm",
+        "war & politics": "War & Politics",
+        "western": "Western"
+      },
+      "languages": {
+        "default": "Herkunftssprache",
+        "da": "Dänisch",
+        "de": "Deutsch",
+        "en": "Englisch",
+        "es": "Spanisch",
+        "fr": "Französisch",
+        "id": "Bahasa Indonesia",
+        "it": "Italienisch",
+        "ja": "Japanisch",
+        "ko": "Koreanisch",
+        "no": "Norwegisch",
+        "pl": "Polnisch",
+        "sv": "Schwedisch",
+        "th": "Thailändisch",
+        "tr": "Türkisch",
+        "zh": "Chinesisch",
+        "cy": "Walisisch"
+      },
+      "items": {
+        "released": "Veröffentlicht",
+        "format": "MMM D, YYYY"
+      }
+    }
+  }
+}

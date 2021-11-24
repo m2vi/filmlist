@@ -7,8 +7,6 @@ import itemSchema from '@models/itemSchema';
 import _ from 'underscore';
 import { GenreProps, InsertProps, ItemProps, Tabs } from './types';
 
-export class Filter {}
-
 export class Api {
   genres: GenreProps[];
   tabs: Tabs;
@@ -21,13 +19,27 @@ export class Api {
     return await connectToDatabase();
   }
 
-  async prepareForFrontend(
+  private getFilterFromTab(name: string) {
+    if (!this.tabs[name]?.filter) return {};
+
+    return this.tabs[name].filter!;
+  }
+
+  async getTab({ tab, locale, sort, start, end }: { tab: string; locale: string; sort: string; start: number; end: number }) {
+    const db = await this.init();
+    const filter = this.getFilterFromTab(tab);
+    const items = await this.find(filter);
+
+    return this.prepareForFrontend(items, locale, sort, start, end);
+  }
+
+  private prepareForFrontend(
     items: ItemProps[] = [],
     locale: string = 'en',
     sortKey: string = 'name',
     start: number = 0,
     end: number = 50
-  ): Promise<ItemProps[]> {
+  ): ItemProps[] {
     const mapped = items.map(({ _id, genre_ids, name, poster_path, release_date }) => ({
       _id,
       genre_ids,

@@ -1,16 +1,41 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+@import url('https://dev.core.fluxi.ml/styles/colors.css');
+@import url('https://dev.core.fluxi.ml/styles/globals.css');
+@import url('https://dev.core.fluxi.ml/styles/components.css');
+@import url('https://dev.core.fluxi.ml/styles/animations.css');
+
+h1,
+h2,
+h3,
+h4,
+p {
+  line-height: 1.6 !important;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+h1,
+h2,
+h3,
+h4,
+p.bold {
+  font-weight: 700 !important;
 }
 
-* {
-  box-sizing: border-box;
+h1 {
+  font-size: 3.85rem !important;
+}
+
+h2 {
+  font-size: 2.8rem !important;
+}
+
+h3 {
+  font-size: 2rem !important;
+}
+
+h4 {
+  font-size: 1.5rem !important;
+}
+
+p {
+  font-size: 1rem !important;
+  font-weight: 500 !important;
 }
