@@ -39,3 +39,12 @@ p {
   font-size: 1rem !important;
   font-weight: 500 !important;
 }
+
+.btn-discord {
+  color: #fff;
+  background-color: #5865f2;
+}
+
+.btn-discord:hover {
+  background-color: rgb(121, 131, 245);
+}

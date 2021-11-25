@@ -1,13 +1,21 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { IoAddOutline } from 'react-icons/io5';
+import Image from 'next/image';
+import api from '@utils/frontend/api';
+import { DiscordUser } from '@utils/types';
 
 const Dropdown = () => {
+  const user = api.jwt.decode() as DiscordUser;
+  const avatar = `https://cdn.discordapp.com/avatars/${user?.id}/${user?.avatar}.png?size=128`;
+
   return (
     <div className=' flex justify-end'>
       <Menu as='div' className='relative h-full'>
         <div className='h-full flex justify-center'>
-          <Menu.Button className='inline-flex justify-center h-7 w-7 bg-primary-800 text-sm font-medium text-white bg-black rounded bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'></Menu.Button>
+          <Menu.Button className='inline-flex justify-center h-7 w-7 bg-primary-800 text-sm font-medium text-white bg-black rounded bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'>
+            <Image src={avatar} alt='Avatar' height='35px' width='35px' className='rounded no-drag' />
+          </Menu.Button>
         </div>
         <Transition
           as={Fragment}

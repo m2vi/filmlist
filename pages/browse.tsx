@@ -17,10 +17,10 @@ Home.layout = true;
 
 export default Home;
 
-export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale!, ['common', 'footer'])),
+      ...(await serverSideTranslations(context.locale!, ['common', 'footer'])),
     },
   };
 };

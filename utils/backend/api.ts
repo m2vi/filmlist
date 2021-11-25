@@ -1,18 +1,30 @@
 import { Connection, FilterQuery, ObjectId, Schema } from 'mongoose';
-import { connectToDatabase } from './database';
-import { sortByKey } from './array';
+import { connectToDatabase } from '../database';
+import { sortByKey } from '../array';
 import genreList from '@data/genres.json';
 import tabs from '@data/tabs.json';
 import itemSchema from '@models/itemSchema';
 import _ from 'underscore';
-import { GenreProps, InsertProps, ItemProps, Tabs } from './types';
+import { GenreProps, InsertProps, ItemProps, Tabs } from '../types';
+import jwt from 'jsonwebtoken';
+import cookies from 'js-cookie';
+
+class Jwt {
+  decode() {
+    const cookie = cookies.get('token');
+    if (!cookie) return false;
+    return jwt.decode(cookie);
+  }
+}
 
 export class Api {
   genres: GenreProps[];
   tabs: Tabs;
+  jwt: Jwt;
   constructor() {
     this.genres = sortByKey(genreList.data, 'name');
     this.tabs = tabs;
+    this.jwt = new Jwt();
   }
 
   private async init(): Promise<Connection | undefined> {
