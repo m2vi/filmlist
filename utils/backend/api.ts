@@ -152,6 +152,19 @@ export class Api {
       tabs: tabStats(),
     };
   }
+
+  async getDataForUpdate() {}
+
+  async update() {
+    const db = await this.init();
+    const docs = await this.find({});
+
+    for (const doc of docs) {
+      await itemSchema.updateOne(doc, {
+        $set: {},
+      });
+    }
+  }
 }
 
 export const api = new Api();
