@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { code = null, error = null } = req.query;
 
   if (error) {
-    return res.redirect(`/?error=${req.query.error}`);
+    return res.redirect(`/error/?e=${encodeURIComponent(req.query.error.toString())}`);
   }
 
   if (!code || typeof code !== 'string') return res.redirect(OAUTH_URI);
@@ -50,6 +50,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (!('id' in me)) {
     return res.redirect(OAUTH_URI);
+  }
+
+  if (!oauth.allowedIDs.includes(me.id)) {
+    return res.redirect('/oauth?e=Not allowed');
   }
 
   const token = sign(me, oauth.jwtSecret, { expiresIn: '24h' });
