@@ -1,6 +1,6 @@
 import { validateEnv } from './utils';
 
-export const config = {
+export const oauth = {
   cookieName: 'token',
   clientId: validateEnv('DISCORD_CLIENT_ID'),
   clientSecret: validateEnv('DISCORD_CLIENT_SECRET'),

@@ -59,3 +59,18 @@ export interface DiscordUser {
   mfa_enabled: boolean;
   premium_type: number;
 }
+
+export interface MongooseBase {
+  _id: ObjectId;
+  __v: number;
+}
+
+export interface JwtBase {
+  iat: number;
+  exp: number;
+}
+
+export interface JwtPayload {
+  jti: string;
+  iat: number;
+}

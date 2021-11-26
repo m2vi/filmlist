@@ -1,14 +1,14 @@
 import { serialize } from 'cookie';
-import { config } from '../../utils/config';
+import { oauth } from '../../utils/config';
 import { sign } from 'jsonwebtoken';
 import { DiscordUser } from '../../utils/types';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const scope = ['identify'].join(' ');
-const REDIRECT_URI = `${config.appUri}/api/oauth`;
+const REDIRECT_URI = `${oauth.appUri}/api/oauth`;
 
 const OAUTH_QS = new URLSearchParams({
-  client_id: config.clientId,
+  client_id: oauth.clientId,
   redirect_uri: REDIRECT_URI,
   response_type: 'code',
   scope,
@@ -26,8 +26,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (!code || typeof code !== 'string') return res.redirect(OAUTH_URI);
 
   const body = new URLSearchParams({
-    client_id: config.clientId,
-    client_secret: config.clientSecret,
+    client_id: oauth.clientId,
+    client_secret: oauth.clientSecret,
     grant_type: 'authorization_code',
     redirect_uri: REDIRECT_URI,
     code,
@@ -52,11 +52,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.redirect(OAUTH_URI);
   }
 
-  const token = sign(me, config.jwtSecret, { expiresIn: '24h' });
+  const token = sign(me, oauth.jwtSecret, { expiresIn: '24h' });
 
   res.setHeader(
     'Set-Cookie',
-    serialize(config.cookieName, token, {
+    serialize(oauth.cookieName, token, {
       secure: process.env.NODE_ENV !== 'development',
       sameSite: 'lax',
       path: '/',

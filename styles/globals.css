@@ -41,10 +41,10 @@ p {
 }
 
 .btn-discord {
-  color: #fff;
-  background-color: #5865f2;
+  color: #fff !important;
+  background-color: #5865f2 !important;
 }
 
 .btn-discord:hover {
-  background-color: rgb(121, 131, 245);
+  background-color: rgb(121, 131, 245) !important;
 }
