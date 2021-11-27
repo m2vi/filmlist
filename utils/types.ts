@@ -6,6 +6,11 @@ export enum ItemTypeEnum {
   'both' = 2,
 }
 
+export enum MovieDbTypeEnum {
+  'tv' = 0,
+  'movie' = 1,
+}
+
 export interface ItemProps {
   _id: ObjectId;
   favoured: boolean;
@@ -20,8 +25,16 @@ export interface ItemProps {
     [locale: string]: string;
   };
   release_date: number;
-  type: ItemTypeEnum;
+  type: MovieDbTypeEnum;
   watched: boolean;
+}
+
+export interface FrontendItemProps {
+  _id: ObjectId;
+  genre_ids: number[];
+  name: string;
+  poster_path: string;
+  release_data: number;
 }
 
 export interface GenreProps {
@@ -31,9 +44,9 @@ export interface GenreProps {
 
 export interface InsertProps {
   id_db: number;
-  type: ItemTypeEnum;
-  favoured: number;
-  watched: number;
+  type: MovieDbTypeEnum;
+  favoured: boolean;
+  watched: boolean;
 }
 
 export interface TabFilterOptions {
@@ -73,4 +86,9 @@ export interface JwtBase {
 export interface JwtPayload {
   jti: string;
   iat: number;
+}
+
+export interface MovieDbOptions {
+  favoured: boolean;
+  watched: boolean;
 }

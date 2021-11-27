@@ -5,9 +5,10 @@ import genreList from '@data/genres.json';
 import tabs from '@data/tabs.json';
 import itemSchema from '@models/itemSchema';
 import _ from 'underscore';
-import { GenreProps, InsertProps, ItemProps, Tabs } from '../types';
+import { GenreProps, InsertProps, ItemProps, MovieDbTypeEnum, Tabs } from '../types';
 import jwt from 'jsonwebtoken';
 import cookies from 'js-cookie';
+import client from '@utils/themoviedb/api';
 
 class Jwt {
   decode() {
@@ -45,20 +46,24 @@ export class Api {
     return this.prepareForFrontend(items, locale, sort, start, end);
   }
 
-  private prepareForFrontend(
+  toFrontendItem({ _id, genre_ids, name, poster_path, release_date }: ItemProps, locale: string = 'en') {
+    return {
+      _id,
+      genre_ids,
+      name: name[locale],
+      poster_path: poster_path[locale],
+      release_date,
+    };
+  }
+
+  prepareForFrontend(
     items: ItemProps[] = [],
     locale: string = 'en',
     sortKey: string = 'name',
     start: number = 0,
     end: number = 50
   ): ItemProps[] {
-    const mapped = items.map(({ _id, genre_ids, name, poster_path, release_date }) => ({
-      _id,
-      genre_ids,
-      name: name[locale],
-      poster_path: poster_path[locale],
-      release_date,
-    }));
+    const mapped = items.map((item) => this.toFrontendItem(item, locale));
     const sorted = sortByKey(mapped, sortKey);
     const sliced = sorted.slice(start, end);
 
@@ -86,22 +91,39 @@ export class Api {
   }
 
   async exists(filter: FilterQuery<ItemProps>): Promise<boolean> {
-    const item = await this.findOne(filter);
+    try {
+      const item = await this.findOne(filter);
 
-    return item ? true : false;
+      return item ? true : false;
+    } catch (error) {
+      return false;
+    }
   }
 
-  async insert(item: InsertProps): Promise<ItemProps | boolean> {
-    const exists = await this.exists({ id_db: item.id_db, type: item.type });
+  async insert({ id_db, type, favoured, watched }: InsertProps): Promise<ItemProps | any> {
+    try {
+      const exists = await this.exists({ id_db: parseInt(id_db as any), type: MovieDbTypeEnum[type] as any });
+      if (exists) {
+        return {
+          error: 'Already exists',
+        };
+      }
 
-    return false;
+      const data = await client.get(id_db, type, { favoured, watched });
+      const doc = new itemSchema(data);
+
+      return await doc.save();
+    } catch (error: any) {
+      console.log(error.message);
+      return null;
+    }
+  }
+
+  async insertMany(items: InsertProps[]): Promise<ItemProps | null> {
+    return null as any;
   }
 
   arrayToFind(items: ItemProps[]) {
-    type Partial<T> = {
-      [P in keyof T]?: T[P];
-    };
-
     return (filter: Partial<ItemProps>) => _.where(items, filter);
   }
 
@@ -153,18 +175,36 @@ export class Api {
     };
   }
 
-  async getDataForUpdate() {}
+  async update(id: number, type: MovieDbTypeEnum) {
+    const newData = await client.dataForUpdate(id, type);
 
-  async update() {
-    const db = await this.init();
-    const docs = await this.find({});
+    const result = await itemSchema.updateOne({ id_db: id, type }, { ...newData });
 
-    for (const doc of docs) {
-      await itemSchema.updateOne(doc, {
-        $set: {},
-      });
+    return result;
+
+    // maybe not working
+  }
+
+  async updateAll() {
+    const docs = await api.find({});
+    let finished = [];
+    let errors = [];
+
+    for (const index in docs) {
+      try {
+        const { id_db, type } = docs[index];
+
+        const newData = await client.dataForUpdate(id_db, type);
+
+        await itemSchema.updateOne({ id_db, type }, { ...newData });
+        finished.push(index);
+      } catch (error) {
+        errors.push(index);
+      }
     }
   }
+
+  async discoverTabs() {}
 }
 
 export const api = new Api();

@@ -3,20 +3,21 @@ import { oauth } from '../../utils/config';
 import { sign } from 'jsonwebtoken';
 import { DiscordUser } from '../../utils/types';
 import { NextApiRequest, NextApiResponse } from 'next';
-
-const scope = ['identify'].join(' ');
-const REDIRECT_URI = `${oauth.appUri}/api/oauth`;
-
-const OAUTH_QS = new URLSearchParams({
-  client_id: oauth.clientId,
-  redirect_uri: REDIRECT_URI,
-  response_type: 'code',
-  scope,
-}).toString();
-
-const OAUTH_URI = `https://discord.com/api/oauth2/authorize?${OAUTH_QS}`;
+import { baseUrl } from '@utils/fetch';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const scope = ['identify'].join(' ');
+  const REDIRECT_URI = `${baseUrl(req)}/api/oauth`;
+
+  const OAUTH_QS = new URLSearchParams({
+    client_id: oauth.clientId,
+    redirect_uri: REDIRECT_URI,
+    response_type: 'code',
+    scope,
+  }).toString();
+
+  const OAUTH_URI = `https://discord.com/api/oauth2/authorize?${OAUTH_QS}`;
+
   const { code = null, error = null } = req.query;
 
   if (error) {
