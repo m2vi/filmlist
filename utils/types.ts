@@ -45,8 +45,8 @@ export interface GenreProps {
 export interface InsertProps {
   id_db: number;
   type: MovieDbTypeEnum;
-  favoured: boolean;
-  watched: boolean;
+  favoured: string;
+  watched: string;
 }
 
 export interface TabFilterOptions {
