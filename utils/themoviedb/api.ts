@@ -3,6 +3,7 @@ import { ItemProps, MovieDbTypeEnum } from '@utils/types';
 import { stringToBoolean, validateEnv } from '@utils/utils';
 import moment from 'moment';
 import { MovieDb } from 'moviedb-promise';
+import { shuffle } from 'underscore';
 
 export const api = new MovieDb(validateEnv('MOVIE_TOKEN'));
 
@@ -39,11 +40,26 @@ export class Client {
     };
   }
 
+  isAnime(base: any): boolean {
+    const genre_ids: number[] = base.genres ? base.genres?.map(({ id }: any) => id) : base.genre_ids;
+    const original_language: string = base.original_language;
+
+    if (!genre_ids || !original_language) {
+      return false;
+    }
+
+    if (genre_ids.includes(7424) || (genre_ids.includes(16) && original_language === 'ja')) {
+      return true;
+    }
+
+    return false;
+  }
+
   async adapt(id: number, type: MovieDbTypeEnum, base?: { isMovie: boolean; de: any; en: any }): Promise<Partial<ItemProps>> {
     const { isMovie, de, en } = base ? base : await this.getBase(id, type);
 
     return {
-      genre_ids: en.genres?.map(({ id }: any) => id) as number[],
+      genre_ids: (en.genres?.map(({ id }: any) => id) as number[]).concat(this.isAnime(en) ? [7424] : []),
       id_db: parseInt(id as any),
       name: {
         en: isMovie ? en.title : en.name,
@@ -78,36 +94,58 @@ export class Client {
     return both;
   }
 
-  async adaptTabs(base: any) {
+  async adaptTabs(base: any, type: string) {
     return await Promise.all(
       base!.map(async ([en, de]: any[]) => {
-        const adapted = await this.adapt(en?.id, MovieDbTypeEnum.movie, { isMovie: true, de, en });
+        const adapted = await this.adapt(en?.id, MovieDbTypeEnum[type as any] as any, { isMovie: type === 'movie', de, en });
 
         return adapted;
       })
     );
   }
 
+  async getNowPlaying() {
+    const base = this.getTabeBase(
+      (await api.movieNowPlaying({ language: 'en' })).results,
+      (await api.movieNowPlaying({ language: 'de' })).results
+    );
+
+    return await this.adaptTabs(base, 'movie');
+  }
+
+  async getPopular() {
+    const base = this.getTabeBase(
+      (await api.moviePopular({ language: 'en' })).results,
+      (await api.moviePopular({ language: 'de' })).results
+    );
+
+    return await this.adaptTabs(base, 'movie');
+  }
+
+  async getDiscover() {
+    const baseTv = this.getTabeBase((await api.discoverTv({ language: 'en' })).results, (await api.discoverTv({ language: 'de' })).results);
+    const baseMovie = this.getTabeBase(
+      (await api.discoverMovie({ language: 'en' })).results,
+      (await api.discoverMovie({ language: 'de' })).results
+    );
+
+    const adaptedTv = await this.adaptTabs(baseTv, 'tv');
+    const adaptedMovie = await this.adaptTabs(baseMovie, 'movie');
+
+    return shuffle([...adaptedTv.slice(0, 10), ...adaptedMovie.slice(0, 10)]);
+  }
+
   async getTabs() {
-    const nowPlaying = async () => {
-      const base = this.getTabeBase(
-        (await api.movieNowPlaying({ language: 'en' })).results,
-        (await api.movieNowPlaying({ language: 'de' })).results
-      );
+    const discover = await this.getDiscover();
 
-      return await this.adaptTabs(base);
+    return {
+      discover: {
+        length: discover.length,
+        name: 'discover',
+        route: null,
+        items: discover,
+      },
     };
-
-    const popular = async () => {
-      const base = this.getTabeBase(
-        (await api.moviePopular({ language: 'en' })).results,
-        (await api.moviePopular({ language: 'de' })).results
-      );
-
-      return await this.adaptTabs(base);
-    };
-
-    return { nowPlaying: await nowPlaying(), popular: await popular() };
   }
 }
 

@@ -1,7 +1,6 @@
 import { Connection, FilterQuery, ObjectId, Schema } from 'mongoose';
 import { connectToDatabase } from '../database';
 import { sortByKey } from '../array';
-import genreList from '@data/genres.json';
 import tabs from '@data/tabs.json';
 import itemSchema from '@models/itemSchema';
 import _ from 'underscore';
@@ -9,6 +8,7 @@ import { GenreProps, InsertProps, ItemProps, MovieDbTypeEnum, Tabs } from '../ty
 import jwt from 'jsonwebtoken';
 import cookies from 'js-cookie';
 import client from '@utils/themoviedb/api';
+import genres from '@utils/themoviedb/genres';
 
 class Jwt {
   decode() {
@@ -23,7 +23,7 @@ export class Api {
   tabs: Tabs;
   jwt: Jwt;
   constructor() {
-    this.genres = sortByKey(genreList.data, 'name');
+    this.genres = genres.array;
     this.tabs = tabs;
     this.jwt = new Jwt();
   }
@@ -38,7 +38,7 @@ export class Api {
     return this.tabs[name].filter!;
   }
 
-  async getTab({ tab, locale, sort, start, end }: { tab: string; locale: string; sort: string; start: number; end: number }) {
+  async getTab({ tab, locale, sort, start, end }: { tab: string; locale: string; sort?: string; start: number; end: number }) {
     const db = await this.init();
     const filter = this.getFilterFromTab(tab);
     const items = await this.find(filter);
@@ -49,7 +49,7 @@ export class Api {
   toFrontendItem({ _id, genre_ids, name, poster_path, release_date }: ItemProps, locale: string = 'en') {
     return {
       _id,
-      genre_ids,
+      genre_ids: genres.getNames(genre_ids),
       name: name[locale],
       poster_path: poster_path[locale],
       release_date,
@@ -132,7 +132,7 @@ export class Api {
     const collection = await itemSchema.find().lean<ItemProps[]>();
     const find = api.arrayToFind(collection);
 
-    const genreStats = () => {
+    const genreStats = (collection: any[]) => {
       let genres = {} as any;
 
       this.genres.forEach(({ id, name }) => {
@@ -169,8 +169,13 @@ export class Api {
       general: {
         movies: find({ type: 1 }).length,
         tv: find({ type: 0 }).length,
+        anime: find({}).filter((base) => client.isAnime(base)).length,
       },
-      genres: genreStats(),
+      genres: {
+        both: genreStats(await itemSchema.find().lean<ItemProps[]>()),
+        movies: genreStats(await itemSchema.find({ type: 1 }).lean<ItemProps[]>()),
+        tv: genreStats(await itemSchema.find({ type: 0 }).lean<ItemProps[]>()),
+      },
       tabs: tabStats(),
     };
   }
@@ -204,7 +209,13 @@ export class Api {
     }
   }
 
-  async discoverTabs() {}
+  async getTabs() {
+    const moviedbtabs = await client.getTabs();
+
+    return {
+      ...moviedbtabs,
+    };
+  }
 }
 
 export const api = new Api();
