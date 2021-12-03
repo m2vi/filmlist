@@ -47,12 +47,14 @@ export class Api {
   }
 
   toFrontendItem({ _id, genre_ids, name, poster_path, release_date }: ItemProps, locale: string = 'en') {
+    const new_genre_ids = genres.getNames(genre_ids);
+
     return {
-      _id,
-      genre_ids: genres.getNames(genre_ids),
-      name: name[locale],
-      poster_path: poster_path[locale],
-      release_date,
+      _id: _id ? _id.toString() : null,
+      genre_ids: new_genre_ids ? new_genre_ids : [],
+      name: name[locale] ? name[locale] : 'Invalid',
+      poster_path: poster_path[locale] ? poster_path[locale] : null,
+      release_date: release_date ? release_date : Date.now(),
     };
   }
 
@@ -209,10 +211,20 @@ export class Api {
     }
   }
 
-  async getTabs() {
+  async getBrowse() {
+    //! CHANGE
+    const items = await this.find({});
     const moviedbtabs = await client.getTabs();
 
+    const myList = this.prepareForFrontend(_.filter(items, { watched: false }));
+
     return {
+      myList: {
+        length: myList.length,
+        name: 'My List',
+        route: '/my-list',
+        items: myList,
+      },
       ...moviedbtabs,
     };
   }

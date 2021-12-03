@@ -1,4 +1,4 @@
-import backend from '@utils/backend/api';
+import backend, { Api } from '@utils/backend/api';
 import { ItemProps, MovieDbTypeEnum } from '@utils/types';
 import { stringToBoolean, validateEnv } from '@utils/utils';
 import moment from 'moment';
@@ -41,7 +41,7 @@ export class Client {
   }
 
   isAnime(base: any): boolean {
-    const genre_ids: number[] = base.genres ? base.genres?.map(({ id }: any) => id) : base.genre_ids;
+    const genre_ids: number[] = base.genre_ids?.map(({ id }: any) => id);
     const original_language: string = base.original_language;
 
     if (!genre_ids || !original_language) {
@@ -59,7 +59,7 @@ export class Client {
     const { isMovie, de, en } = base ? base : await this.getBase(id, type);
 
     return {
-      genre_ids: (en.genres?.map(({ id }: any) => id) as number[]).concat(this.isAnime(en) ? [7424] : []),
+      genre_ids: en.genre_ids?.concat(this.isAnime(en) ? [7424] : []),
       id_db: parseInt(id as any),
       name: {
         en: isMovie ? en.title : en.name,
@@ -99,7 +99,7 @@ export class Client {
       base!.map(async ([en, de]: any[]) => {
         const adapted = await this.adapt(en?.id, MovieDbTypeEnum[type as any] as any, { isMovie: type === 'movie', de, en });
 
-        return adapted;
+        return backend.toFrontendItem(adapted as any);
       })
     );
   }
@@ -132,11 +132,7 @@ export class Client {
     const adaptedTv = await this.adaptTabs(baseTv, 'tv');
     const adaptedMovie = await this.adaptTabs(baseMovie, 'movie');
 
-    return shuffle([...adaptedTv.slice(0, 10), ...adaptedMovie.slice(0, 10)]);
-  }
-
-  async getTabs() {
-    const discover = await this.getDiscover();
+    const discover = shuffle([...adaptedTv.slice(0, 10), ...adaptedMovie.slice(0, 10)]);
 
     return {
       discover: {
@@ -145,6 +141,12 @@ export class Client {
         route: null,
         items: discover,
       },
+    };
+  }
+
+  async getTabs() {
+    return {
+      ...(await this.getDiscover()),
     };
   }
 }

@@ -12,7 +12,7 @@ export enum MovieDbTypeEnum {
 }
 
 export interface ItemProps {
-  _id: ObjectId;
+  _id: ObjectId | null;
   favoured: boolean;
   genre_ids: number[];
   id_db: number;
@@ -30,11 +30,11 @@ export interface ItemProps {
 }
 
 export interface FrontendItemProps {
-  _id: ObjectId;
+  _id: string;
   genre_ids: number[];
   name: string;
   poster_path: string;
-  release_data: number;
+  release_date: number;
 }
 
 export interface GenreProps {

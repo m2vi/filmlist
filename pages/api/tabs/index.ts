@@ -3,7 +3,7 @@ import api from '@utils/backend/api';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    res.json(await api.getTabs());
+    res.json(await api.getBrowse());
   } catch (error) {
     res.json((error as any).message);
   }

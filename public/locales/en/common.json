@@ -13,9 +13,10 @@
         "films": "Films",
         "kids": "Kids",
         "anime": "Anime",
-        "list": "My List",
+        "myList": "My List",
         "favourites": "Favourites",
-        "new": "New"
+        "new": "New",
+        "discover": "Discover"
       },
       "genres": {
         "default": "Genres",
