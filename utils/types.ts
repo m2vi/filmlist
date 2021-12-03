@@ -37,6 +37,13 @@ export interface FrontendItemProps {
   release_date: number;
 }
 
+export interface BrowseSectionProps {
+  length: number;
+  items: FrontendItemProps[];
+  name: string;
+  route: string;
+}
+
 export interface GenreProps {
   id: number;
   name: string;

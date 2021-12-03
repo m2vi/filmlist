@@ -1,7 +1,6 @@
 import backend, { Api } from '@utils/backend/api';
 import { ItemProps, MovieDbTypeEnum } from '@utils/types';
 import { stringToBoolean, validateEnv } from '@utils/utils';
-import moment from 'moment';
 import { MovieDb } from 'moviedb-promise';
 import { shuffle } from 'underscore';
 
@@ -14,7 +13,7 @@ export class Client {
   }
 
   async getBase(id: number, type: MovieDbTypeEnum) {
-    const isMovie = (MovieDbTypeEnum[type] as any) === MovieDbTypeEnum.movie;
+    const isMovie = (MovieDbTypeEnum[type] as any) === MovieDbTypeEnum.movie || type === 1;
     const de = (await (isMovie ? api.movieInfo({ id, language: 'de' }) : api.tvInfo({ id, language: 'de' }))) as any;
     const en = (await (isMovie ? api.movieInfo({ id, language: 'en' }) : api.tvInfo({ id, language: 'en' }))) as any;
 
@@ -37,6 +36,7 @@ export class Client {
         en: isMovie ? en.poster_path : en.poster_path,
         de: isMovie ? de.poster_path : de.poster_path,
       },
+      release_date: new Date(isMovie ? en.release_date : en.first_air_date).getTime(),
     };
   }
 
@@ -71,7 +71,7 @@ export class Client {
         en: isMovie ? en.poster_path : en.poster_path,
         de: isMovie ? de.poster_path : de.poster_path,
       },
-      release_date: moment(isMovie ? en.release_date : en.first_air_date).unix(),
+      release_date: new Date(isMovie ? en.release_date : en.first_air_date).getTime(),
       type: isMovie ? 1 : 0,
     };
   }

@@ -15,14 +15,9 @@ const Home = ({ ...props }) => {
   return (
     <Full className='grid place-items-center'>
       <Title title='Home' />
-      <div className='w-full py-11'>
-        {Object.entries(props.data).map(([name, items], i) => {
-          return (
-            <div className='flex flex-col' key={i}>
-              <h3 className='mb-2'> {t(`pages.filmlist.menu.${name}`)}</h3>
-              <Carousel />
-            </div>
-          );
+      <div className='w-full'>
+        {Object.entries(props.data).map(([key, section], i) => {
+          return <Carousel section={section as any} key={i} />;
         })}
       </div>
     </Full>
@@ -38,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       ...(await serverSideTranslations(context.locale!, ['common', 'footer'])),
       data: {
-        ...(await api.getBrowse()),
+        ...(await api.getBrowse(context.locale)),
       },
     },
   };

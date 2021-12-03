@@ -61,12 +61,12 @@ export class Api {
   prepareForFrontend(
     items: ItemProps[] = [],
     locale: string = 'en',
-    sortKey: string = 'name',
+    sortKey: string | null = 'name',
     start: number = 0,
     end: number = 50
   ): ItemProps[] {
     const mapped = items.map((item) => this.toFrontendItem(item, locale));
-    const sorted = sortByKey(mapped, sortKey);
+    const sorted = !sortKey ? mapped.reverse() : sortByKey(mapped, sortKey);
     const sliced = sorted.slice(start, end);
 
     return sliced;
@@ -188,8 +188,6 @@ export class Api {
     const result = await itemSchema.updateOne({ id_db: id, type }, { ...newData });
 
     return result;
-
-    // maybe not working
   }
 
   async updateAll() {
@@ -211,12 +209,12 @@ export class Api {
     }
   }
 
-  async getBrowse() {
+  async getBrowse(locale?: string) {
     //! CHANGE
     const items = await this.find({});
     const moviedbtabs = await client.getTabs();
 
-    const myList = this.prepareForFrontend(_.filter(items, { watched: false }));
+    const myList = this.prepareForFrontend(_.filter(items, { watched: false }), locale, null);
 
     return {
       myList: {
