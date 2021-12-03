@@ -11,7 +11,7 @@ const Card = ({ _id, genre_ids, name, poster_path, release_date }: FrontendItemP
         {/* eslint-disable-next-line */}
         <img
           src={`https://image.tmdb.org/t/p/w342${poster_path}`}
-          alt={_id}
+          alt={_id ? _id : ''}
           style={{ aspectRatio: '150 / 225', width: '100%' }}
           className='no-drag select-none w-full overflow-hidden relative'
         />

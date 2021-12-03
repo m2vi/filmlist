@@ -30,10 +30,10 @@ export interface ItemProps {
 }
 
 export interface FrontendItemProps {
-  _id: string;
+  _id: string | null;
   genre_ids: number[];
   name: string;
-  poster_path: string;
+  poster_path: string | null;
   release_date: number;
 }
 

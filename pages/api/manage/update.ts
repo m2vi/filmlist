@@ -14,7 +14,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       console.log(id_db, `${parseInt(index) + 1}/${length}`);
       const n = await client.dataForUpdate(id_db, type);
 
-      await itemSchema.updateOne({ id_db, type }, { ...n });
+      await itemSchema.updateOne(
+        { id_db, type },
+        {
+          ...n,
+        }
+      );
     } catch (error) {
       results.push(index);
     }

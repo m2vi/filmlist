@@ -4,7 +4,7 @@ import { sortByKey } from '../array';
 import tabs from '@data/tabs.json';
 import itemSchema from '@models/itemSchema';
 import _ from 'underscore';
-import { GenreProps, InsertProps, ItemProps, MovieDbTypeEnum, Tabs } from '../types';
+import { FrontendItemProps, GenreProps, InsertProps, ItemProps, MovieDbTypeEnum, Tabs } from '../types';
 import jwt from 'jsonwebtoken';
 import cookies from 'js-cookie';
 import client from '@utils/themoviedb/api';
@@ -46,12 +46,10 @@ export class Api {
     return this.prepareForFrontend(items, locale, sort, start, end);
   }
 
-  toFrontendItem({ _id, genre_ids, name, poster_path, release_date }: ItemProps, locale: string = 'en') {
-    const new_genre_ids = genres.getNames(genre_ids);
-
+  toFrontendItem({ _id, genre_ids, name, poster_path, release_date }: ItemProps, locale: string = 'en'): FrontendItemProps {
     return {
       _id: _id ? _id.toString() : null,
-      genre_ids: new_genre_ids ? new_genre_ids : [],
+      genre_ids: genre_ids ? genre_ids : [],
       name: name[locale] ? name[locale] : 'Invalid',
       poster_path: poster_path[locale] ? poster_path[locale] : null,
       release_date: release_date ? release_date : Date.now(),
@@ -210,7 +208,6 @@ export class Api {
   }
 
   async getBrowse(locale?: string) {
-    //! CHANGE
     const items = await this.find({});
     const moviedbtabs = await client.getTabs();
 

@@ -13,7 +13,7 @@ export class Client {
   }
 
   async getBase(id: number, type: MovieDbTypeEnum) {
-    const isMovie = (MovieDbTypeEnum[type] as any) === MovieDbTypeEnum.movie || type === 1;
+    const isMovie = (MovieDbTypeEnum[type] as any) === MovieDbTypeEnum.movie || type.toString() === '1';
     const de = (await (isMovie ? api.movieInfo({ id, language: 'de' }) : api.tvInfo({ id, language: 'de' }))) as any;
     const en = (await (isMovie ? api.movieInfo({ id, language: 'en' }) : api.tvInfo({ id, language: 'en' }))) as any;
 
@@ -57,6 +57,7 @@ export class Client {
 
   async adapt(id: number, type: MovieDbTypeEnum, base?: { isMovie: boolean; de: any; en: any }): Promise<Partial<ItemProps>> {
     const { isMovie, de, en } = base ? base : await this.getBase(id, type);
+    const runtime = !isMovie ? (en?.episode_run_time ? en?.episode_run_time[0] : undefined) : en?.runtime;
 
     return {
       genre_ids: en.genre_ids?.concat(this.isAnime(en) ? [7424] : []),
