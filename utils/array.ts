@@ -33,3 +33,9 @@ export const shuffle = (array: any[]) => {
 
   return array;
 };
+
+export const removeArray = (array: any[], toRemove: any[]) => {
+  return array.filter((v) => {
+    return !toRemove.includes(v);
+  });
+};

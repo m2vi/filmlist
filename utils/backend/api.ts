@@ -1,6 +1,6 @@
 import { Connection, FilterQuery, ObjectId, Schema } from 'mongoose';
 import { connectToDatabase } from '../database';
-import { shuffle, sortByKey } from '../array';
+import { removeArray, shuffle, sortByKey } from '../array';
 import tabs from '@data/tabs.json';
 import itemSchema from '@models/itemSchema';
 import _, { filter } from 'underscore';
@@ -10,6 +10,7 @@ import cookies from 'js-cookie';
 import client from '@utils/themoviedb/api';
 import genres from '@utils/themoviedb/genres';
 import { isReleased } from '@utils/utils';
+import config from '@data/config.json';
 
 class Jwt {
   decode() {
@@ -175,6 +176,7 @@ export class Api {
         movies: find({ type: 1 }).length,
         tv: find({ type: 0 }).length,
         anime: find({}).filter((base) => client.isAnime(base)).length,
+        genresWithLessThanTwentyItems: await this.getGenresWithLessThanNItems(20),
       },
       genres: {
         both: genreStats(await itemSchema.find().lean<ItemProps[]>()),
@@ -212,9 +214,26 @@ export class Api {
     }
   }
 
+  async getGenresWithLessThanNItems(n: number = 20) {
+    const items = await this.find({});
+    const { ids } = genres;
+    let result = [] as number[];
+
+    for (const id_index in ids) {
+      const id = ids[parseInt(id_index)];
+
+      const filtered = items.filter(({ genre_ids }) => genre_ids?.includes(id));
+      if (filtered.length < n) {
+        result.push(id);
+      }
+    }
+
+    return result;
+  }
+
   getBrowseGenres(items: ItemProps[] = [], locale: string = 'en') {
     const { ids } = genres;
-    const shuffled = shuffle(ids).slice(0, 3);
+    const shuffled = shuffle(removeArray(ids, config.hideGenresFromBrowse));
     let entries = {} as any;
 
     for (const id_index in shuffled) {
