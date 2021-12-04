@@ -233,7 +233,7 @@ export class Api {
 
   getBrowseGenres(items: ItemProps[] = [], locale: string = 'en') {
     const { ids } = genres;
-    const shuffled = shuffle(removeArray(ids, config.hideGenresFromBrowse));
+    const shuffled = shuffle(ids);
     let entries = {} as any;
 
     for (const id_index in shuffled) {
@@ -241,6 +241,8 @@ export class Api {
       const name = genres.getName(id);
       const filtered = items.filter(({ genre_ids }) => genre_ids?.includes(id));
       if (filtered.length < 20) continue;
+      if (Object.entries(entries).length >= 3) continue;
+
       const newItems = this.prepareForFrontend(shuffle(filtered), locale, null, 0, 20);
 
       entries[name] = {

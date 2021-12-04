@@ -15,6 +15,7 @@ const Carousel = ({ section: { items, length, name, route } }: { section: Browse
       <Swiper
         spaceBetween={20}
         slidesPerView={2}
+        lazy={true}
         breakpoints={{
           2150: {
             slidesPerView: 13,

@@ -6,13 +6,13 @@ const Card = ({ _id, genre_ids, name, poster_path, release_date }: FrontendItemP
   const { t } = useTranslation();
 
   return (
-    <div className='flex flex-col flex-1 cursor-pointer relative overlay mb-2' style={{ width: '150px' }}>
+    <div className='flex flex-col flex-1 cursor-pointer relative overlay mb-2' style={{ width: '154px' }}>
       <div className='h-full w-full grid place-items-center relative bg-primary-800 rounded-0 overflow-hidden shadow-1'>
         {/* eslint-disable-next-line */}
         <img
-          src={`https://image.tmdb.org/t/p/w342${poster_path}`}
+          src={`https://image.tmdb.org/t/p/w154${poster_path}`}
           alt={_id ? _id : ''}
-          style={{ aspectRatio: '150 / 225', width: '100%' }}
+          style={{ aspectRatio: '154 / 226', width: '100%' }}
           className='no-drag select-none w-full overflow-hidden relative'
         />
       </div>
