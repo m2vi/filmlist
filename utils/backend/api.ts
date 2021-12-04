@@ -211,7 +211,7 @@ export class Api {
     const items = await this.find({});
     const moviedbtabs = await client.getTabs();
 
-    const myList = this.prepareForFrontend(_.filter(items, { watched: false }), locale, null);
+    const myList = this.prepareForFrontend(_.filter(items, { watched: false }), locale, null).slice(0, 20);
 
     return {
       myList: {
