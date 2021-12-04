@@ -57,10 +57,9 @@ export class Client {
 
   async adapt(id: number, type: MovieDbTypeEnum, base?: { isMovie: boolean; de: any; en: any }): Promise<Partial<ItemProps>> {
     const { isMovie, de, en } = base ? base : await this.getBase(id, type);
-    const runtime = !isMovie ? (en?.episode_run_time ? en?.episode_run_time[0] : undefined) : en?.runtime;
 
     return {
-      genre_ids: en.genre_ids?.concat(this.isAnime(en) ? [7424] : []),
+      genre_ids: (en?.genres ? en?.genres?.map(({ id }: any) => id) : en.genre_ids)?.concat(this.isAnime(en) ? [7424] : []),
       id_db: parseInt(id as any),
       name: {
         en: isMovie ? en.title : en.name,
@@ -124,10 +123,11 @@ export class Client {
   }
 
   async getDiscover() {
+    //! CHECK
     const baseTv = this.getTabeBase((await api.discoverTv({ language: 'en' })).results, (await api.discoverTv({ language: 'de' })).results);
     const baseMovie = this.getTabeBase(
-      (await api.discoverMovie({ language: 'en' })).results,
-      (await api.discoverMovie({ language: 'de' })).results
+      (await api.discoverMovie({ language: 'de' })).results,
+      (await api.discoverMovie({ language: 'en' })).results
     );
 
     const adaptedTv = await this.adaptTabs(baseTv, 'tv');

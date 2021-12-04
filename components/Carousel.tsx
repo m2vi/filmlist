@@ -9,7 +9,9 @@ const Carousel = ({ section: { items, length, name, route } }: { section: Browse
 
   return (
     <div className='mb-6' style={{ width: 'calc(100vw - 120px)', maxWidth: 'calc(2220px - 120px)' }}>
-      <h3 className='mb-2'> {t(`pages.filmlist.menu.${name}`)}</h3>
+      <h2 className='mb-2' style={{ fontSize: '25px!important' }}>
+        {t(`pages.filmlist.menu.${name.toLowerCase()}`)}
+      </h2>
       <Swiper
         spaceBetween={20}
         slidesPerView={2}

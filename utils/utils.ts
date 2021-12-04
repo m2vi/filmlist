@@ -34,3 +34,11 @@ export const stringToBoolean = (string: string) => {
       return Boolean(string);
   }
 };
+
+export const isReleased = (release_date: any) => {
+  if (typeof release_date === 'number') {
+    return Math.sign(new Date().getTime() - release_date) === 1;
+  } else {
+    return false;
+  }
+};

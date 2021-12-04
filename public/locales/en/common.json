@@ -11,15 +11,13 @@
         "browse": "Home",
         "series": "Series",
         "films": "Films",
-        "kids": "Kids",
         "anime": "Anime",
-        "myList": "My List",
+        "My List": "My List",
         "favourites": "Favourites",
-        "new": "New",
-        "discover": "Discover"
-      },
-      "genres": {
-        "default": "Genres",
+        "New": "New",
+        "discover": "Discover",
+        "coming soon": "Bald verfügbar",
+
         "action": "Action",
         "action & adventure": "Action & Adventure",
         "adventure": "Adventure",
@@ -48,6 +46,7 @@
         "war & politics": "War & Politics",
         "western": "Western"
       },
+
       "languages": {
         "default": "Original Language",
         "da": "Danish",

@@ -1,14 +1,15 @@
 import { Connection, FilterQuery, ObjectId, Schema } from 'mongoose';
 import { connectToDatabase } from '../database';
-import { sortByKey } from '../array';
+import { shuffle, sortByKey } from '../array';
 import tabs from '@data/tabs.json';
 import itemSchema from '@models/itemSchema';
-import _ from 'underscore';
+import _, { filter } from 'underscore';
 import { FrontendItemProps, GenreProps, InsertProps, ItemProps, MovieDbTypeEnum, Tabs } from '../types';
 import jwt from 'jsonwebtoken';
 import cookies from 'js-cookie';
 import client from '@utils/themoviedb/api';
 import genres from '@utils/themoviedb/genres';
+import { isReleased } from '@utils/utils';
 
 class Jwt {
   decode() {
@@ -61,11 +62,15 @@ export class Api {
     locale: string = 'en',
     sortKey: string | null = 'name',
     start: number = 0,
-    end: number = 50
+    end: number = 50,
+    reverse: boolean = false,
+    only_unreleased: boolean = false
   ): ItemProps[] {
     const mapped = items.map((item) => this.toFrontendItem(item, locale));
     const sorted = !sortKey ? mapped.reverse() : sortByKey(mapped, sortKey);
-    const sliced = sorted.slice(start, end);
+    const leased = only_unreleased ? sorted.filter(({ release_date }) => !isReleased(release_date)) : sorted;
+    const ersed = reverse ? leased.reverse() : leased;
+    const sliced = ersed.slice(start, end);
 
     return sliced;
   }
@@ -207,11 +212,36 @@ export class Api {
     }
   }
 
+  getBrowseGenres(items: ItemProps[] = [], locale: string = 'en') {
+    const { ids } = genres;
+    const shuffled = shuffle(ids).slice(0, 3);
+    let entries = {} as any;
+
+    for (const id_index in shuffled) {
+      const id = ids[id_index];
+      const name = genres.getName(id);
+      const filtered = items.filter(({ genre_ids }) => genre_ids?.includes(id));
+      if (filtered.length < 20) continue;
+      const newItems = this.prepareForFrontend(shuffle(filtered), locale, null, 0, 20);
+
+      entries[name] = {
+        length: newItems.length,
+        name: name,
+        route: `/genre/${id}`,
+        items: newItems,
+      };
+    }
+
+    return entries;
+  }
+
   async getBrowse(locale?: string) {
     const items = await this.find({});
     const moviedbtabs = await client.getTabs();
 
-    const myList = this.prepareForFrontend(_.filter(items, { watched: false }), locale, null).slice(0, 20);
+    const myList = this.prepareForFrontend(_.filter(items, { watched: false }), locale, null, 0, 20);
+    const newI = this.prepareForFrontend(items, locale, null, 0, 20);
+    const comingSoon = this.prepareForFrontend(items, locale, 'release_date', 0, 20, false, true);
 
     return {
       myList: {
@@ -220,7 +250,20 @@ export class Api {
         route: '/my-list',
         items: myList,
       },
+      new: {
+        length: newI.length,
+        name: 'New',
+        route: '/new',
+        items: newI,
+      },
       ...moviedbtabs,
+      comingSoon: {
+        length: comingSoon.length,
+        name: 'Coming Soon',
+        route: '/soon',
+        items: comingSoon,
+      },
+      ...this.getBrowseGenres(items, locale),
     };
   }
 }
