@@ -9,7 +9,7 @@ import jwt from 'jsonwebtoken';
 import cookies from 'js-cookie';
 import client from '@utils/themoviedb/api';
 import genres from '@utils/themoviedb/genres';
-import { isReleased } from '@utils/utils';
+import { isReleased, someIncludes } from '@utils/utils';
 import config from '@data/config.json';
 
 class Jwt {
@@ -34,18 +34,42 @@ export class Api {
     return await connectToDatabase();
   }
 
-  private getFilterFromTab(name: string) {
-    if (!this.tabs[name]?.filter) return {};
+  private getTabConfig(name: string) {
+    if (!this.tabs[name]) return null;
 
-    return this.tabs[name].filter!;
+    return this.tabs[name]!;
   }
 
-  async getTab({ tab, locale, sort, start, end }: { tab: string; locale: string; sort?: string; start: number; end: number }) {
+  async getTab({
+    tab,
+    locale,
+    start,
+    end,
+    includeGenres,
+  }: {
+    tab: string;
+    locale: string;
+    start: number;
+    end: number;
+    includeGenres?: number;
+  }) {
+    //! überarbeiten!
     const db = await this.init();
-    const filter = this.getFilterFromTab(tab);
-    const items = await this.find(filter);
+    const config = this.getTabConfig(tab);
+    const items = await this.find(config?.filter ? config?.filter : {});
+    const sorted =
+      typeof config?.sort_key === 'boolean' ? items : sortByKey(items, config?.sort_key ? config?.sort_key : 'name', locale).reverse();
+    const genre_step = config?.includeGenres
+      ? sorted.filter(({ genre_ids }) => someIncludes(config?.includeGenres, genre_ids))
+      : includeGenres
+      ? sorted.filter(({ genre_ids }) => genre_ids.includes(includeGenres))
+      : sorted;
+    const result = this.prepareForFrontend(genre_step, locale, null, null, null, config?.reverse, config?.only_unreleased);
 
-    return this.prepareForFrontend(items, locale, sort, start, end);
+    return {
+      length: result.length,
+      items: result.slice(start, end),
+    };
   }
 
   toFrontendItem({ _id, genre_ids, name, poster_path, release_date, original_name }: ItemProps, locale: string = 'en'): FrontendItemProps {
@@ -62,16 +86,16 @@ export class Api {
     items: ItemProps[] = [],
     locale: string = 'en',
     sortKey: string | null = 'name',
-    start: number = 0,
-    end: number = 50,
+    start: number | null = 0,
+    end: number | null = 50,
     reverse: boolean = false,
     only_unreleased: boolean = false
   ): ItemProps[] {
-    const mapped = items.map((item) => this.toFrontendItem(item, locale));
-    const sorted = !sortKey ? mapped.reverse() : sortByKey(mapped, sortKey);
+    const mapped = items.map((item) => this.toFrontendItem(item, locale)).reverse();
+    const sorted = !sortKey ? mapped : sortByKey(mapped, sortKey);
     const leased = only_unreleased ? sorted.filter(({ release_date }) => !isReleased(release_date)) : sorted;
     const ersed = reverse ? leased.reverse() : leased;
-    const sliced = ersed.slice(start, end);
+    const sliced = !end || !start ? ersed : ersed.slice(start, end);
 
     return sliced;
   }
@@ -275,7 +299,7 @@ export class Api {
       new: {
         length: newI.length,
         name: 'New',
-        route: '/new',
+        route: '/latest',
         items: newI,
       },
       ...moviedbtabs,

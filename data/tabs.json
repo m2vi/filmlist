@@ -1,6 +1,6 @@
 {
   "browse": {},
-  "tv shows": {
+  "tv": {
     "filter": {
       "type": 0
     }
@@ -10,8 +10,12 @@
       "type": 1
     }
   },
-  "latest": {
-    "sort": "release_date",
+  "new": {
+    "sort_key": false
+  },
+  "soon": {
+    "sort_key": "release_date",
+    "only_unreleased": true,
     "reverse": true
   },
   "anime": {
@@ -20,14 +24,16 @@
   "kids": {
     "includeGenres": [10751, 10762]
   },
-  "my-list": {
+  "my list": {
     "filter": {
       "watched": false
-    }
+    },
+    "sort_key": false
   },
-  "favoured": {
+  "favourites": {
     "filter": {
       "favoured": true
     }
-  }
+  },
+  "none": {}
 }

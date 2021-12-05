@@ -58,10 +58,10 @@ export interface InsertProps {
 
 export interface TabFilterOptions {
   filter?: Partial<ItemProps>;
-  sort?: string;
+  sort_key?: string | boolean;
   reverse?: boolean;
-  type?: ItemTypeEnum;
   includeGenres?: number[];
+  only_unreleased?: boolean;
 }
 
 export interface Tabs {

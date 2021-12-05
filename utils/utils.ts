@@ -42,3 +42,7 @@ export const isReleased = (release_date: any) => {
     return false;
   }
 };
+
+export const someIncludes = (arr1: any[] = [], arr2: any[] = []) => {
+  return arr1.some((v: any) => arr2?.includes(v));
+};

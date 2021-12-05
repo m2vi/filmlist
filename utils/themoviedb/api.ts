@@ -108,8 +108,8 @@ export class Client {
   async getTrends() {
     //! CHECK
     const base = this.getTabeBase(
-      (await api.trending({ language: 'de', time_window: 'week', media_type: 'all' })).results,
-      (await api.trending({ language: 'en', time_window: 'week', media_type: 'all' })).results
+      (await api.trending({ language: 'de', time_window: 'day', media_type: 'all' })).results,
+      (await api.trending({ language: 'en', time_window: 'day', media_type: 'all' })).results
     );
     const adapted = await this.adaptTabs(base);
 

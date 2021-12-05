@@ -1,11 +1,14 @@
 import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
-import { jsonResponse } from '@utils/fetch';
+import * as config from '@utils/worker/config';
+import api from '@utils/worker/worker';
 
-export function middleware(req: NextRequest, ev: NextFetchEvent) {
-  if (process.env.NODE_ENV !== 'development') {
-    return jsonResponse(425, {
-      error: 'This route is currently being maintained ',
-    });
+export async function middleware(req: NextRequest, ev: NextFetchEvent) {
+  if (!req.page.name || !config.middleware.restricted.includes(req.page.name)) return;
+
+  const [result, error] = await api.verify(req);
+
+  if (!result) {
+    return NextResponse.redirect(`/oauth?e=${encodeURIComponent(error)}`);
   }
 
   return NextResponse.next();

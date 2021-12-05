@@ -1,12 +1,9 @@
 import Carousel from '@components/Carousel';
 import Full from '@components/Full';
-import { Spinner } from '@components/Spinner';
 import Title from '@components/Title';
 import api from '@utils/backend/api';
-import client from '@utils/themoviedb/api';
-import type { GetServerSideProps, NextPage } from 'next';
+import type { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const Home = ({ ...props }) => {
