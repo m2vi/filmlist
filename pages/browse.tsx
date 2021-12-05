@@ -13,9 +13,9 @@ const Home = ({ ...props }) => {
   const { t } = useTranslation();
 
   return (
-    <Full className='pt-10'>
+    <Full className='pt-10 flex justify-center'>
       <Title title='Browse' />
-      <div className='w-full items-center pt-11 px-11'>
+      <div className='w-full items-center pt-11 px-11' style={{ maxWidth: '2220px' }}>
         {Object.entries(props.data).map(([key, section], i) => {
           return <Carousel section={section as any} key={i} />;
         })}
