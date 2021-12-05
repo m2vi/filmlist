@@ -104,50 +104,27 @@ export class Client {
     );
   }
 
-  async getNowPlaying() {
-    const base = this.getTabeBase(
-      (await api.movieNowPlaying({ language: 'en' })).results,
-      (await api.movieNowPlaying({ language: 'de' })).results
-    );
-
-    return await this.adaptTabs(base, 'movie');
-  }
-
-  async getPopular() {
-    const base = this.getTabeBase(
-      (await api.moviePopular({ language: 'en' })).results,
-      (await api.moviePopular({ language: 'de' })).results
-    );
-
-    return await this.adaptTabs(base, 'movie');
-  }
-
-  async getDiscover() {
+  async getTrends() {
     //! CHECK
-    const baseTv = this.getTabeBase((await api.discoverTv({ language: 'en' })).results, (await api.discoverTv({ language: 'de' })).results);
-    const baseMovie = this.getTabeBase(
-      (await api.discoverMovie({ language: 'de' })).results,
-      (await api.discoverMovie({ language: 'en' })).results
+    const base = this.getTabeBase(
+      (await api.trending({ language: 'de', time_window: 'week', media_type: 'all' })).results,
+      (await api.trending({ language: 'en', time_window: 'week', media_type: 'all' })).results
     );
-
-    const adaptedTv = await this.adaptTabs(baseTv, 'tv');
-    const adaptedMovie = await this.adaptTabs(baseMovie, 'movie');
-
-    const discover = shuffle([...adaptedTv.slice(0, 10), ...adaptedMovie.slice(0, 10)]);
+    const adapted = await this.adaptTabs(base, 'movie');
 
     return {
-      discover: {
-        length: discover.length,
-        name: 'discover',
+      trends: {
+        length: adapted.length,
+        name: 'trends',
         route: null,
-        items: discover,
+        items: adapted,
       },
     };
   }
 
   async getTabs() {
     return {
-      ...(await this.getDiscover()),
+      ...(await this.getTrends()),
     };
   }
 }

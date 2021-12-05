@@ -237,6 +237,7 @@ export class Api {
     let entries = {} as any;
 
     for (const id_index in shuffled) {
+      if (entries.length >= 3) continue;
       const id = ids[id_index];
       const name = genres.getName(id);
       const filtered = items.filter(({ genre_ids }) => genre_ids?.includes(id));
