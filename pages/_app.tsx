@@ -2,6 +2,7 @@ import '@styles/globals.css';
 import 'nprogress/nprogress.css';
 import 'tailwindcss/tailwind.css';
 import 'swiper/css';
+import 'swiper/css/lazy';
 import type { AppProps } from 'next/app';
 import { appWithTranslation } from 'next-i18next';
 import { NextSeo } from 'next-seo';

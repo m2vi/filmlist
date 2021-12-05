@@ -8,8 +8,8 @@ export const sortByKey = (array: Array<any>, key?: string, key2?: string) => {
   }
 };
 
-export const removeDuplicates = (array: Array<any>) => {
-  return array.filter((v, i) => array.indexOf(v) == i);
+export const removeDuplicates = (array: Array<any>): any[] => {
+  return array.reduce((acc, curr) => (acc.includes(curr) ? acc : [...acc, ...[curr]]), []);
 };
 
 export const searchArray = (array: any[], key: string, value: any) => {

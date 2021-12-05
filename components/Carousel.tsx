@@ -8,7 +8,7 @@ const Carousel = ({ section: { items, length, name, route } }: { section: Browse
   const { t } = useTranslation();
 
   return (
-    <div className='mb-6 h-auto' style={{ width: 'calc(100vw - 120px)', maxWidth: 'calc(2220px - 120px)' }}>
+    <div className='mb-6 h-auto'>
       {route ? (
         <Link href={route} passHref={true}>
           <a className='carousel-title hover:text-primary-200'>{t(`pages.filmlist.menu.${name.toLowerCase()}`)}</a>
