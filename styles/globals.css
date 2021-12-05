@@ -24,7 +24,7 @@ h1 {
 }
 
 h2 {
-  font-size: 2.8rem !important;
+  font-size: 25px !important;
 }
 
 h3 {
@@ -38,6 +38,12 @@ h4 {
 p {
   font-size: 1rem !important;
   font-weight: 500 !important;
+}
+
+.carousel-title {
+  font-size: 25px;
+  line-height: 1.6;
+  font-weight: 700;
 }
 
 .btn-discord {
