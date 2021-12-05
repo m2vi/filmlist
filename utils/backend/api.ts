@@ -48,11 +48,11 @@ export class Api {
     return this.prepareForFrontend(items, locale, sort, start, end);
   }
 
-  toFrontendItem({ _id, genre_ids, name, poster_path, release_date }: ItemProps, locale: string = 'en'): FrontendItemProps {
+  toFrontendItem({ _id, genre_ids, name, poster_path, release_date, original_name }: ItemProps, locale: string = 'en'): FrontendItemProps {
     return {
       _id: _id ? _id.toString() : null,
       genre_ids: genre_ids ? genre_ids : [],
-      name: name[locale] ? name[locale] : 'Invalid',
+      name: name[locale] ? name[locale] : 'Invalid name',
       poster_path: poster_path[locale] ? poster_path[locale] : null,
       release_date: release_date ? release_date : Date.now(),
     };

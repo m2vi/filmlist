@@ -1,5 +1,4 @@
-import { BrowseSectionProps, FrontendItemProps } from '@utils/types';
-import { useEffect } from 'react';
+import { BrowseSectionProps } from '@utils/types';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Card from './Card';

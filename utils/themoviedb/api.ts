@@ -94,10 +94,11 @@ export class Client {
     return both;
   }
 
-  async adaptTabs(base: any, type: string) {
+  async adaptTabs(base: any) {
     return await Promise.all(
       base!.map(async ([en, de]: any[]) => {
-        const adapted = await this.adapt(en?.id, MovieDbTypeEnum[type as any] as any, { isMovie: type === 'movie', de, en });
+        const isMovie = de.title ? true : false;
+        const adapted = await this.adapt(en?.id, MovieDbTypeEnum[isMovie ? 'movie' : 'tv'], { isMovie, de, en });
 
         return backend.toFrontendItem(adapted as any);
       })
@@ -110,7 +111,7 @@ export class Client {
       (await api.trending({ language: 'de', time_window: 'week', media_type: 'all' })).results,
       (await api.trending({ language: 'en', time_window: 'week', media_type: 'all' })).results
     );
-    const adapted = await this.adaptTabs(base, 'movie');
+    const adapted = await this.adaptTabs(base);
 
     return {
       trends: {
