@@ -24,7 +24,7 @@ const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number }
 
   const fetchMoreData = () => {
     fetch(
-      `/api/manage/tab?tab=${query.tab}&locale=${locale}&start=${items.length}&end=${items.length + 50}${
+      `/api/manage/tab?tab=${query.tab ? query.tab : 'none'}&locale=${locale}&start=${items.length}&end=${items.length + 50}${
         query.id ? `&includeGenres=${query.id}` : ''
       }`
     )
