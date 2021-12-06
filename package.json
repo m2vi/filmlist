@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.4.2",
+    "@heroicons/react": "^1.0.5",
     "@tsndr/cloudflare-worker-jwt": "^1.1.5",
     "cookie": "^0.4.1",
     "js-cookie": "^3.0.1",

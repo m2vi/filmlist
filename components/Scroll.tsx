@@ -1,3 +1,4 @@
+import api from '@utils/frontend/api';
 import { FrontendItemProps } from '@utils/types';
 import { useRouter } from 'next/router';
 import { createRef, useEffect, useState } from 'react';
@@ -16,20 +17,13 @@ const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number }
   useEffect(() => setItems(data.items), [data]);
   useEffect(() => {
     if (ScrollRef.current) {
-      if (ScrollRef.current.scrollTop === 0) return;
-      ScrollRef.current.scrollTop = 0;
+      if (!(ScrollRef.current.scrollTop === 0)) ScrollRef.current.scrollTop = 0;
     }
     // eslint-disable-next-line
   }, [data]);
 
   const fetchMoreData = () => {
-    fetch(
-      `/api/manage/tab?tab=${query.tab ? query.tab : 'none'}&locale=${locale}&start=${items.length}&end=${items.length + 50}${
-        query.id ? `&includeGenres=${query.id}` : ''
-      }`
-    )
-      .then((data) => data.json())
-      .then((data) => data.items && setItems(items.concat(data.items)));
+    api.fetchMoreData(query, locale, items.length).then((toConcat) => setItems(items.concat(toConcat)));
   };
 
   return (
