@@ -4,6 +4,7 @@ import { IoAddOutline, IoLogOutOutline } from 'react-icons/io5';
 import Image from 'next/image';
 import api from '@utils/frontend/api';
 import { DiscordUser } from '@utils/types';
+import Link from 'next/link';
 
 const Dropdown = () => {
   const user = api.jwt.decode() as DiscordUser;
@@ -29,34 +30,38 @@ const Dropdown = () => {
           <div className='absolute right-0 w-170 mt-3 origin-top-right bg-primary-800 divide-y divide-primary-700 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
             <Menu.Items>
               <div className='px-1 py-1'>
-                <Menu.Item>
-                  {({ active }) => (
-                    <button
-                      className={`${
-                        active ? ' text-primary-200 opacity-80' : 'text-primary-100'
-                      } group flex rounded-md items-center w-full px-2 py-1 text-sm`}
-                    >
-                      <IoAddOutline className='w-5 h-5 mr-2' aria-hidden='true' />
-                      Add Entry
-                    </button>
-                  )}
-                </Menu.Item>
+                <Link href='/insert' passHref={true}>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <button
+                        className={`${
+                          active ? ' text-primary-200 opacity-80' : 'text-primary-100'
+                        } group flex rounded-md items-center w-full px-2 py-1 text-sm`}
+                      >
+                        <IoAddOutline className='w-5 h-5 mr-2' aria-hidden='true' />
+                        Add Entry
+                      </button>
+                    )}
+                  </Menu.Item>
+                </Link>
               </div>
             </Menu.Items>
             <Menu.Items>
               <div className='px-1 py-1'>
-                <Menu.Item>
-                  {({ active }) => (
-                    <button
-                      className={`${
-                        active ? ' text-primary-200 opacity-80' : 'text-primary-100'
-                      } group flex rounded-md items-center w-full px-2 py-1 text-sm`}
-                    >
-                      <IoLogOutOutline className='w-5 h-5 mr-2' aria-hidden='true' />
-                      Log out
-                    </button>
-                  )}
-                </Menu.Item>
+                <Link href='/logout' passHref={true}>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <button
+                        className={`${
+                          active ? ' text-primary-200 opacity-80' : 'text-primary-100'
+                        } group flex rounded-md items-center w-full px-2 py-1 text-sm`}
+                      >
+                        <IoLogOutOutline className='w-5 h-5 mr-2' aria-hidden='true' />
+                        Log out
+                      </button>
+                    )}
+                  </Menu.Item>
+                </Link>
               </div>
             </Menu.Items>
           </div>

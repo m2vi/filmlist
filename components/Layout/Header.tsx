@@ -9,7 +9,7 @@ import Dropdown from './Dropdown';
 const Header = () => {
   const Router = useRouter();
 
-  const routes = ['browse', 'new', 'anime', 'kids', 'my list', 'favourites'];
+  const routes = ['browse', 'tv', 'movies', 'my list', 'favourites'];
   const { t } = useTranslation();
 
   return (

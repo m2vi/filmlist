@@ -6,24 +6,30 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const docs = await api.find({});
   const length = docs.length;
-  let results = [];
+  let modified = 0;
+  let updated = 0;
+  let errors = [];
 
   for (const index in docs) {
     try {
       const { id_db, type } = docs[index];
       console.log(id_db, `${parseInt(index) + 1}/${length}`);
       const n: any = await client.dataForUpdate(id_db, type);
-
-      await itemSchema.updateOne(
+      const result = await itemSchema.updateOne(
         { id_db, type },
         {
           ...n,
         }
       );
+      modified += result.modifiedCount;
+      updated += 1;
     } catch (error) {
-      results.push(index);
+      errors.push(index);
     }
   }
 
-  res.json(results);
+  res.json({
+    errors,
+    modified,
+  });
 }

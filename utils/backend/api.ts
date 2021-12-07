@@ -316,7 +316,7 @@ export class Api {
       new: {
         length: newI.length,
         name: 'New',
-        route: '/latest',
+        route: '/new',
         items: newI,
       },
       ...moviedbtabs,

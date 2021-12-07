@@ -42,5 +42,12 @@
     "hide_unreleased": true,
     "reverse": false
   },
+  "latest": {
+    "filter": {
+      "watched": true
+    },
+    "sort_key": false,
+    "hide_unreleased": true
+  },
   "none": {}
 }

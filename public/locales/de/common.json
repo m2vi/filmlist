@@ -9,8 +9,8 @@
       "name": "filmliste",
       "menu": {
         "browse": "Startseite",
-        "series": "Serien",
-        "films": "Filme",
+        "tv": "Serien",
+        "movies": "Filme",
         "anime": "Anime",
         "my list": "Meine Liste",
         "favourites": "Favouriten",
@@ -19,6 +19,7 @@
         "coming soon": "Bald verfügbar",
         "recently released": "Vor kurzem erschienen",
         "trends": "Derzeit beliebt",
+        "latest": "Neuestes",
 
         "action": "Action",
         "action & adventure": "Action & Adventure",
