@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const { id_db, type } = docs[index];
       console.log(id_db, `${parseInt(index) + 1}/${length}`);
-      const n = await client.dataForUpdate(id_db, type);
+      const n: any = await client.dataForUpdate(id_db, type);
 
       await itemSchema.updateOne(
         { id_db, type },
