@@ -228,7 +228,7 @@ export class Api {
   }
 
   async update(id: number, type: MovieDbTypeEnum) {
-    const newData = await client.dataForUpdate(id, type);
+    const newData: any = await client.dataForUpdate(id, type);
 
     const result = await itemSchema.updateOne({ id_db: id, type }, { ...newData });
 
