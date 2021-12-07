@@ -244,7 +244,7 @@ export class Api {
       try {
         const { id_db, type } = docs[index];
 
-        const newData = await client.dataForUpdate(id_db, type);
+        const newData: any = await client.dataForUpdate(id_db, type);
 
         await itemSchema.updateOne({ id_db, type }, { ...newData });
         finished.push(index);
