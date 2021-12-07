@@ -17,7 +17,7 @@ export default function Example() {
           <Listbox.Button className='flex justify-between items-center relative w-full py-2 px-4 mb-2  text-left bg-primary-800 border border-primary-600 placeholder-primary-300 text-primary-100 rounded-8 shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm'>
             <span className='block truncate'>{selected.name}</span>
             <span className='w-5 h-5 text-gray-400' aria-hidden='true'>
-              <svg xmlns='http://www.w3.org/2000/svg' className='h-6 w-6' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+              <svg xmlns='http://www.w3.org/2000/svg' className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M8 9l4-4 4 4m0 6l-4 4-4-4' />
               </svg>
             </span>

@@ -40,31 +40,47 @@ export class Api {
     return this.tabs[name]!;
   }
 
-  async getTab({
-    tab,
-    locale,
-    start,
-    end,
-    includeGenres,
-  }: {
-    tab: string;
-    locale: string;
-    start: number;
-    end: number;
-    includeGenres?: number;
-  }) {
-    //! überarbeiten!
-    const db = await this.init();
+  async getTab(
+    {
+      tab,
+      locale,
+      start,
+      end,
+      includeGenres,
+    }: {
+      tab: string;
+      locale: string;
+      start: number;
+      end: number;
+      includeGenres?: number;
+    },
+    default_items?: ItemProps[]
+  ) {
+    let items = [];
     const config = this.getTabConfig(tab);
-    const items = await this.find(config?.filter ? config?.filter : {});
-    const sorted =
-      typeof config?.sort_key === 'boolean' ? items : sortByKey(items, config?.sort_key ? config?.sort_key : 'name', locale).reverse();
-    const genre_step = config?.includeGenres
-      ? sorted.filter(({ genre_ids }) => someIncludes(config?.includeGenres, genre_ids))
+
+    if (default_items) {
+      items = _.filter(default_items, config?.filter ? config?.filter : {});
+    } else {
+      const db = await this.init();
+      items = await this.find(config?.filter ? config?.filter : {});
+    }
+
+    if (typeof config?.sort_key === 'boolean') {
+    } else if (typeof config?.sort_key === 'undefined') {
+      items = sortByKey(items, 'name', locale).reverse();
+    } else if (config?.sort_key) {
+      items = sortByKey(items, config?.sort_key);
+    }
+
+    items = config?.includeGenres
+      ? items.filter(({ genre_ids }) => someIncludes(config?.includeGenres, genre_ids))
       : includeGenres
-      ? sorted.filter(({ genre_ids }) => genre_ids.includes(includeGenres))
-      : sorted;
-    const result = this.prepareForFrontend(genre_step, locale, null, null, null, config?.reverse, config?.only_unreleased);
+      ? items.filter(({ genre_ids }) => genre_ids.includes(includeGenres))
+      : items;
+    items = config?.hide_unreleased ? items.filter(({ release_date }) => isReleased(release_date)) : items;
+
+    const result = this.prepareForFrontend(items, locale, null, null, null, config?.reverse, config?.only_unreleased);
 
     return {
       length: result.length,
@@ -285,9 +301,10 @@ export class Api {
     const items = await this.find({});
     const moviedbtabs = await client.getTabs();
 
-    const myList = this.prepareForFrontend(_.filter(items, { watched: false }), locale, null, 0, 20);
-    const newI = this.prepareForFrontend(items, locale, null, 0, 20);
-    const comingSoon = this.prepareForFrontend(items, locale, 'release_date', 0, 20, false, true);
+    const myList = (await this.getTab({ tab: 'my list', locale: locale!, start: 0, end: 20 }, items)).items;
+    const newI = (await this.getTab({ tab: 'new', locale: locale!, start: 0, end: 20 }, items)).items;
+    const soon = (await this.getTab({ tab: 'soon', locale: locale!, start: 0, end: 20 }, items)).items;
+    const recently = (await this.getTab({ tab: 'recently released', locale: locale!, start: 0, end: 20 }, items)).items;
 
     return {
       myList: {
@@ -304,10 +321,16 @@ export class Api {
       },
       ...moviedbtabs,
       comingSoon: {
-        length: comingSoon.length,
+        length: soon.length,
         name: 'Coming Soon',
         route: '/soon',
-        items: comingSoon,
+        items: soon,
+      },
+      recentlyReleased: {
+        length: recently.length,
+        name: 'Recently Released',
+        route: '/recently',
+        items: recently,
       },
       ...this.getBrowseGenres(items, locale),
     };

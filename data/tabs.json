@@ -28,12 +28,19 @@
     "filter": {
       "watched": false
     },
-    "sort_key": false
+    "sort_key": false,
+    "hide_unreleased": true
   },
   "favourites": {
     "filter": {
       "favoured": true
-    }
+    },
+    "hide_unreleased": true
+  },
+  "recently released": {
+    "sort_key": "release_date",
+    "hide_unreleased": true,
+    "reverse": false
   },
   "none": {}
 }

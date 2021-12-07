@@ -62,6 +62,7 @@ export interface TabFilterOptions {
   reverse?: boolean;
   includeGenres?: number[];
   only_unreleased?: boolean;
+  hide_unreleased?: boolean;
 }
 
 export interface Tabs {
