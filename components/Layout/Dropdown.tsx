@@ -30,9 +30,9 @@ const Dropdown = () => {
           <div className='absolute right-0 w-170 mt-3 origin-top-right bg-primary-800 divide-y divide-primary-700 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
             <Menu.Items>
               <div className='px-1 py-1'>
-                <Link href='/insert' passHref={true}>
-                  <Menu.Item>
-                    {({ active }) => (
+                <Menu.Item>
+                  {({ active }) => (
+                    <Link href='/insert' passHref={true}>
                       <button
                         className={`${
                           active ? ' text-primary-200 opacity-80' : 'text-primary-100'
@@ -41,16 +41,16 @@ const Dropdown = () => {
                         <IoAddOutline className='w-5 h-5 mr-2' aria-hidden='true' />
                         Add Entry
                       </button>
-                    )}
-                  </Menu.Item>
-                </Link>
+                    </Link>
+                  )}
+                </Menu.Item>
               </div>
             </Menu.Items>
             <Menu.Items>
               <div className='px-1 py-1'>
-                <Link href='/logout' passHref={true}>
-                  <Menu.Item>
-                    {({ active }) => (
+                <Menu.Item>
+                  {({ active }) => (
+                    <Link href='/logout' passHref={true}>
                       <button
                         className={`${
                           active ? ' text-primary-200 opacity-80' : 'text-primary-100'
@@ -59,9 +59,9 @@ const Dropdown = () => {
                         <IoLogOutOutline className='w-5 h-5 mr-2' aria-hidden='true' />
                         Log out
                       </button>
-                    )}
-                  </Menu.Item>
-                </Link>
+                    </Link>
+                  )}
+                </Menu.Item>
               </div>
             </Menu.Items>
           </div>

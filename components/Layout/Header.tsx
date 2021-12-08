@@ -23,8 +23,8 @@ const Header = () => {
         <div className='md:flex items-center hidden'>
           {routes.map((route) => (
             <span className='cursor-pointer mr-4 text-primary-100 hover:opacity-80' key={route}>
-              <Link href={`/${route}`} shallow={false} prefetch={false}>
-                {t(`pages.filmlist.menu.${route}`)}
+              <Link href={`/${route}`} passHref={true}>
+                <a>{t(`pages.filmlist.menu.${route}`)}</a>
               </Link>
             </span>
           ))}
