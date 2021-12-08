@@ -8,7 +8,6 @@ import Dropdown from './Dropdown';
 
 const Header = () => {
   const { t } = useTranslation();
-  const { asPath } = useRouter();
 
   const routes = ['browse', 'tv', 'movies', 'my list', 'favourites'];
 
@@ -23,12 +22,7 @@ const Header = () => {
       >
         <div className='md:flex items-center hidden'>
           {routes.map((route) => (
-            <span
-              className={`cursor-pointer mr-4 text-primary-100 hover:opacity-80 ${
-                decodeURIComponent(asPath) === `/${route}` && 'font-semibold hover:opacity-100'
-              }`}
-              key={route}
-            >
+            <span className='cursor-pointer mr-4 text-primary-100 hover:opacity-80' key={route}>
               <Link href={`/${route}`} shallow={false} prefetch={false}>
                 {t(`pages.filmlist.menu.${route}`)}
               </Link>
