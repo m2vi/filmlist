@@ -7,6 +7,8 @@ import Card from './Card';
 const Carousel = ({ section: { items, length, name, route } }: { section: BrowseSectionProps }) => {
   const { t } = useTranslation();
 
+  console.log(items.length);
+
   return (
     <div className='mb-6 h-auto'>
       {route ? (

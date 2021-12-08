@@ -22,7 +22,7 @@ module.exports = {
       },
     ];
   },
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+  webpack: (config, { buildId, webpack }) => {
     config.plugins.push(
       new webpack.DefinePlugin({
         'process.env.BUILD_ID': JSON.stringify(buildId),

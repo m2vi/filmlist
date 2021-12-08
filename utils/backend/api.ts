@@ -111,7 +111,7 @@ export class Api {
     const sorted = !sortKey ? mapped : sortByKey(mapped, sortKey);
     const leased = only_unreleased ? sorted.filter(({ release_date }) => !isReleased(release_date)) : sorted;
     const ersed = reverse ? leased.reverse() : leased;
-    const sliced = !end || !start ? ersed : ersed.slice(start, end);
+    const sliced = typeof start === 'number' ? (!(start + 1 && end) ? ersed : ersed.slice(start, end)) : ersed;
 
     return sliced;
   }
@@ -304,7 +304,7 @@ export class Api {
     const myList = (await this.getTab({ tab: 'my list', locale: locale!, start: 0, end: 20 }, items)).items;
     const latest = (await this.getTab({ tab: 'latest', locale: locale!, start: 0, end: 20 }, items)).items;
     const soon = (await this.getTab({ tab: 'soon', locale: locale!, start: 0, end: 20 }, items)).items;
-    const recently = (await this.getTab({ tab: 'recently released', locale: locale!, start: 0, end: 20 }, items)).items;
+    const recently = (await this.getTab({ tab: 'recently', locale: locale!, start: 0, end: 20 }, items)).items;
 
     return {
       myList: {

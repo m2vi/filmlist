@@ -37,7 +37,7 @@
     },
     "hide_unreleased": true
   },
-  "recently released": {
+  "recently": {
     "sort_key": "release_date",
     "hide_unreleased": true,
     "reverse": false
