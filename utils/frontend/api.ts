@@ -29,7 +29,6 @@ export class Api {
 
       return res.items ? res.items : [];
     } catch (error) {
-      console.log(error);
       return [];
     }
   }

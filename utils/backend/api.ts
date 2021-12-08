@@ -160,7 +160,6 @@ export class Api {
 
       return await doc.save();
     } catch (error: any) {
-      console.log(error.message);
       return null;
     }
   }

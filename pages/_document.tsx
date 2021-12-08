@@ -30,6 +30,7 @@ class MyDocument extends Document {
           <meta name='msapplication-config' content='/browserconfig.xml' />
           <link rel='manifest' href='/manifest.json' />
           <meta name='theme-color' content='#ffffff' />
+          <meta name='description' content='A list with all movies or series I have ever watched or still want to watch' />
         </Head>
         <body className='overflow-x-hidden'>
           <Main />
