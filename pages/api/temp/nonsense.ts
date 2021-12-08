@@ -1,6 +1,4 @@
-import itemSchema from '@models/itemSchema';
 import api from '@utils/backend/api';
-import client from '@utils/themoviedb/api';
 import { ItemProps } from '@utils/types';
 import { isReleased } from '@utils/utils';
 import type { NextApiRequest, NextApiResponse } from 'next';

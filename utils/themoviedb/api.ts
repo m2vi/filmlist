@@ -1,8 +1,7 @@
-import backend, { Api } from '@utils/backend/api';
+import backend from '@utils/backend/api';
 import { ItemProps, MovieDbTypeEnum } from '@utils/types';
 import { stringToBoolean, validateEnv } from '@utils/utils';
 import { MovieDb } from 'moviedb-promise';
-import { shuffle } from 'underscore';
 
 export const api = new MovieDb(validateEnv('MOVIE_TOKEN'));
 

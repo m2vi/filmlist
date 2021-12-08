@@ -1,5 +1,4 @@
-import { forwardRef, useEffect, useState } from 'react';
-import { IoSearchOutline, IoSearch } from 'react-icons/io5';
+import { forwardRef } from 'react';
 
 export interface InputProps extends React.ComponentPropsWithoutRef<'input'> {
   textarea?: boolean;

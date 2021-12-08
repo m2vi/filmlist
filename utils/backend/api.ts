@@ -1,16 +1,15 @@
-import { Connection, FilterQuery, ObjectId, Schema } from 'mongoose';
+import { Connection, FilterQuery } from 'mongoose';
 import { connectToDatabase } from '../database';
-import { removeArray, shuffle, sortByKey } from '../array';
+import { shuffle, sortByKey } from '../array';
 import tabs from '@data/tabs.json';
 import itemSchema from '@models/itemSchema';
-import _, { filter } from 'underscore';
+import _ from 'underscore';
 import { FrontendItemProps, GenreProps, InsertProps, ItemProps, MovieDbTypeEnum, Tabs } from '../types';
 import jwt from 'jsonwebtoken';
 import cookies from 'js-cookie';
 import client from '@utils/themoviedb/api';
 import genres from '@utils/themoviedb/genres';
 import { isReleased, someIncludes } from '@utils/utils';
-import config from '@data/config.json';
 
 class Jwt {
   decode() {

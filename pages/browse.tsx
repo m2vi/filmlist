@@ -1,5 +1,4 @@
 import Carousel from '@components/Carousel';
-import Full from '@components/Full';
 import Title from '@components/Title';
 import api from '@utils/backend/api';
 import type { GetServerSideProps } from 'next';

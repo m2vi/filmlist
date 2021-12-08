@@ -1,6 +1,5 @@
 import genreList from '@data/genres.json';
 import { removeDuplicates, sortByKey } from '@utils/array';
-import _ from 'underscore';
 
 class Genres {
   constructor() {}
