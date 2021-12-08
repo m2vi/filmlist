@@ -21,7 +21,7 @@ export class Api {
     try {
       const res = await (
         await fetch(
-          `/api/manage/tab?tab=${query.tab ? query.tab : 'none'}&locale=${locale}&start=${start}&end=${start + 50}${
+          `/api/manage/tab?tab=${query.tab ? query.tab : 'none'}&locale=${locale}&start=${start}&end=${start + 75}${
             query.id ? `&includeGenres=${query.id}` : ''
           }`
         )
@@ -29,6 +29,7 @@ export class Api {
 
       return res.items ? res.items : [];
     } catch (error) {
+      console.log(error);
       return [];
     }
   }

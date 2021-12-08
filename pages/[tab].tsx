@@ -18,7 +18,7 @@ export const getServerSideProps: GetServerSideProps = async ({ locale, query }: 
   return {
     props: {
       ...(await serverSideTranslations(locale!, ['common', 'footer'])),
-      data: await api.getTab({ tab: query.tab, locale, start: 0, end: 50 }),
+      data: await api.getTab({ tab: query.tab, locale, start: 0, end: 75 }),
     },
   };
 };

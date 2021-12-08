@@ -10,7 +10,7 @@ const Home = ({ ...props }) => {
   const { t } = useTranslation();
 
   return (
-    <div className='pt-10 w-full'>
+    <div className='pt-10 w-full flex justify-center'>
       <Title title='Browse' />
       <div className='w-full items-center pt-11 px-11 max-w-screen-2xl'>
         {Object.entries(props.data).map(([key, section], i) => {
@@ -26,7 +26,6 @@ Home.layout = true;
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  console.log(process.env.BUILD_ID);
   return {
     props: {
       ...(await serverSideTranslations(context.locale!, ['common', 'footer'])),
