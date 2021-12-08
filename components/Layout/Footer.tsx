@@ -6,7 +6,7 @@ const Footer = () => {
       <span className='text-xs text-primary-300 l-1'>© 2021 m2vi &#123;{process.env.BUILD_ID}&#125;</span>
       <div>
         <a href='https://github.com/m2vi/filmlist'>
-          <IoLogoGithub style={{ height: '17px', width: '17px' }} />
+          <IoLogoGithub style={{ height: '17.5px', width: '17.5px' }} />
         </a>
       </div>
     </div>
