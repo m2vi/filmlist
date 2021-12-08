@@ -63,3 +63,7 @@ p {
 .overlay:hover .overlay-child {
   visibility: visible;
 }
+
+.l-1 {
+  line-height: 1 !important;
+}

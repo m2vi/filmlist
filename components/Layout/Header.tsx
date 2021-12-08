@@ -14,8 +14,8 @@ const Header = () => {
 
   return (
     <div
-      className='absolute top-0 z-50 py-1 px-11 bg-transparent w-full'
-      style={{ maxWidth: '2220px', transform: ' translate(-50%, 0)', left: '50%' }}
+      className='absolute top-0 z-50 py-1 px-11 bg-transparent w-full max-w-screen-2xl'
+      style={{ transform: ' translate(-50%, 0)', left: '50%' }}
     >
       <header
         className='font-normal text-base text-primary-200 w-full flex justify-end items-center md:justify-between bg-primary-900'
@@ -31,6 +31,9 @@ const Header = () => {
           ))}
         </div>
         <div className='flex items-center justify-end'>
+          <Link href='/anime'>
+            <a className='font-normal text-sm h-full text-center items-center mx-4'>Anime</a>
+          </Link>
           <Dropdown />
         </div>
       </header>

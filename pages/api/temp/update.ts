@@ -1,6 +1,4 @@
-import itemSchema from '@models/itemSchema';
 import api from '@utils/backend/api';
-import client from '@utils/themoviedb/api';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

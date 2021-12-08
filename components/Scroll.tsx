@@ -27,18 +27,24 @@ const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number }
   };
 
   return (
-    <Full className='pt-10 flex justify-center'>
+    <div className='pt-10 flex h-full w-full justify-center'>
       <Title title={`${t(`pages.filmlist.menu.${query.tab!}`)} – ${t(`pages.filmlist.default`)}`} />
-      <main className='w-full overflow-y-scroll dD5d-items px-11 pt-11' ref={ScrollRef} id='scrollableDiv'>
+      <main
+        className='w-full overflow-y-scroll dD5d-items max-w-screen-2xl px-11 pt-11'
+        ref={ScrollRef}
+        id='scrollableDiv'
+        style={{ overflowX: 'hidden' }}
+      >
         <InfiniteScroll
           dataLength={items.length}
           next={fetchMoreData}
           hasMore={data.length >= items.length}
           loader={null}
           scrollableTarget='scrollableDiv'
-          className='w-full p-0 grid gap-2 auto-rows-auto place-items-center'
+          className='w-full p-0 grid gap-2 auto-rows-auto place-items-center !overflow-x-hidden '
           style={{
             gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+            overflowX: 'hidden',
           }}
         >
           {items.map(({ ...props }, i: number) => {
@@ -46,7 +52,7 @@ const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number }
           })}
         </InfiniteScroll>
       </main>
-    </Full>
+    </div>
   );
 };
 

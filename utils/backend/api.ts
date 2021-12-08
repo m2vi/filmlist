@@ -302,7 +302,7 @@ export class Api {
     const moviedbtabs = await client.getTabs();
 
     const myList = (await this.getTab({ tab: 'my list', locale: locale!, start: 0, end: 20 }, items)).items;
-    const newI = (await this.getTab({ tab: 'new', locale: locale!, start: 0, end: 20 }, items)).items;
+    const latest = (await this.getTab({ tab: 'latest', locale: locale!, start: 0, end: 20 }, items)).items;
     const soon = (await this.getTab({ tab: 'soon', locale: locale!, start: 0, end: 20 }, items)).items;
     const recently = (await this.getTab({ tab: 'recently released', locale: locale!, start: 0, end: 20 }, items)).items;
 
@@ -313,11 +313,11 @@ export class Api {
         route: '/my-list',
         items: myList,
       },
-      new: {
-        length: newI.length,
-        name: 'New',
-        route: '/new',
-        items: newI,
+      latest: {
+        length: latest.length,
+        name: 'Latest',
+        route: '/latest',
+        items: latest,
       },
       ...moviedbtabs,
       comingSoon: {

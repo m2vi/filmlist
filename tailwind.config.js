@@ -89,7 +89,7 @@ module.exports = {
       maxWidth: {
         xxs: '225px',
       },
-      screens: { fmd: '860px', flg: '1125px', fxl: '1350px', f2xl: '1720px' },
+      screens: { fmd: '860px', flg: '1125px', fxl: '1350px', f2xl: '1720px', '2xl': '1560px' },
     },
   },
   variants: {
@@ -100,4 +100,5 @@ module.exports = {
       margin: ['first', 'last'],
     },
   },
+  plugins: [require('tailwindcss-important')()],
 };

@@ -14,7 +14,7 @@ const Carousel = ({ section: { items, length, name, route } }: { section: Browse
           <a className='carousel-title hover:text-primary-200'>{t(`pages.filmlist.menu.${name.toLowerCase()}`)}</a>
         </Link>
       ) : (
-        <span className='carousel-title'>{t(`pages.filmlist.menu.${name.toLowerCase()}`)}</span>
+        <span className='carousel-title '>{t(`pages.filmlist.menu.${name.toLowerCase()}`)}</span>
       )}
 
       <Swiper
@@ -23,18 +23,6 @@ const Carousel = ({ section: { items, length, name, route } }: { section: Browse
         lazy={true}
         className='mt-1'
         breakpoints={{
-          2150: {
-            slidesPerView: 13,
-          },
-          2000: {
-            slidesPerView: 12,
-          },
-          1800: {
-            slidesPerView: 11,
-          },
-          1700: {
-            slidesPerView: 10,
-          },
           1540: {
             slidesPerView: 9,
           },

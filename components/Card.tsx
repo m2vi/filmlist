@@ -1,4 +1,5 @@
 import { FrontendItemProps } from '@utils/types';
+import copy from 'copy-to-clipboard';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 
@@ -22,7 +23,11 @@ const Card = ({ _id, genre_ids, name, poster_path, release_date }: FrontendItemP
       </div>
       <div className='absolute w-full h-full top-0 left-0 z-50 overlay-child flex items-end justify-start px-2'>
         <div className='w-full pb-2'>
-          <p className='font-semibold text-base overflow-hidden overflow-ellipsis whitespace-nowrap' title={name.toString()}>
+          <p
+            className='font-semibold text-base overflow-hidden overflow-ellipsis whitespace-nowrap'
+            title={name.toString()}
+            onClick={(e) => copy(e.currentTarget.title)}
+          >
             {t(`pages.filmlist.menu.${name}`, {
               defaultValue: name,
             })}

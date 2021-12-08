@@ -10,14 +10,14 @@ const Home = ({ ...props }) => {
   const { t } = useTranslation();
 
   return (
-    <Full className='pt-10 flex justify-center'>
+    <div className='pt-10 w-full'>
       <Title title='Browse' />
-      <div className='w-full items-center pt-11 px-11' style={{ maxWidth: '2220px' }}>
+      <div className='w-full items-center pt-11 px-11 max-w-screen-2xl'>
         {Object.entries(props.data).map(([key, section], i) => {
           return <Carousel section={section as any} key={i} />;
         })}
       </div>
-    </Full>
+    </div>
   );
 };
 
@@ -26,6 +26,7 @@ Home.layout = true;
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  console.log(process.env.BUILD_ID);
   return {
     props: {
       ...(await serverSideTranslations(context.locale!, ['common', 'footer'])),
