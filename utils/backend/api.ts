@@ -62,7 +62,7 @@ export class Api {
     if (default_items) {
       items = _.filter(default_items, config?.filter ? config?.filter : {});
     } else {
-      const db = await this.init();
+      await this.init();
       items = await this.find(config?.filter ? config?.filter : {});
     }
 
@@ -88,7 +88,7 @@ export class Api {
     };
   }
 
-  toFrontendItem({ _id, genre_ids, name, poster_path, release_date, original_name }: ItemProps, locale: string = 'en'): FrontendItemProps {
+  toFrontendItem({ _id, genre_ids, name, poster_path, release_date }: ItemProps, locale: string = 'en'): FrontendItemProps {
     return {
       _id: _id ? _id.toString() : null,
       genre_ids: genre_ids ? genre_ids : [],
