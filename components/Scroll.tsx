@@ -28,7 +28,7 @@ const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number }
 
   return (
     <Full className='pt-10 flex justify-center'>
-      <Title title={`${t(`pages.filmlist.menu.${query.tab!}`)} – ${t(`pages.filmlist.default`)}`} />
+      <Title title={`${query.tab ? t(`pages.filmlist.menu.${query.tab}`) : `Genre ${query.id}`} – ${t(`pages.filmlist.default`)}`} />
       <main
         className='w-full overflow-y-scroll dD5d-items max-w-screen-2xl px-11 pt-11'
         ref={ScrollRef}

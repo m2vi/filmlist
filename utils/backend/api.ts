@@ -318,9 +318,9 @@ export class Api {
         items: latest,
       },
       ...moviedbtabs,
-      comingSoon: {
+      soon: {
         length: soon.length,
-        name: 'Coming Soon',
+        name: 'soon',
         route: '/soon',
         items: soon,
       },
