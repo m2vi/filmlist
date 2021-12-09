@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
-import { IoNotifications, IoSearch } from 'react-icons/io5';
+import { IoSearch } from 'react-icons/io5';
 import Dropdown from './Dropdown';
+import PopoverEl from './Popover';
 
 const Header = () => {
   const { t } = useTranslation();
@@ -35,9 +36,7 @@ const Header = () => {
             <a className='font-normal text-sm text-center ml-4 l-1 h-7 flex items-center'>Anime</a>
           </Link>
 
-          <span className='font-normal text-sm h-full text-center items-center mx-4 cursor-pointer'>
-            <IoNotifications className='h-4 w-4' />
-          </span>
+          <PopoverEl />
 
           <Dropdown />
         </div>

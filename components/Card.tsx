@@ -2,6 +2,7 @@ import { FrontendItemProps } from '@utils/types';
 import copy from 'copy-to-clipboard';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
+import config from '@data/config.json';
 
 const Card = ({ _id, genre_ids, name, poster_path, release_date }: FrontendItemProps) => {
   const { t } = useTranslation();
@@ -12,7 +13,7 @@ const Card = ({ _id, genre_ids, name, poster_path, release_date }: FrontendItemP
         {poster_path ? (
           /* eslint-disable-next-line */
           <img
-            src={`https://image.tmdb.org/t/p/w154${poster_path}`}
+            src={`https://image.tmdb.org/t/p/w${config.posterWidth}${poster_path}`}
             alt={_id ? _id : ''}
             style={{ aspectRatio: '154 / 226', width: '100%' }}
             className='no-drag select-none w-full overflow-hidden relative'
