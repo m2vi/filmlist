@@ -46,10 +46,10 @@ const Carousel = ({ section: { items, length, name, route } }: { section: Browse
           },
         }}
       >
-        {items.map(({ _id, genre_ids, name, poster_path, release_date }, index) => {
+        {items.map((props, index) => {
           return (
             <SwiperSlide key={index} style={{ width: '150px' }}>
-              <Card _id={_id} genre_ids={genre_ids} name={name} poster_path={poster_path} release_date={release_date} />
+              <Card {...props} />
             </SwiperSlide>
           );
         })}

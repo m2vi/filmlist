@@ -23,7 +23,7 @@ export class Client {
     };
   }
 
-  async dataForUpdate(id: number, type: MovieDbTypeEnum) {
+  async dataForUpdate(id: number, type: MovieDbTypeEnum): Promise<Partial<ItemProps>> {
     const { isMovie, de, en } = await this.getBase(id, type);
 
     return {
@@ -32,8 +32,12 @@ export class Client {
         de: isMovie ? de.title : de.name,
       },
       poster_path: {
-        en: isMovie ? en.poster_path : en.poster_path,
-        de: isMovie ? de.poster_path : de.poster_path,
+        en: en.poster_path,
+        de: de.poster_path,
+      },
+      backdrop_path: {
+        en: en.backdrop_path,
+        de: de.backdrop_path,
       },
       release_date: new Date(isMovie ? en.release_date : en.first_air_date).getTime(),
     };
@@ -67,8 +71,12 @@ export class Client {
       original_language: en.original_language,
       original_name: isMovie ? en.original_title : en.original_name,
       poster_path: {
-        en: isMovie ? en.poster_path : en.poster_path,
-        de: isMovie ? de.poster_path : de.poster_path,
+        en: en.poster_path,
+        de: de.poster_path,
+      },
+      backdrop_path: {
+        en: en.backdrop_path,
+        de: en.backdrop_path,
       },
       release_date: new Date(isMovie ? en.release_date : en.first_air_date).getTime(),
       type: isMovie ? 1 : 0,

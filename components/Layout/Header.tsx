@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
-import { IoSearch } from 'react-icons/io5';
 import Dropdown from './Dropdown';
 import PopoverEl from './Popover';
+import Search from './Search';
 
 const Header = () => {
   const { t } = useTranslation();
@@ -28,9 +28,7 @@ const Header = () => {
           ))}
         </div>
         <div className='flex items-center justify-end'>
-          <span className='font-normal text-sm h-full text-center items-center ml-4 cursor-pointer'>
-            <IoSearch className='h-4 w-4' />
-          </span>
+          <Search />
 
           <Link href='/anime'>
             <a className='font-normal text-sm text-center ml-4 l-1 h-7 flex items-center'>Anime</a>

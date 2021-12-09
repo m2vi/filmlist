@@ -49,5 +49,12 @@
     "sort_key": false,
     "hide_unreleased": true
   },
+  "notifications": {
+    "filter": {
+      "watched": false
+    },
+    "sort_key": "release_date",
+    "hide_unreleased": true
+  },
   "none": {}
 }

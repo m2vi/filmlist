@@ -12,6 +12,8 @@ import { NextPage } from 'next';
 import React from 'react';
 import Layout from '@components/Layout/Layout';
 import Null from '@components/Null';
+import 'moment/locale/en-gb';
+import 'moment/locale/de';
 
 Router.events.on('routeChangeStart', () => nProgress.start());
 Router.events.on('routeChangeComplete', () => nProgress.done());

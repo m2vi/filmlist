@@ -24,6 +24,9 @@ export interface ItemProps {
   poster_path: {
     [locale: string]: string;
   };
+  backdrop_path: {
+    [locale: string]: string;
+  };
   release_date: number;
   type: MovieDbTypeEnum;
   watched: boolean;
@@ -34,7 +37,15 @@ export interface FrontendItemProps {
   genre_ids: number[];
   name: string;
   poster_path: string | null;
+  backdrop_path: string | null;
   release_date: number;
+}
+
+export interface NotificationItemProps {
+  _id: string | null;
+  name: string;
+  backdrop_path: string | null;
+  release_date: string;
 }
 
 export interface BrowseSectionProps {

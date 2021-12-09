@@ -1,7 +1,9 @@
 import jwt from 'jsonwebtoken';
 import cookies from 'js-cookie';
-import { DiscordUser } from '@utils/types';
+import { DiscordUser, FrontendItemProps, NotificationItemProps } from '@utils/types';
 import { ParsedUrlQuery } from 'querystring';
+import moment from 'moment';
+import { basicFetch } from '@utils/fetch';
 
 class Jwt {
   decode() {
@@ -31,6 +33,25 @@ export class Api {
     } catch (error) {
       return [];
     }
+  }
+
+  private toNotifications(items: FrontendItemProps[] = [], locale: string = 'en') {
+    return items
+      .filter(({ release_date }) => new Date().getTime() - release_date < 1000 * 60 * 60 * 24 * 30 * 6)
+      .map(({ _id, name, release_date, backdrop_path }) => {
+        return {
+          _id,
+          name,
+          backdrop_path,
+          release_date: moment(release_date).locale(locale).fromNow(),
+        };
+      });
+  }
+
+  async getNotifications(locale: string = 'en'): Promise<NotificationItemProps[]> {
+    const { items } = await basicFetch(`/api/manage/tab?tab=notifications&locale=${locale}&start=0&end=15`);
+
+    return this.toNotifications(items, locale);
   }
 }
 

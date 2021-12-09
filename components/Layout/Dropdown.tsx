@@ -11,7 +11,7 @@ const Dropdown = () => {
   const avatar = `https://cdn.discordapp.com/avatars/${user?.id}/${user?.avatar}.png?size=128`;
 
   return (
-    <div className=' flex justify-end'>
+    <div className='flex justify-end'>
       <Menu as='div' className='relative h-full'>
         <div className='h-full flex justify-center'>
           <Menu.Button className='inline-flex justify-center h-7 w-7 bg-primary-800 text-sm font-medium text-white bg-black rounded bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'>
@@ -27,7 +27,7 @@ const Dropdown = () => {
           leaveFrom='transform opacity-100 scale-100'
           leaveTo='transform opacity-0 scale-95'
         >
-          <div className='absolute right-0 w-170 mt-3 origin-top-right bg-primary-800 divide-y divide-primary-700 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
+          <div className='absolute right-0 w-170 mt-3 origin-top-right bg-primary-800 divide-y divide-primary-700 rounded-5'>
             <Menu.Items>
               <div className='px-1 py-1'>
                 <Menu.Item>
