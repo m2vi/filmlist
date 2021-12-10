@@ -14,11 +14,11 @@ const Card = ({ _id, genre_ids, name, poster_path, release_date }: FrontendItemP
           <img
             src={`https://image.tmdb.org/t/p/w${config.posterWidth}${poster_path}`}
             alt={_id ? _id : ''}
-            style={{ aspectRatio: '154 / 226', width: '100%' }}
+            style={{ aspectRatio: '2 / 3', width: '100%' }}
             className='no-drag select-none w-full overflow-hidden relative'
           />
         ) : (
-          <div style={{ aspectRatio: '154 / 226', width: '100%' }} className='no-drag select-none w-full overflow-hidden relative' />
+          <div style={{ aspectRatio: '2 / 3', width: '100%' }} className='no-drag select-none w-full overflow-hidden relative' />
         )}
       </div>
       <div className='absolute w-full h-full top-0 left-0 z-10 overlay-child flex items-end justify-start px-2'>

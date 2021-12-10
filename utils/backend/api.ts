@@ -57,6 +57,11 @@ export class Api {
   ) {
     let items = [];
     const config = this.getTabConfig(tab);
+    if (config === null)
+      return {
+        length: (default_items ? default_items : []).length,
+        items: default_items ? default_items : [],
+      };
 
     if (default_items) {
       items = _.filter(default_items, config?.filter ? config?.filter : {});
