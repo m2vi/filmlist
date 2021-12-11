@@ -35,7 +35,8 @@ class Search {
     return mapped.slice(start, end);
   }
 
-  async get(pattern: string = '', { locale = 'en', items }: SearchOptions) {
+  async get(pattern: string = '', { locale = 'en' }: SearchOptions) {
+    const items = await api.find({});
     // const fused = this.fuse(items, pattern);
     const matched = this.matchSorter(items, pattern);
     const prepared = this.prepare(matched, { locale, start: 0, end: 75 });

@@ -1,9 +1,8 @@
 import Card from '@components/Card';
 import { Input } from '@components/Input';
 import Title from '@components/Title';
-import api from '@utils/backend/api';
 import search from '@utils/frontend/search';
-import { FrontendItemProps, ItemProps } from '@utils/types';
+import { FrontendItemProps } from '@utils/types';
 import moment from 'moment';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
@@ -11,7 +10,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { createRef, useState } from 'react';
 
-const Search = ({ data }: { data: ItemProps[] }) => {
+const Search = () => {
   const { t } = useTranslation();
   const [items, setItems] = useState<FrontendItemProps[]>([]);
   const { locale } = useRouter();
@@ -20,7 +19,7 @@ const Search = ({ data }: { data: ItemProps[] }) => {
   const fetchMore = () => {
     const start = window.performance.now();
     search
-      .fetchMoreData(data, InputRef?.current?.value!, locale)
+      .fetchMoreData(InputRef?.current?.value!, locale)
       .then((data) => setItems(data))
       .then(() => {
         const end = window.performance.now();
@@ -65,7 +64,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       ...(await serverSideTranslations(context.locale!, ['common', 'footer'])),
-      data: JSON.stringify(await api.find({})),
     },
   };
 };

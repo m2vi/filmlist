@@ -1,16 +1,10 @@
-import { FrontendItemProps, ItemProps } from '@utils/types';
+import { FrontendItemProps } from '@utils/types';
 
 class Search {
-  async fetchMoreData(data: ItemProps[], pattern: string, locale: string = 'en'): Promise<FrontendItemProps[]> {
+  async fetchMoreData(pattern: string, locale: string = 'en'): Promise<FrontendItemProps[]> {
     try {
       const res = await (
-        await fetch(`/api/manage/search?pattern=${encodeURIComponent(pattern)}&locale=${encodeURIComponent(locale)}`, {
-          method: 'POST',
-          body: JSON.stringify({ items: data }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
+        await fetch(`/api/manage/search?pattern=${encodeURIComponent(pattern)}&locale=${encodeURIComponent(locale)}`)
       ).json();
 
       return res;
