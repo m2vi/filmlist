@@ -17,18 +17,20 @@ const Search = () => {
   const InputRef = createRef<HTMLInputElement>();
 
   const fetchMore = () => {
+    if (!InputRef.current) return;
     const start = window.performance.now();
+    const value = InputRef.current.value;
     search
-      .fetchMoreData(InputRef?.current?.value!, locale)
+      .fetchMoreData(value, locale)
       .then((data) => setItems(data))
       .then(() => {
         const end = window.performance.now();
         const time = end - start;
 
         console.log({
-          query: InputRef?.current?.value!,
+          query: value,
           locale,
-          time: `${moment(time).valueOf} ms`,
+          time: `${moment(time).valueOf()} ms`,
         });
       });
   };
