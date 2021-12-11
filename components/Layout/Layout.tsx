@@ -10,7 +10,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     <div className='w-full flex flex-col items-center'>
       <Header />
       {children}
-      {!['/[tab]', '/genre/[id]'].includes(pathname) && <Footer />}
+      {!['/[tab]', '/genre/[id]', '/search'].includes(pathname) && <Footer />}
     </div>
   );
 };
