@@ -31,6 +31,11 @@
     "sort_key": false,
     "hide_unreleased": true
   },
+  "watched": {
+    "filter": {
+      "watched": true
+    }
+  },
   "favourites": {
     "filter": {
       "favoured": true
@@ -55,6 +60,11 @@
     },
     "sort_key": "release_date",
     "hide_unreleased": true
+  },
+  "61135": {
+    "filter": {
+      "hall_of_fame": true
+    }
   },
   "none": {}
 }

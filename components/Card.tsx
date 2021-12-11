@@ -4,7 +4,7 @@ import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import config from '@data/config.json';
 
-const Card = ({ _id, genre_ids, name, poster_path, release_date }: FrontendItemProps) => {
+const Card = ({ _id, genre_ids, name, poster_path, release_date, id_db }: FrontendItemProps) => {
   const { t } = useTranslation();
 
   return (
@@ -26,7 +26,7 @@ const Card = ({ _id, genre_ids, name, poster_path, release_date }: FrontendItemP
           <p
             className='font-semibold text-base overflow-hidden overflow-ellipsis whitespace-nowrap'
             title={name.toString()}
-            onClick={(e) => copy(e.currentTarget.title)}
+            onClick={(e) => copy(id_db.toString())}
           >
             {t(`pages.filmlist.menu.${name}`, {
               defaultValue: name,

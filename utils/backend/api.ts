@@ -1,4 +1,4 @@
-import { Connection, FilterQuery } from 'mongoose';
+import { Connection, FilterQuery, UpdateQuery } from 'mongoose';
 import { connectToDatabase } from '../database';
 import { shuffle, sortByKey } from '../array';
 import tabs from '@data/tabs.json';
@@ -92,9 +92,13 @@ export class Api {
     };
   }
 
-  toFrontendItem({ _id, genre_ids, name, poster_path, release_date, backdrop_path }: ItemProps, locale: string = 'en'): FrontendItemProps {
+  toFrontendItem(
+    { _id, genre_ids, name, poster_path, release_date, backdrop_path, id_db }: ItemProps,
+    locale: string = 'en'
+  ): FrontendItemProps {
     return {
       _id: _id ? _id.toString() : null,
+      id_db,
       genre_ids: genre_ids ? genre_ids : [],
       name: name[locale] ? name[locale] : 'Invalid name',
       poster_path: poster_path[locale] ? poster_path[locale] : null,
@@ -239,23 +243,12 @@ export class Api {
     return result;
   }
 
-  async updateAll() {
-    const docs = await api.find({});
-    let finished = [];
-    let errors = [];
+  async updateMany(data: UpdateQuery<ItemProps>) {
+    await this.init();
 
-    for (const index in docs) {
-      try {
-        const { id_db, type } = docs[index];
+    const result = await itemSchema.updateMany({}, data);
 
-        const newData: any = await client.dataForUpdate(id_db, type);
-
-        await itemSchema.updateOne({ id_db, type }, { ...newData });
-        finished.push(index);
-      } catch (error) {
-        errors.push(index);
-      }
-    }
+    return result;
   }
 
   async getGenresWithLessThanNItems(n: number = 20) {

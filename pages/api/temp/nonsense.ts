@@ -10,6 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const favouredButNotWatched = filter({ favoured: true, watched: false });
   const watchedButNotReleased = filter({ watched: true }).filter(({ release_date }) => !isReleased(release_date));
+  const hallOfFameButNotFavoured = filter({ hall_of_fame: true, favoured: false });
 
-  res.status(200).json({ favouredButNotWatched, watchedButNotReleased });
+  res.status(200).json({ favouredButNotWatched, watchedButNotReleased, hallOfFameButNotFavoured });
 }
