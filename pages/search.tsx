@@ -12,7 +12,7 @@ import { createRef, useState } from 'react';
 
 const Search = () => {
   const { t } = useTranslation();
-  const [items, setItems] = useState<FrontendItemProps[]>([]);
+  const [items, setItems] = useState<FrontendItemProps[][]>([]);
   const { locale } = useRouter();
   const InputRef = createRef<HTMLInputElement>();
 
@@ -20,19 +20,18 @@ const Search = () => {
     if (!InputRef.current) return;
     const start = window.performance.now();
     const value = InputRef.current.value;
-    search
-      .fetchMoreData(value, locale)
-      .then((data) => setItems(data))
-      .then(() => {
-        const end = window.performance.now();
-        const time = end - start;
+    search.fetchMoreData(value, locale).then((data) => {
+      setItems(data);
+      const end = window.performance.now();
+      const time = end - start;
 
-        console.log({
-          query: value,
-          locale,
-          time: `${moment(time).valueOf()} ms`,
-        });
+      console.log({
+        query: value,
+        locale,
+        time: `${moment(time).valueOf()} ms`,
+        results: data,
       });
+    });
   };
 
   return (
@@ -41,17 +40,40 @@ const Search = () => {
       <div className='flex justify-center items-center w-full max-h-11 mt-11 pt-11 mb-11'>
         <Input placeholder='Titles, Ids' className='max-w-lg w-full' ref={InputRef} onKeyDown={(e) => e.code === 'Enter' && fetchMore()} />
       </div>
-      <main className='w-full overflow-y-scroll dD5d-items max-w-screen-2xl px-11 pt-11' id='scrollableDiv' style={{ overflowX: 'hidden' }}>
+      <main className='w-full flex flex-col'>
         <div
-          className='w-full p-0 grid gap-2 auto-rows-auto place-items-center !overflow-x-hidden '
-          style={{
-            gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-            overflowX: 'hidden',
-          }}
+          className='w-full overflow-y-scroll dD5d-items max-w-screen-2xl px-11 pt-11'
+          id='scrollableDiv'
+          style={{ overflowX: 'hidden' }}
         >
-          {items.map(({ ...props }, i: number) => {
-            return <Card {...(props as FrontendItemProps)} key={i} />;
-          })}
+          <div
+            className='w-full p-0 grid gap-2 auto-rows-auto place-items-center !overflow-x-hidden '
+            style={{
+              gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+              overflowX: 'hidden',
+            }}
+          >
+            {items[0].map(({ ...props }, i: number) => {
+              return <Card {...(props as FrontendItemProps)} key={i} />;
+            })}
+          </div>
+        </div>
+        <div
+          className='w-full overflow-y-scroll dD5d-items max-w-screen-2xl px-11 pt-11'
+          id='scrollableDiv'
+          style={{ overflowX: 'hidden' }}
+        >
+          <div
+            className='w-full p-0 grid gap-2 auto-rows-auto place-items-center !overflow-x-hidden '
+            style={{
+              gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+              overflowX: 'hidden',
+            }}
+          >
+            {items[1].map(({ ...props }, i: number) => {
+              return <Card {...(props as FrontendItemProps)} key={i} />;
+            })}
+          </div>
         </div>
       </main>
     </div>

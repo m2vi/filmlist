@@ -25,8 +25,8 @@ const Card = ({ _id, genre_ids, name, poster_path, release_date, id_db }: Fronte
         <div className='w-full pb-2'>
           <p
             className='font-semibold text-base overflow-hidden overflow-ellipsis whitespace-nowrap'
-            title={name.toString()}
-            onClick={(e) => copy(id_db.toString())}
+            title={name?.toString()}
+            onClick={(e) => copy(id_db?.toString())}
           >
             {t(`pages.filmlist.menu.${name}`, {
               defaultValue: name,

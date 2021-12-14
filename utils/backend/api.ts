@@ -94,17 +94,17 @@ export class Api {
   }
 
   toFrontendItem(
-    { _id, genre_ids, name, poster_path, release_date, backdrop_path, id_db }: ItemProps,
+    { _id, genre_ids, name, poster_path, release_date, backdrop_path, id_db, title, first_air_date }: any,
     locale: string = 'en'
   ): FrontendItemProps {
     return {
       _id: _id ? _id.toString() : null,
       id_db,
       genre_ids: genre_ids ? genre_ids : [],
-      name: name[locale] ? name[locale] : 'Invalid name',
-      poster_path: poster_path[locale] ? poster_path[locale] : null,
-      backdrop_path: backdrop_path[locale] ? backdrop_path[locale] : null,
-      release_date: release_date ? release_date : Date.now(),
+      name: typeof name === 'object' ? (name[locale] ? name[locale] : 'Invalid name') : name ? name : title,
+      poster_path: typeof poster_path === 'object' ? (poster_path[locale] ? poster_path[locale] : null) : poster_path,
+      backdrop_path: typeof backdrop_path === 'object' ? (backdrop_path[locale] ? backdrop_path[locale] : null) : backdrop_path,
+      release_date: (release_date ? release_date : first_air_date) ? (release_date ? release_date : first_air_date) : new Date(),
     };
   }
 
