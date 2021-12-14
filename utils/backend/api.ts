@@ -10,6 +10,7 @@ import cookies from 'js-cookie';
 import client from '@utils/themoviedb/api';
 import genres from '@utils/themoviedb/genres';
 import { isReleased, someIncludes } from '@utils/utils';
+import { performance } from 'perf_hooks';
 
 class Jwt {
   decode() {
@@ -182,6 +183,7 @@ export class Api {
   }
 
   async stats() {
+    const start = performance.now();
     const db = await this.init();
     const collection = await itemSchema.find().lean<ItemProps[]>();
     const find = api.arrayToFind(collection);
@@ -232,6 +234,7 @@ export class Api {
         tv: genreStats(await itemSchema.find({ type: 0 }).lean<ItemProps[]>()),
       },
       tabs: tabStats(),
+      time: `${(performance.now() - start).toFixed(2)}ms`,
     };
   }
 

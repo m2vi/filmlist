@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { code = null, error = null } = req.query;
 
   if (error) {
-    return res.redirect(`/error/?e=${encodeURIComponent(req.query.error.toString())}`);
+    return res.redirect(`/error/?e=${encodeURIComponent(req.query.error as any)}`);
   }
 
   if (!code || typeof code !== 'string') return res.redirect(OAUTH_URI);

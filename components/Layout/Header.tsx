@@ -7,7 +7,7 @@ import Search from './Search';
 const Header = () => {
   const { t } = useTranslation();
 
-  const routes = ['browse', 'tv', 'movies', 'my list', 'favourites', '61135'];
+  const routes = ['browse', 'tv', 'movies', 'my list', 'favourites', 'hall of fame'];
 
   return (
     <div
