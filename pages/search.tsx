@@ -12,7 +12,7 @@ import { createRef, useState } from 'react';
 
 const Search = () => {
   const { t } = useTranslation();
-  const [items, setItems] = useState<FrontendItemProps[][]>([]);
+  const [items, setItems] = useState<FrontendItemProps[][]>([[], []]);
   const { locale } = useRouter();
   const InputRef = createRef<HTMLInputElement>();
 
@@ -28,7 +28,7 @@ const Search = () => {
       console.log({
         query: value,
         locale,
-        time: `${moment(time).valueOf()} ms`,
+        time: `${moment(time).valueOf()}ms`,
         results: data,
       });
     });
@@ -58,11 +58,8 @@ const Search = () => {
             })}
           </div>
         </div>
-        <div
-          className='w-full overflow-y-scroll dD5d-items max-w-screen-2xl px-11 pt-11'
-          id='scrollableDiv'
-          style={{ overflowX: 'hidden' }}
-        >
+        <h2 className='w-full max-w-screen-2xl px-11 pt-11 pb-4'>TMDB Results</h2>
+        <div className='w-full overflow-y-scroll dD5d-items max-w-screen-2xl px-11' id='scrollableDiv' style={{ overflowX: 'hidden' }}>
           <div
             className='w-full p-0 grid gap-2 auto-rows-auto place-items-center !overflow-x-hidden '
             style={{
