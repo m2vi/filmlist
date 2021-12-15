@@ -182,7 +182,7 @@ export class Api {
     return (filter: Partial<ItemProps>) => _.where(items, filter);
   }
 
-  async stats(small: boolean) {
+  async stats(small?: boolean) {
     const start = performance.now();
     const db = await this.init();
     const collection = await itemSchema.find().lean<ItemProps[]>();
@@ -242,8 +242,6 @@ export class Api {
       entries: collection?.map((item) => this.toFrontendItem(item)),
       general: {
         entries: collection?.length,
-        movies: find({ type: 1 }).length,
-        tv: find({ type: 0 }).length,
       },
       time: `${(performance.now() - start).toFixed(2)}ms`,
     };
