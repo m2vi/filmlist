@@ -182,7 +182,7 @@ export class Api {
     return (filter: Partial<ItemProps>) => _.where(items, filter);
   }
 
-  async stats() {
+  async stats(small: boolean) {
     const start = performance.now();
     const db = await this.init();
     const collection = await itemSchema.find().lean<ItemProps[]>();
@@ -220,20 +220,31 @@ export class Api {
       return tabs;
     };
 
+    if (!small) {
+      return {
+        entries: collection?.length,
+        general: {
+          movies: find({ type: 1 }).length,
+          tv: find({ type: 0 }).length,
+          anime: find({}).filter((base) => client.isAnime(base)).length,
+          genresWithLessThanTwentyItems: await this.getGenresWithLessThanNItems(20),
+        },
+        genres: {
+          both: genreStats(await itemSchema.find().lean<ItemProps[]>()),
+          movies: genreStats(await itemSchema.find({ type: 1 }).lean<ItemProps[]>()),
+          tv: genreStats(await itemSchema.find({ type: 0 }).lean<ItemProps[]>()),
+        },
+        tabs: tabStats(),
+        time: `${(performance.now() - start).toFixed(2)}ms`,
+      };
+    }
     return {
-      entries: collection?.length,
+      entries: collection?.map((item) => this.toFrontendItem(item)),
       general: {
+        entries: collection?.length,
         movies: find({ type: 1 }).length,
         tv: find({ type: 0 }).length,
-        anime: find({}).filter((base) => client.isAnime(base)).length,
-        genresWithLessThanTwentyItems: await this.getGenresWithLessThanNItems(20),
       },
-      genres: {
-        both: genreStats(await itemSchema.find().lean<ItemProps[]>()),
-        movies: genreStats(await itemSchema.find({ type: 1 }).lean<ItemProps[]>()),
-        tv: genreStats(await itemSchema.find({ type: 0 }).lean<ItemProps[]>()),
-      },
-      tabs: tabStats(),
       time: `${(performance.now() - start).toFixed(2)}ms`,
     };
   }
