@@ -20,18 +20,21 @@ const Search = () => {
     if (!InputRef.current) return;
     const start = window.performance.now();
     const value = InputRef.current.value;
-    search.fetchMoreData(value, locale).then((data) => {
-      setItems(data);
-      const end = window.performance.now();
-      const time = end - start;
+    search
+      .fetchMoreData(value, locale)
+      .then((data) => {
+        setItems(data);
+        const end = window.performance.now();
+        const time = end - start;
 
-      console.log({
-        query: value,
-        locale,
-        time: `${moment(time).valueOf()}ms`,
-        results: data,
-      });
-    });
+        console.log({
+          query: value,
+          locale,
+          time: `${moment(time).valueOf()}ms`,
+          results: data,
+        });
+      })
+      .catch(console.log);
   };
 
   return (

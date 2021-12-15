@@ -14,9 +14,11 @@ const PopoverEl = () => {
 
   const fetchData = () => {
     if (data.length > 0) return;
-    try {
-      api.getNotifications(locale).then((items) => setData(items));
-    } catch (error) {}
+
+    api
+      .getNotifications(locale)
+      .then((items) => setData(items))
+      .catch((err) => console.log(err));
   };
 
   return (

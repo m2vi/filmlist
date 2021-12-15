@@ -24,7 +24,10 @@ const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number }
 
   const fetchMoreData = () => {
     try {
-      api.fetchMoreData(query, locale, items.length).then((toConcat) => setItems(items.concat(toConcat)));
+      api
+        .fetchMoreData(query, locale, items.length)
+        .then((toConcat) => setItems(items.concat(toConcat)))
+        .catch((err) => console.log(err));
     } catch (error) {}
   };
 
