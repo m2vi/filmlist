@@ -1,6 +1,7 @@
 import itemSchema from '@models/itemSchema';
 import api from '@utils/backend/api';
 import client from '@utils/themoviedb/api';
+import moment from 'moment';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { performance } from 'perf_hooks';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -10,9 +11,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   let modifiedIds = [];
   let updated = 0;
   let errors = [];
+  let times: number[] = [];
+
+  const calculateTimeRemaining = () => {
+    const average = times.reduce((b, a) => b + a, 0) / times.length;
+    const result = average * (length - updated);
+    return result;
+  };
 
   for (const index in docs) {
-    const { _id, id_db, type, original_name } = docs[index];
+    const { _id, id_db, type, name } = docs[index];
     const start = performance.now();
 
     try {
@@ -24,8 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       );
       modified += result.modifiedCount;
-      result.modifiedCount && modifiedIds.push(original_name);
-      updated += 1;
+      result.modifiedCount && modifiedIds.push(name);
     } catch (error: any) {
       errors.push({
         message: `ERROR - ${_id?.toString()} - ${error.message}`,
@@ -34,8 +41,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const end = performance.now() - start;
+    updated += 1;
+    times.push(end);
 
-    console.log(`${((100 * (parseInt(index) + 1)) / length).toFixed(2)}% - ${end.toFixed(2)}ms - ${_id?.toString()} - ${id_db}`);
+    console.log(
+      `${((100 * (parseInt(index) + 1)) / length).toFixed(2)}% - ${moment(calculateTimeRemaining()).format('mm:ss')} - ${end.toFixed(
+        2
+      )}ms - ${_id?.toString()} - ${id_db}`
+    );
   }
 
   res.json({
