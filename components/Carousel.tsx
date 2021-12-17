@@ -11,7 +11,7 @@ const Carousel = ({ section: { items, length, name, route } }: { section: Browse
     <div className='mb-6 h-auto'>
       {route ? (
         <Link href={route} passHref={true}>
-          <a className='carousel-title hover:text-primary-200'>{t(`pages.filmlist.menu.${name.toLowerCase()}`)}</a>
+          <a className='carousel-title hover:text-primary-200'>{t(`pages.filmlist.menu.${name.toLowerCase()}`, { defaultValue: name })}</a>
         </Link>
       ) : (
         <span className='carousel-title '>{t(`pages.filmlist.menu.${name.toLowerCase()}`)}</span>

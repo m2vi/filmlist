@@ -104,7 +104,7 @@ export class Api {
       name: typeof name === 'object' ? (name[locale] ? name[locale] : 'Invalid name') : name ? name : title,
       poster_path: typeof poster_path === 'object' ? (poster_path[locale] ? poster_path[locale] : null) : poster_path,
       backdrop_path: typeof backdrop_path === 'object' ? (backdrop_path[locale] ? backdrop_path[locale] : null) : backdrop_path,
-      release_date: (release_date ? release_date : first_air_date) ? (release_date ? release_date : first_air_date) : new Date(),
+      release_date: (release_date ? release_date : first_air_date) ? (release_date ? release_date : first_air_date) : new Date().getTime(),
     };
   }
 

@@ -2,6 +2,8 @@ import backend from '@utils/backend/api';
 import { ItemProps, MovieDbTypeEnum } from '@utils/types';
 import { stringToBoolean, validateEnv } from '@utils/utils';
 import { MovieDb } from 'moviedb-promise';
+import companies from '@data/companies.json';
+import _, { shuffle } from 'underscore';
 
 export const api = new MovieDb(validateEnv('MOVIE_TOKEN'));
 
@@ -130,10 +132,44 @@ export class Client {
     };
   }
 
+  async getCompany(id: number) {
+    const jr = _.find(companies.data, { id })!;
+    if (!jr) return null;
+
+    const base = this.getTabeBase(
+      (await api.discoverMovie({ with_companies: id.toString(), language: 'de' })).results,
+      (await api.discoverMovie({ with_companies: id.toString(), language: 'en' })).results
+    );
+    const adapted = await this.adaptTabs(base);
+
+    return {
+      length: adapted.length,
+      name: jr.name,
+      route: jr.homepage,
+      items: adapted,
+    };
+  }
+
   async getTabs() {
     return {
       ...(await this.getTrends()),
     };
+  }
+
+  async getCompanyTabs() {
+    const ids = shuffle(companies.ids).slice(0, 3);
+    let result = {} as any;
+
+    for (const index in ids) {
+      const id = ids[index];
+
+      const entry = await this.getCompany(id);
+      if (entry) {
+        result[id] = entry;
+      }
+    }
+
+    return result;
   }
 }
 

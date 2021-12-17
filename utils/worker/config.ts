@@ -1,3 +1,3 @@
 export const middleware = {
-  restricted: ['/', '/browse'],
+  restricted: ['/', '/browse', '/[tab]', '/search', '/genre/[id]', '/insert'],
 };

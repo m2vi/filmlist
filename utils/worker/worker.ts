@@ -5,10 +5,14 @@ import { JwtPayload } from '../types';
 
 class Api {
   async verify(req: NextApiRequest | NextRequest) {
-    const token = req.cookies.token;
+    const token = req.cookies.token || (req.headers as any).get('authorization');
 
     if (!token) {
       return [false, 'Not logged in'];
+    }
+
+    if (process.env.API_TOKEN && token === process.env.API_TOKEN) {
+      return [true, null];
     }
 
     try {
