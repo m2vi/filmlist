@@ -7,6 +7,7 @@ import { performance } from 'perf_hooks';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const docs = await api.find({});
   const length = docs.length;
+  const total_start = performance.now();
   let modified = 0;
   let modifiedIds = [];
   let updated = 0;
@@ -57,5 +58,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       count: modified,
       modifiedIds,
     },
+    time: performance.now() - total_start,
   });
 }
