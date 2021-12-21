@@ -5,7 +5,7 @@ import { jsonResponse } from '@utils/fetch';
 export async function middleware(req: NextRequest, ev: NextFetchEvent) {
   if (!req.page.name) return;
 
-  const [result, error] = await api.verify(req);
+  const [result, error] = await api.verify(req, true);
 
   if (!result) {
     return jsonResponse(401, {

@@ -4,7 +4,7 @@ import { NextRequest } from 'next/server';
 import { JwtPayload } from '../types';
 
 class Api {
-  async verify(req: NextApiRequest | NextRequest) {
+  async verify(req: NextApiRequest | NextRequest, allowGuest: boolean = false) {
     const token = req.cookies.token || (req.headers as any).get('authorization');
 
     if (!token) {
@@ -21,6 +21,11 @@ class Api {
       }
     } catch (error) {
       return [false, (error as any).message];
+    }
+
+    const payload = jwt.decode(token) as any;
+
+    if (!allowGuest && payload?.isGuest) {
     }
 
     return [jwt.decode(token) as JwtPayload, null];
