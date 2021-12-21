@@ -93,17 +93,35 @@ export class Api {
     };
   }
 
+  async getCompanyItems({ id, locale, page }: { id: number; locale: string; page: number }) {
+    try {
+      const raw = (await client.api.discoverMovie({ with_companies: id.toString(), language: locale, page: page + 1 }))?.results;
+      if (!raw) return [];
+
+      return this.prepareForFrontend(raw as any, locale, null, 0, Number.MAX_SAFE_INTEGER);
+    } catch (error: any) {
+      console.log(error.message);
+      return [];
+    }
+  }
+
   toFrontendItem(
     { _id, genre_ids, name, poster_path, release_date, backdrop_path, id_db, title, first_air_date }: any,
     locale: string = 'en'
   ): FrontendItemProps {
     return {
       _id: _id ? _id.toString() : null,
-      id_db,
+      id_db: id_db ? id_db : null,
       genre_ids: genre_ids ? genre_ids : [],
       name: typeof name === 'object' ? (name[locale] ? name[locale] : 'Invalid name') : name ? name : title,
-      poster_path: typeof poster_path === 'object' ? (poster_path[locale] ? poster_path[locale] : null) : poster_path,
-      backdrop_path: typeof backdrop_path === 'object' ? (backdrop_path[locale] ? backdrop_path[locale] : null) : backdrop_path,
+      poster_path:
+        typeof poster_path === 'object' && poster_path !== null ? (poster_path[locale] ? poster_path[locale] : null) : poster_path,
+      backdrop_path:
+        typeof backdrop_path === 'object' && backdrop_path !== null
+          ? backdrop_path[locale]
+            ? backdrop_path[locale]
+            : null
+          : backdrop_path,
       release_date: (release_date ? release_date : first_air_date) ? (release_date ? release_date : first_air_date) : new Date().getTime(),
     };
   }
