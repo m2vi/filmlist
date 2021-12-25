@@ -3,7 +3,7 @@ import { connectToDatabase } from '../database';
 import { shuffle, sortByKey } from '../array';
 import tabs from '@data/tabs.json';
 import itemSchema from '@models/itemSchema';
-import _ from 'underscore';
+import _, { sortBy } from 'underscore';
 import { CreditProps, FrontendItemProps, GenreProps, InsertProps, ItemProps, MovieDbTypeEnum, Tabs } from '../types';
 import jwt from 'jsonwebtoken';
 import cookies from 'js-cookie';
@@ -161,6 +161,34 @@ export class Api {
     await itemSchema.deleteOne(item);
     const doc = new itemSchema(item);
     return await doc.save();
+  }
+
+  async deleteOne(filter: FilterQuery<ItemProps>) {
+    await this.init();
+    if (!(_.has(filter, 'type') || _.has(filter, 'id_db'))) {
+      return {
+        error: 'Filter sucks',
+      };
+    }
+
+    if (!(await this.exists(filter))) {
+      return {
+        error: 'Item does not exist',
+      };
+    }
+
+    return await itemSchema.deleteOne(filter);
+  }
+
+  async deleteMany(filter: FilterQuery<ItemProps>) {
+    await this.init();
+    if (!(_.has(filter, 'type') || _.has(filter, 'id_db'))) {
+      return {
+        error: 'Filter sucks',
+      };
+    }
+
+    return await itemSchema.deleteMany(filter);
   }
 
   prepareForFrontend(
@@ -375,7 +403,7 @@ export class Api {
     return entries;
   }
 
-  async getPersons(locale: string, default_items?: ItemProps[]) {
+  async getPersons(locale: string, start: number, end: number, default_items?: ItemProps[]) {
     const items = default_items
       ? default_items
       : (
@@ -390,38 +418,35 @@ export class Api {
         ).items;
     let result = {} as any;
 
-    items.forEach(({ name, original_name, credits, vote_average, vote_count }: ItemProps) => {
-      const n = name[locale] ? name[locale] : original_name;
-      const c = credits?.cast.concat(credits.crew as any);
+    items.forEach(({ credits }: ItemProps) => {
+      const c = credits?.cast;
 
       c?.forEach(({ original_name, profile_path, gender, id, known_for_department }) => {
         if (result[original_name]) {
-          result[original_name].items.push({
-            name: n,
-            vote_average,
-            vote_count,
-          });
+          result[original_name].items++;
         } else {
           result[original_name] = {
-            info: {
-              profile_path,
-              gender,
-              id,
-              known_for_department,
-            },
-            items: [
-              {
-                name: n,
-                vote_average,
-                vote_count,
-              },
-            ],
+            profile_path,
+            items: 1,
           };
         }
       });
     });
 
-    return result;
+    return sortBy(
+      Object.entries(result)
+        .map(([name, object]: any) => {
+          return {
+            name,
+            ...object,
+          };
+        })
+        .filter((item) => item),
+      'items'
+    )
+      .reverse()
+      .slice(start, end)
+      .map(({ name, profile_path }) => ({ name, profile_path }));
   }
 
   async getBrowse(locale?: string) {
@@ -454,6 +479,12 @@ export class Api {
       },
       ...this.getBrowseGenres(items, locale),
     };
+  }
+
+  async backup() {
+    await this.init();
+
+    return await itemSchema.find();
   }
 }
 
