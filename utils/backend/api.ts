@@ -199,9 +199,18 @@ export class Api {
     return items;
   }
 
-  async findOne(filter: FilterQuery<ItemProps>): Promise<ItemProps> {
+  async findOne(filter: FilterQuery<ItemProps>, includeCredits: boolean = false): Promise<ItemProps> {
     await this.init();
-    const item = await itemSchema.findOne(filter).lean<any>();
+    let item = [];
+
+    if (includeCredits) {
+      item = await itemSchema.findOne({ ...filter }).lean<any>();
+    } else {
+      item = await itemSchema
+        .findOne({ ...filter })
+        .select('-credits')
+        .lean<any>();
+    }
 
     return item;
   }
