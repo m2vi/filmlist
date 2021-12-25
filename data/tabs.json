@@ -66,5 +66,33 @@
       "hall_of_fame": true
     }
   },
-  "none": {}
+  "top-rated": {
+    "sort_key": "vote_average",
+    "hide_unreleased": true,
+    "minVotes": 200
+  },
+  "top-rated 0": {
+    "filter": {
+      "type": 0
+    },
+    "sort_key": "vote_average",
+    "hide_unreleased": true,
+    "minVotes": 200
+  },
+  "top-rated 1": {
+    "filter": {
+      "type": 1
+    },
+    "sort_key": "vote_average",
+    "hide_unreleased": true,
+    "minVotes": 200
+  },
+  "person": {
+    "includeCredits": true
+  },
+  "none": {},
+  "unfiltered": {
+    "sort_key": false,
+    "reverse": true
+  }
 }

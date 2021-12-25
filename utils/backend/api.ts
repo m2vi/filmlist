@@ -4,7 +4,7 @@ import { shuffle, sortByKey } from '../array';
 import tabs from '@data/tabs.json';
 import itemSchema from '@models/itemSchema';
 import _ from 'underscore';
-import { FrontendItemProps, GenreProps, InsertProps, ItemProps, MovieDbTypeEnum, Tabs } from '../types';
+import { CreditProps, FrontendItemProps, GenreProps, InsertProps, ItemProps, MovieDbTypeEnum, Tabs } from '../types';
 import jwt from 'jsonwebtoken';
 import cookies from 'js-cookie';
 import client from '@utils/themoviedb/api';
@@ -47,16 +47,19 @@ export class Api {
       start,
       end,
       includeGenres,
+      includePerson,
     }: {
       tab: string;
       locale: string;
       start: number;
       end: number;
       includeGenres?: number;
+      includePerson?: number;
     },
     default_items?: ItemProps[]
   ) {
     let items = [];
+    let extra = null;
     const config = this.getTabConfig(tab);
     if (config === null)
       return {
@@ -68,7 +71,7 @@ export class Api {
       items = _.filter(default_items, config?.filter ? config?.filter : {});
     } else {
       await this.init();
-      items = await this.find(config?.filter ? config?.filter : {});
+      items = await this.find(config?.filter ? config?.filter : {}, config?.includeCredits);
     }
 
     if (typeof config?.sort_key === 'boolean') {
@@ -83,12 +86,29 @@ export class Api {
       : includeGenres
       ? items.filter(({ genre_ids }) => genre_ids.includes(includeGenres))
       : items;
+    items =
+      includePerson && config?.includeCredits
+        ? items.filter(({ credits: { cast, crew } }: { credits: CreditProps }) => {
+            const both = cast.concat(crew as any);
+            const ids = both.map(({ id }) => id);
+            if (ids.includes(includePerson)) {
+              extra = both.find(({ id }) => id === includePerson);
+              return true;
+            } else {
+              return false;
+            }
+          })
+        : items;
     items = config?.hide_unreleased ? items.filter(({ release_date }) => isReleased(release_date)) : items;
+
+    items =
+      typeof config?.minVotes === 'number' ? items.filter(({ vote_count } = { vote_count: 0 }) => vote_count > config.minVotes!) : items;
 
     const result = this.prepareForFrontend(items, locale, null, null, null, config?.reverse, config?.only_unreleased);
 
     return {
       length: result.length,
+      extra: extra ? extra : null,
       items: result.slice(start, end),
     };
   }
@@ -106,7 +126,7 @@ export class Api {
   }
 
   toFrontendItem(
-    { _id, genre_ids, name, poster_path, release_date, backdrop_path, id_db, title, first_air_date }: any,
+    { _id, genre_ids, name, poster_path, release_date, backdrop_path, id_db, title, first_air_date, vote_average }: any,
     locale: string = 'en'
   ): FrontendItemProps {
     return {
@@ -123,7 +143,20 @@ export class Api {
             : null
           : backdrop_path,
       release_date: (release_date ? release_date : first_air_date) ? (release_date ? release_date : first_air_date) : new Date().getTime(),
+      vote_average: vote_average ? vote_average : 0,
     };
+  }
+
+  async moveItemToStart(filter: FilterQuery<ItemProps>) {
+    if (!(_.has(filter, 'type') || _.has(filter, 'id_db')))
+      return {
+        error: 'Filter sucks',
+      };
+
+    const item = await this.findOne(filter);
+    await itemSchema.deleteOne(item);
+    const doc = new itemSchema(item);
+    return await doc.save();
   }
 
   prepareForFrontend(
@@ -150,9 +183,18 @@ export class Api {
     };
   }
 
-  async find(filter: FilterQuery<ItemProps>): Promise<ItemProps[]> {
+  async find(filter: FilterQuery<ItemProps>, includeCredits: boolean = false): Promise<ItemProps[]> {
     await this.init();
-    const items = await itemSchema.find(filter).lean<any>();
+    let items = [];
+
+    if (includeCredits) {
+      items = await itemSchema.find({ ...filter }).lean<any>();
+    } else {
+      items = await itemSchema
+        .find({ ...filter })
+        .select('-credits')
+        .lean<any>();
+    }
 
     return items;
   }

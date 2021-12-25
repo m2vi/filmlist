@@ -9,7 +9,7 @@ import Card from './Card';
 import Full from './Full';
 import Title from './Title';
 
-const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number } }) => {
+const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number; extra: any } }) => {
   const ScrollRef = createRef<HTMLDivElement>();
   const [items, setItems] = useState(data.items);
   const { t } = useTranslation();
@@ -40,6 +40,8 @@ const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number }
             ? t(`pages.filmlist.menu.${query.tab}`)
             : _.has(data, 'name')
             ? `Company ${(data as any).name ? (data as any).name : (data as any).id}`
+            : data.extra
+            ? `${data.extra.original_name}`
             : `Genre ${query.id}`
         } – ${t(`pages.filmlist.default`)}`}
       />

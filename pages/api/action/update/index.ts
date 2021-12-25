@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       );
       modified += result.modifiedCount;
-      result.modifiedCount && modifiedIds.push(name);
+      result.modifiedCount && modifiedIds.push(name.en ? name.en : name);
     } catch (error: any) {
       errors.push({
         message: `ERROR - ${_id?.toString()} - ${error.message}`,

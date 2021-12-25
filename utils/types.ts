@@ -11,6 +11,31 @@ export enum MovieDbTypeEnum {
   'movie' = 1,
 }
 
+export interface CastProps {
+  character: string;
+  gender: number | null;
+  id: number;
+  known_for_department: string;
+  original_name: string;
+  profile_path: string | null;
+}
+
+export interface CrewProps {
+  department?: string;
+  gender?: number | null;
+  id?: number;
+  known_for_department?: string;
+  job?: string;
+  original_name?: string;
+  profile_path?: string | null;
+}
+
+export interface CreditProps {
+  id: number;
+  cast: CastProps[];
+  crew: CrewProps[];
+}
+
 export interface ItemProps {
   _id: ObjectId | null;
   hall_of_fame: boolean;
@@ -28,9 +53,12 @@ export interface ItemProps {
   backdrop_path: {
     [locale: string]: string;
   };
+  vote_average: number;
+  vote_count: number;
   release_date: number;
   type: MovieDbTypeEnum;
   watched: boolean;
+  credits: CreditProps | null;
 }
 
 export interface FrontendItemProps {
@@ -41,6 +69,7 @@ export interface FrontendItemProps {
   poster_path: string | null;
   backdrop_path: string | null;
   release_date: number;
+  vote_average: number;
 }
 
 export interface NotificationItemProps {
@@ -76,6 +105,8 @@ export interface TabFilterOptions {
   includeGenres?: number[];
   only_unreleased?: boolean;
   hide_unreleased?: boolean;
+  minVotes?: number;
+  includeCredits?: boolean;
 }
 
 export interface Tabs {
