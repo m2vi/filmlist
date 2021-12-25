@@ -48,6 +48,8 @@ export class Api {
       end,
       includeGenres,
       includePerson,
+      includeCredits,
+      dontFrontend,
     }: {
       tab: string;
       locale: string;
@@ -55,6 +57,8 @@ export class Api {
       end: number;
       includeGenres?: number;
       includePerson?: number;
+      includeCredits?: boolean;
+      dontFrontend?: boolean;
     },
     default_items?: ItemProps[]
   ) {
@@ -71,7 +75,7 @@ export class Api {
       items = _.filter(default_items, config?.filter ? config?.filter : {});
     } else {
       await this.init();
-      items = await this.find(config?.filter ? config?.filter : {}, config?.includeCredits);
+      items = await this.find(config?.filter ? config?.filter : {}, config?.includeCredits || includeCredits);
     }
 
     if (typeof config?.sort_key === 'boolean') {
@@ -104,12 +108,12 @@ export class Api {
     items =
       typeof config?.minVotes === 'number' ? items.filter(({ vote_count } = { vote_count: 0 }) => vote_count > config.minVotes!) : items;
 
-    const result = this.prepareForFrontend(items, locale, null, null, null, config?.reverse, config?.only_unreleased);
+    items = dontFrontend ? items : this.prepareForFrontend(items, locale, null, null, null, config?.reverse, config?.only_unreleased);
 
     return {
-      length: result.length,
+      length: items.length,
       extra: extra ? extra : null,
-      items: result.slice(start, end),
+      items: items.slice(start, end),
     };
   }
 
@@ -153,7 +157,7 @@ export class Api {
         error: 'Filter sucks',
       };
 
-    const item = await this.findOne(filter);
+    const item = await this.findOne(filter, true);
     await itemSchema.deleteOne(item);
     const doc = new itemSchema(item);
     return await doc.save();
@@ -298,11 +302,7 @@ export class Api {
           anime: find({}).filter((base) => client.isAnime(base)).length,
           genresWithLessThanTwentyItems: await this.getGenresWithLessThanNItems(20),
         },
-        genres: {
-          both: genreStats(await itemSchema.find().lean<ItemProps[]>()),
-          movies: genreStats(await itemSchema.find({ type: 1 }).lean<ItemProps[]>()),
-          tv: genreStats(await itemSchema.find({ type: 0 }).lean<ItemProps[]>()),
-        },
+        genres: genreStats(collection),
         tabs: tabStats(),
         time: `${(performance.now() - start).toFixed(2)}ms`,
       };
@@ -324,10 +324,10 @@ export class Api {
     return result;
   }
 
-  async updateMany(data: UpdateQuery<ItemProps>) {
+  async updateMany(filter: FilterQuery<ItemProps>, data: UpdateQuery<ItemProps>) {
     await this.init();
 
-    const result = await itemSchema.updateMany({}, data);
+    const result = await itemSchema.updateMany(filter, data);
 
     return result;
   }
@@ -373,6 +373,55 @@ export class Api {
     }
 
     return entries;
+  }
+
+  async getPersons(locale: string, default_items?: ItemProps[]) {
+    const items = default_items
+      ? default_items
+      : (
+          await this.getTab({
+            tab: 'top-rated',
+            start: 0,
+            end: Number.MAX_SAFE_INTEGER,
+            locale,
+            includeCredits: true,
+            dontFrontend: true,
+          })
+        ).items;
+    let result = {} as any;
+
+    items.forEach(({ name, original_name, credits, vote_average, vote_count }: ItemProps) => {
+      const n = name[locale] ? name[locale] : original_name;
+      const c = credits?.cast.concat(credits.crew as any);
+
+      c?.forEach(({ original_name, profile_path, gender, id, known_for_department }) => {
+        if (result[original_name]) {
+          result[original_name].items.push({
+            name: n,
+            vote_average,
+            vote_count,
+          });
+        } else {
+          result[original_name] = {
+            info: {
+              profile_path,
+              gender,
+              id,
+              known_for_department,
+            },
+            items: [
+              {
+                name: n,
+                vote_average,
+                vote_count,
+              },
+            ],
+          };
+        }
+      });
+    });
+
+    return result;
   }
 
   async getBrowse(locale?: string) {
