@@ -46,3 +46,7 @@ export const isReleased = (release_date: any) => {
 export const someIncludes = (arr1: any[] = [], arr2: any[] = []) => {
   return arr1.some((v: any) => arr2?.includes(v));
 };
+
+export function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(' ');
+}
