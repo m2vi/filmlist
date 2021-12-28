@@ -19,19 +19,24 @@ export class Client {
     const de = (await (isMovie ? api.movieInfo({ id, language: 'de' }) : api.tvInfo({ id, language: 'de' }))) as any;
     const en = (await (isMovie ? api.movieInfo({ id, language: 'en' }) : api.tvInfo({ id, language: 'en' }))) as any;
     const credits = await (isMovie ? api.movieCredits({ id, language: 'en' }) : api.tvCredits({ id, language: 'en' }));
+    const external_ids = await (isMovie ? api.movieExternalIds({ id, language: 'en' }) : api.tvExternalIds({ id, language: 'en' }));
 
     return {
       isMovie,
       de,
       en,
       credits,
+      external_ids,
     };
   }
 
   async dataForUpdate(id: number, type: MovieDbTypeEnum): Promise<Partial<ItemProps>> {
-    const { isMovie, de, en, credits } = await this.getBase(id, type);
+    const { isMovie, de, en, credits, external_ids } = await this.getBase(id, type);
 
     return {
+      external_ids,
+      tagline: en.tagline,
+      overview: en.overview,
       name: {
         en: isMovie ? en.title : en.name,
         de: isMovie ? de.title : de.name,
@@ -52,7 +57,7 @@ export class Client {
   }
 
   isAnime(base: any): boolean {
-    const genre_ids: number[] = base.genre_ids?.map(({ id }: any) => id);
+    const genre_ids: number[] = base.genres ? base.genres.map(({ id }: any) => id) : base.genre_ids;
     const original_language: string = base.original_language;
 
     if (!genre_ids || !original_language) {
@@ -96,10 +101,17 @@ export class Client {
     };
   }
 
-  async adapt(id: number, type: MovieDbTypeEnum, base?: { isMovie: boolean; de: any; en: any; credits: any }): Promise<Partial<ItemProps>> {
-    const { isMovie, de, en, credits } = base ? base : await this.getBase(id, type);
+  async adapt(
+    id: number,
+    type: MovieDbTypeEnum,
+    base?: { isMovie: boolean; de: any; en: any; credits: any; external_ids: any }
+  ): Promise<Partial<ItemProps>> {
+    const { isMovie, de, en, credits, external_ids } = base ? base : await this.getBase(id, type);
 
     return {
+      external_ids,
+      tagline: en.tagline,
+      overview: en.overview,
       genre_ids: (en?.genres ? en?.genres?.map(({ id }: any) => id) : en.genre_ids)?.concat(this.isAnime(en) ? [7424] : []),
       id_db: parseInt(id as any),
       name: {
@@ -147,7 +159,13 @@ export class Client {
     return await Promise.all(
       base!.map(async ([en, de]: any[]) => {
         const isMovie = de.title ? true : false;
-        const adapted = await this.adapt(en?.id, MovieDbTypeEnum[isMovie ? 'movie' : 'tv'], { isMovie, de, en, credits: null });
+        const adapted = await this.adapt(en?.id, MovieDbTypeEnum[isMovie ? 'movie' : 'tv'], {
+          isMovie,
+          de,
+          en,
+          credits: null,
+          external_ids: null,
+        });
 
         return backend.toFrontendItem(adapted as any);
       })

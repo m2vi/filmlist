@@ -59,7 +59,7 @@ const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number; 
           scrollableTarget='scrollableDiv'
           className='w-full p-0 grid gap-2 auto-rows-auto place-items-center !overflow-x-hidden '
           style={{
-            gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(154px, 1fr))',
             overflowX: 'hidden',
           }}
         >

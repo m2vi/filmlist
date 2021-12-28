@@ -41,6 +41,10 @@ module.exports = {
       250: '250px',
       300: '350px',
       400: '400px',
+      'toggle-h': 'var(--toggle-height)',
+      'toggle-h-2': 'calc(var(--toggle-height) - var(--toggle-border) * 2)',
+      'toggle-w': 'var(--toggle-width)',
+      'toggle-w-2': 'calc(var(--toggle-width) - calc(var(--toggle-height) - var(--toggle-border) * 2) - calc(var(--toggle-border) * 2))',
     },
     borderWidth: {
       DEFAULT: '1px',
@@ -50,6 +54,7 @@ module.exports = {
     boxShadow: {
       accent: 'var(--shadow-accent)',
       1: '0px 4px 14px rgba(0, 0, 0, 0.4)',
+      toggle: 'inset 0px 0px 0px 2px var(--color-primary-700)',
     },
     extend: {
       colors: {

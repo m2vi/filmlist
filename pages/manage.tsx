@@ -2,12 +2,15 @@ import { Button } from '@components/Button';
 import Full from '@components/Full';
 import { Input } from '@components/Input';
 import Title from '@components/Title';
+import Toggle from '@components/Toggle';
 import { Tab } from '@headlessui/react';
 import { classNames } from '@utils/utils';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useState } from 'react';
 
 const Insert = () => {
+  const [enabled, setEnabled] = useState(true);
   const categories = {
     Insert: {},
     Delete: {},
@@ -20,13 +23,13 @@ const Insert = () => {
       <Title title='Manage' />
       <div className='w-full max-w-lg p-4 bg-primary-800 rounded-8'>
         <Tab.Group>
-          <Tab.List className='flex text-center'>
+          <Tab.List className='flex text-center border-b border-primary-600 h-8'>
             {Object.keys(categories).map((category) => (
               <Tab
                 key={category}
                 className={({ selected }) =>
                   classNames(
-                    'w-full py-2 text-base leading-5 font-medium text-white border-b',
+                    'w-full py-2 h-8 text-base leading-5 font-medium text-white border-b',
                     selected ? 'text-white border-accent' : 'text-primary-300 border-transparent hover:text-white'
                   )
                 }
@@ -39,8 +42,15 @@ const Insert = () => {
             <Tab.Panel>
               <Input className='mt-2' placeholder='Id' />
               <Input className='mt-2' placeholder='Type' />
-              <Input className='mt-2' placeholder='Favoured' />
-              <Input className='mt-2' placeholder='Watched' />
+              <div className='flex items-center mt-2'>
+                <Toggle enabled={enabled} onChange={setEnabled} />
+                <span className='text-lg ml-2'>Favoured</span>
+              </div>
+              <div className='flex items-center mt-2'>
+                <Toggle enabled={enabled} onChange={setEnabled} />
+                <span className='text-lg ml-2'>Watched</span>
+              </div>
+
               <Button className='mt-3'>Submit</Button>
             </Tab.Panel>
             <Tab.Panel>
@@ -51,7 +61,7 @@ const Insert = () => {
             <Tab.Panel>
               <Input className='mt-2' placeholder='Id' />
               <Input className='mt-2' placeholder='Type' />
-              <Input className='mt-2' placeholder='Position' />
+              <Input className='mt-2' placeholder='Position' type='number' />
               <Button className='mt-3'>Submit</Button>
             </Tab.Panel>
             <Tab.Panel>
@@ -60,7 +70,9 @@ const Insert = () => {
               <Button className='mt-3'>Update</Button>
             </Tab.Panel>
             <Tab.Panel className='grid place-items-center h-full w-full'>
-              <Button>Export</Button>
+              <a href='/api/action/backup' download={true}>
+                <Button>Export</Button>
+              </a>
             </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>

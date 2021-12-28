@@ -67,3 +67,9 @@ p {
 .l-1 {
   line-height: 1 !important;
 }
+
+:root {
+  --toggle-height: 32px;
+  --toggle-width: calc(var(--toggle-height) * 16 / 9);
+  --toggle-border: 2px;
+}

@@ -1,4 +1,5 @@
-import { ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
+import { MovieExternalIdsResponse } from 'moviedb-promise/dist/request-types';
 
 export enum ItemTypeEnum {
   'tv' = 0,
@@ -37,11 +38,15 @@ export interface CreditProps {
 }
 
 export interface ItemProps {
-  _id: ObjectId | null;
+  adult: boolean;
+  _id: Types.ObjectId | string | null;
   hall_of_fame: boolean;
   favoured: boolean;
   genre_ids: number[];
   id_db: number;
+  external_ids: MovieExternalIdsResponse;
+  tagline: string;
+  overview: string;
   name: {
     [locale: string]: string;
   };
@@ -126,7 +131,7 @@ export interface DiscordUser {
 }
 
 export interface MongooseBase {
-  _id: ObjectId;
+  _id: Types.ObjectId;
   __v: number;
 }
 

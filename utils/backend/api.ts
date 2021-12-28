@@ -1,4 +1,4 @@
-import { Connection, FilterQuery, UpdateQuery } from 'mongoose';
+import { Connection, FilterQuery, UpdateQuery, Types, isValidObjectId } from 'mongoose';
 import { connectToDatabase } from '../database';
 import { shuffle, sortByKey } from '../array';
 import tabs from '@data/tabs.json';
@@ -151,11 +151,14 @@ export class Api {
     };
   }
 
+  private error(msg: string) {
+    return {
+      error: msg,
+    };
+  }
+
   async moveItemToStart(filter: FilterQuery<ItemProps>) {
-    if (!(_.has(filter, 'type') || _.has(filter, 'id_db')))
-      return {
-        error: 'Filter sucks',
-      };
+    if (!(_.has(filter, 'type') || _.has(filter, 'id_db'))) return this.error('Filter sucks');
 
     const item = await this.findOne(filter, true);
     await itemSchema.deleteOne(item);
@@ -165,28 +168,16 @@ export class Api {
 
   async deleteOne(filter: FilterQuery<ItemProps>) {
     await this.init();
-    if (!(_.has(filter, 'type') || _.has(filter, 'id_db'))) {
-      return {
-        error: 'Filter sucks',
-      };
-    }
+    if (!(_.has(filter, 'type') || _.has(filter, 'id_db'))) return this.error('Filter sucks');
 
-    if (!(await this.exists(filter))) {
-      return {
-        error: 'Item does not exist',
-      };
-    }
+    if (!(await this.exists(filter))) return this.error('Item does not exist');
 
     return await itemSchema.deleteOne(filter);
   }
 
   async deleteMany(filter: FilterQuery<ItemProps>) {
     await this.init();
-    if (!(_.has(filter, 'type') || _.has(filter, 'id_db'))) {
-      return {
-        error: 'Filter sucks',
-      };
-    }
+    if (!(_.has(filter, 'type') || _.has(filter, 'id_db'))) return this.error('Filter sucks');
 
     return await itemSchema.deleteMany(filter);
   }
@@ -260,11 +251,7 @@ export class Api {
   async insert({ id_db, type, favoured, watched }: InsertProps): Promise<ItemProps | any> {
     try {
       const exists = await this.exists({ id_db: parseInt(id_db as any), type: MovieDbTypeEnum[type] as any });
-      if (exists) {
-        return {
-          error: 'Already exists',
-        };
-      }
+      if (exists) return this.error('Already exists');
 
       const data = await client.get(id_db, type, { favoured, watched });
       const doc = new itemSchema(data);
@@ -286,7 +273,7 @@ export class Api {
   async stats(small?: boolean) {
     const start = performance.now();
     const db = await this.init();
-    const collection = await itemSchema.find().lean<ItemProps[]>();
+    const collection = await this.find({}, false);
     const find = api.arrayToFind(collection);
 
     const genreStats = (collection: any[]) => {
@@ -327,11 +314,11 @@ export class Api {
         general: {
           movies: find({ type: 1 }).length,
           tv: find({ type: 0 }).length,
-          anime: find({}).filter((base) => client.isAnime(base)).length,
           genresWithLessThanTwentyItems: await this.getGenresWithLessThanNItems(20),
         },
         genres: genreStats(collection),
         tabs: tabStats(),
+        db: await this.dbStats(),
         time: `${(performance.now() - start).toFixed(2)}ms`,
       };
     }
@@ -341,6 +328,24 @@ export class Api {
         entries: collection?.length,
       },
       time: `${(performance.now() - start).toFixed(2)}ms`,
+    };
+  }
+
+  async dbStats() {
+    const start = performance.now();
+    const db = await this.init();
+    const stats = await db?.db.collection('filmlist').stats();
+    if (!stats) return {};
+    const { count, ns, size, avgObjSize, storageSize, freeStorageSize } = stats;
+
+    return {
+      ns,
+      size,
+      count,
+      avgObjSize,
+      storageSize,
+      freeStorageSize,
+      time: `${(performance.now() - start).toFixed()}ms`,
     };
   }
 
@@ -485,6 +490,27 @@ export class Api {
     await this.init();
 
     return await itemSchema.find();
+  }
+
+  toJSON({ _id, ...props }: ItemProps, realJSON: boolean = false) {
+    const res = {
+      _id: _id?.toString() ? _id?.toString() : null,
+      ...props,
+    };
+
+    return realJSON ? JSON.stringify(res) : res;
+  }
+
+  async details(id: string, locale: string) {
+    if (!isValidObjectId(id)) return this.error('ObjectId is not valid');
+    const objectId = new Types.ObjectId(id);
+
+    const res = this.toJSON(await this.findOne({ _id: new Types.ObjectId(objectId) }));
+
+    return {
+      raw: res,
+      frontend: this.toFrontendItem(res, locale),
+    };
   }
 }
 
