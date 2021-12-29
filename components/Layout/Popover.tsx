@@ -51,21 +51,23 @@ const PopoverEl = () => {
                     {data.length > 0 ? (
                       <>
                         {data.map(({ _id, name, backdrop_path, release_date }) => (
-                          <div className='p-3 hover:bg-primary-900 cursor-pointer' key={_id}>
-                            <Menu.Item>
-                              <div className='flex'>
-                                <img
-                                  className='max-h-11 rounded-3 mr-4'
-                                  src={`https://image.tmdb.org/t/p/w${config.posterWidth}${backdrop_path}`}
-                                  alt={_id ? _id : ''}
-                                />
-                                <div className='flex flex-col pt-1'>
-                                  <span className=''>{name}</span>
-                                  <span className='text-primary-300 text-sm'>{release_date}</span>
+                          <Link href={`/details/${_id}`} key={_id}>
+                            <a className='p-3 hover:bg-primary-900 cursor-pointer' key={_id}>
+                              <Menu.Item>
+                                <div className='flex'>
+                                  <img
+                                    className='max-h-11 rounded-3 mr-4'
+                                    src={`https://image.tmdb.org/t/p/w${config.posterWidth}${backdrop_path}`}
+                                    alt={_id ? _id : ''}
+                                  />
+                                  <div className='flex flex-col pt-1'>
+                                    <span className=''>{name}</span>
+                                    <span className='text-primary-300 text-sm'>{release_date}</span>
+                                  </div>
                                 </div>
-                              </div>
-                            </Menu.Item>
-                          </div>
+                              </Menu.Item>
+                            </a>
+                          </Link>
                         ))}
                         <div className='px-3 py-2 hover:bg-primary-900 cursor-pointer'>
                           <Menu.Item>
