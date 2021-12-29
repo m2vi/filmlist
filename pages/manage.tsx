@@ -42,13 +42,13 @@ const Insert = () => {
             <Tab.Panel>
               <Input className='mt-2' placeholder='Id' />
               <Input className='mt-2' placeholder='Type' />
-              <div className='flex items-center mt-2'>
-                <Toggle enabled={enabled} onChange={setEnabled} />
+              <div className='flex justify-between  items-center mt-2'>
                 <span className='text-lg ml-2'>Favoured</span>
-              </div>
-              <div className='flex items-center mt-2'>
                 <Toggle enabled={enabled} onChange={setEnabled} />
+              </div>
+              <div className='flex justify-between items-center mt-2'>
                 <span className='text-lg ml-2'>Watched</span>
+                <Toggle enabled={enabled} onChange={setEnabled} />
               </div>
 
               <Button className='mt-3'>Submit</Button>

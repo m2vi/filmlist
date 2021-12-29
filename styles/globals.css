@@ -69,7 +69,17 @@ p {
 }
 
 :root {
-  --toggle-height: 32px;
+  --toggle-height: 24px;
   --toggle-width: calc(var(--toggle-height) * 16 / 9);
   --toggle-border: 2px;
+}
+.reset-a,
+.reset-a:hover,
+.reset-a:visited,
+.reset-a:focus,
+.reset-a:active {
+  text-decoration: none;
+  color: inherit;
+  outline: 0;
+  cursor: auto;
 }

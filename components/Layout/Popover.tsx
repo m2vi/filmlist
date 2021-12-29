@@ -51,8 +51,8 @@ const PopoverEl = () => {
                     {data.length > 0 ? (
                       <>
                         {data.map(({ _id, name, backdrop_path, release_date }) => (
-                          <Link href={`/details/${_id}`} key={_id}>
-                            <a className='p-3 hover:bg-primary-900 cursor-pointer' key={_id}>
+                          <Link href={`/details/${_id}`} passHref key={_id}>
+                            <div className='p-3 hover:bg-primary-900 cursor-pointer' key={_id}>
                               <Menu.Item>
                                 <div className='flex'>
                                   <img
@@ -66,7 +66,7 @@ const PopoverEl = () => {
                                   </div>
                                 </div>
                               </Menu.Item>
-                            </a>
+                            </div>
                           </Link>
                         ))}
                         <div className='px-3 py-2 hover:bg-primary-900 cursor-pointer'>
