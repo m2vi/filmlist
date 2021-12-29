@@ -11,12 +11,12 @@ const Header = () => {
 
   return (
     <div
-      className='absolute top-0 z-50 py-1 px-11 bg-transparent w-full max-w-screen-2xl'
+      className='absolute top-0 z-50 py-1 px-120 bg-primary-900-80 backdrop-blur-xl w-full max-w-screen-2xl'
       style={{ transform: ' translate(-50%, 0)', left: '50%' }}
     >
       <header
-        className='font-normal text-base text-primary-200 w-full flex justify-end items-center md:justify-between bg-primary-900'
-        style={{ height: '65px' }}
+        className='font-normal text-base text-primary-200 w-full flex justify-end items-center md:justify-between bg-transparent'
+        style={{ height: '75px' }}
       >
         <div className='md:flex items-center hidden'>
           {routes.map((route) => (

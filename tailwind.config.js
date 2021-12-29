@@ -36,6 +36,7 @@ module.exports = {
       11: '60px',
       24: '24rem',
       100: '100px',
+      120: '120px',
       170: '170px',
       200: '200px',
       250: '250px',
@@ -95,7 +96,7 @@ module.exports = {
       maxWidth: {
         xxs: '225px',
       },
-      screens: { fmd: '860px', flg: '1125px', fxl: '1350px', f2xl: '1720px', '2xl': '1560px' },
+      screens: { fmd: '860px', flg: '1125px', fxl: '1350px', f2xl: '1720px', '2xl': '1440px' },
     },
   },
   variants: {

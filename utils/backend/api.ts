@@ -492,24 +492,24 @@ export class Api {
     return await itemSchema.find();
   }
 
-  toJSON({ _id, ...props }: ItemProps, realJSON: boolean = false) {
+  toJSON({ _id, ...props }: ItemProps): ItemProps {
     const res = {
       _id: _id?.toString() ? _id?.toString() : null,
       ...props,
     };
 
-    return realJSON ? JSON.stringify(res) : res;
+    return res;
   }
 
   async details(id: string, locale: string) {
     if (!isValidObjectId(id)) return this.error('ObjectId is not valid');
     const objectId = new Types.ObjectId(id);
 
-    const res = this.toJSON(await this.findOne({ _id: new Types.ObjectId(objectId) }));
-
+    const res = this.toJSON(await this.findOne({ _id: new Types.ObjectId(objectId) }, true));
     return {
       raw: res,
       frontend: this.toFrontendItem(res, locale),
+      watchProvider: await client.watchProvider(!!res.type, { id: res.id_db, language: locale }),
     };
   }
 }

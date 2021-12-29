@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Card from './Card';
+import config from '@data/config.json';
 
 const Carousel = ({ section: { items, length, name, route } }: { section: BrowseSectionProps }) => {
   const { t } = useTranslation();
@@ -27,16 +28,16 @@ const Carousel = ({ section: { items, length, name, route } }: { section: Browse
             slidesPerView: 9,
           },
           1370: {
-            slidesPerView: 8,
-          },
-          1200: {
             slidesPerView: 7,
           },
+          1200: {
+            slidesPerView: 8,
+          },
           1040: {
-            slidesPerView: 6,
+            slidesPerView: 7,
           },
           900: {
-            slidesPerView: 5,
+            slidesPerView: 6,
           },
           725: {
             slidesPerView: 4,
@@ -48,7 +49,7 @@ const Carousel = ({ section: { items, length, name, route } }: { section: Browse
       >
         {items.map((props, index) => {
           return (
-            <SwiperSlide key={index} style={{ width: '150px' }}>
+            <SwiperSlide key={index} style={{ width: config.cardWidth }}>
               <Card {...props} />
             </SwiperSlide>
           );

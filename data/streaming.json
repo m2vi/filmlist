@@ -1,9 +1,19 @@
 {
-  "services": [
+  "subscribed": [
     {
       "name": "Netflix",
       "homepage": "https://netflix.com/",
-      "logo": ""
+      "logo": "/9A1JSVmSxsyaBK4SUFsYVqbAYfW.jpg"
+    },
+    {
+      "name": "Disney Plus",
+      "homepage": "https://www.disneyplus.com/",
+      "logo": "/dgPueyEdOwpQ10fjuhL2WYFQwQs.jpg"
+    },
+    {
+      "name": "Amazon Prime Video",
+      "homepage": "https://www.amazon.de/video",
+      "logo": "/68MNrwlkpF7WnmNPXLah69CR5cb.jpg"
     }
   ]
 }

@@ -11,9 +11,9 @@ const Card = ({ _id, genre_ids, name, poster_path, release_date, id_db, vote_ave
 
   return (
     <Link href={`/details/${_id}`}>
-      <a className='flex flex-col flex-1 cursor-pointer relative overlay mb-2' style={{ width: '154px' }}>
+      <a className='flex flex-col flex-1 cursor-pointer relative overlay mb-2' style={{ width: config.cardWidth }}>
         <Rating vote_average={vote_average} />
-        <div className='h-full w-full grid place-items-center relative bg-primary-800 rounded-0 overflow-hidden'>
+        <div className='h-full w-full grid place-items-center relative bg-primary-800 rounded-8 overflow-hidden'>
           {poster_path ? (
             <img
               src={`https://image.tmdb.org/t/p/w${config.posterWidth}${poster_path}`}

@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken';
 import cookies from 'js-cookie';
-import { DiscordUser, FrontendItemProps, NotificationItemProps } from '@utils/types';
+import { DiscordUser, FrontendItemProps, ItemProps, NotificationItemProps } from '@utils/types';
 import { ParsedUrlQuery } from 'querystring';
 import moment from 'moment';
 import { basicFetch } from '@utils/fetch';
+import _ from 'underscore';
 
 class Jwt {
   decode() {
@@ -52,6 +53,16 @@ export class Api {
     const { items } = await basicFetch(`/api/manage/tab?tab=notifications&locale=${locale}&start=0&end=15`);
 
     return this.toNotifications(items, locale);
+  }
+
+  getDirector({ credits }: ItemProps) {
+    if (!credits) return null;
+    const director = _.find(credits?.crew, {
+      job: 'Director',
+    });
+
+    if (!director) return null;
+    return director;
   }
 }
 

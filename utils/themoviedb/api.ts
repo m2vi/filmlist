@@ -4,7 +4,8 @@ import { stringToBoolean, validateEnv } from '@utils/utils';
 import { MovieDb } from 'moviedb-promise';
 import companies from '@data/companies.json';
 import _, { shuffle } from 'underscore';
-import { CreditsResponse } from 'moviedb-promise/dist/request-types';
+import { CreditsResponse, IdRequestParams } from 'moviedb-promise/dist/request-types';
+import streaming from '@data/streaming.json';
 
 export const api = new MovieDb(validateEnv('MOVIE_TOKEN'));
 
@@ -12,6 +13,26 @@ export class Client {
   api: MovieDb;
   constructor() {
     this.api = api;
+  }
+
+  async watchProvider(isMovie: boolean, params: IdRequestParams) {
+    const { AT } = (await (isMovie ? api.movieWatchProviders(params) : api.tvWatchProviders(params))).results!;
+    const { subscribed } = streaming;
+    let stream = null;
+
+    AT?.flatrate?.every(({ provider_name }) => {
+      const item = subscribed.find(({ name }) => name === provider_name);
+      if (!item) true;
+
+      stream = {
+        link: AT.link,
+        ...item,
+      };
+
+      return false;
+    });
+
+    return stream;
   }
 
   async getBase(id: number, type: MovieDbTypeEnum) {

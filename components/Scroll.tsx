@@ -8,6 +8,7 @@ import _ from 'underscore';
 import Card from './Card';
 import Full from './Full';
 import Title from './Title';
+import config from '@data/config.json';
 
 const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number; extra: any } }) => {
   const ScrollRef = createRef<HTMLDivElement>();
@@ -46,7 +47,7 @@ const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number; 
         } – ${t(`pages.filmlist.default`)}`}
       />
       <main
-        className='w-full overflow-y-scroll dD5d-item max-w-screen-2xl px-11 pt-11'
+        className='w-full overflow-y-scroll dD5d-item max-w-screen-2xl px-120 py-11'
         ref={ScrollRef}
         id='scrollableDiv'
         style={{ overflowX: 'hidden' }}
@@ -59,7 +60,7 @@ const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number; 
           scrollableTarget='scrollableDiv'
           className='w-full p-0 grid gap-2 auto-rows-auto place-items-center !overflow-x-hidden '
           style={{
-            gridTemplateColumns: 'repeat(auto-fit, minmax(154px, 1fr))',
+            gridTemplateColumns: `repeat(auto-fit, minmax(${config.cardWidth}, 1fr))`,
             overflowX: 'hidden',
           }}
         >

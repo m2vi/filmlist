@@ -11,7 +11,7 @@ const Home = ({ ...props }) => {
   return (
     <div className='pt-10 w-full flex justify-center'>
       <Title title='Browse' />
-      <div className='w-full items-center pt-11 px-11 max-w-screen-2xl'>
+      <div className='w-full items-center py-11 px-120 max-w-screen-2xl'>
         {Object.entries(props.data).map(([key, section], i) => {
           return <Carousel section={section as any} key={i} />;
         })}
