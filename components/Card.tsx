@@ -6,7 +6,7 @@ import config from '@data/config.json';
 import Rating from './Rating';
 import Link from 'next/link';
 
-const Card = ({ _id, genre_ids, name, poster_path, release_date, id_db, vote_average }: FrontendItemProps) => {
+const Card = ({ _id, name, poster_path, release_date, id_db, vote_average, type }: FrontendItemProps) => {
   const { t } = useTranslation();
 
   return (

@@ -1,5 +1,5 @@
 import backend from '@utils/backend/api';
-import { CreditProps, ItemProps, MovieDbTypeEnum } from '@utils/types';
+import { CreditProps, ItemProps, MovieDbTypeEnum, ProviderEntryProps, ProviderProps } from '@utils/types';
 import { stringToBoolean, validateEnv } from '@utils/utils';
 import { MovieDb } from 'moviedb-promise';
 import companies from '@data/companies.json';
@@ -15,24 +15,55 @@ export class Client {
     this.api = api;
   }
 
-  async watchProvider(isMovie: boolean, params: IdRequestParams) {
-    const { AT } = (await (isMovie ? api.movieWatchProviders(params) : api.tvWatchProviders(params))).results!;
-    const { subscribed } = streaming;
-    let stream = null;
+  async watchProviders(isMovie: boolean, params: IdRequestParams): Promise<ProviderEntryProps | null> {
+    try {
+      const { AT } = (await (isMovie ? api.movieWatchProviders(params) : api.tvWatchProviders(params))).results!;
+      if (!AT) return null;
 
-    AT?.flatrate?.every(({ provider_name }) => {
-      const item = subscribed.find(({ name }) => name === provider_name);
+      const flatrate = AT.flatrate?.map(
+        ({ logo_path, provider_id, provider_name }): ProviderProps => ({
+          id: provider_id,
+          name: provider_name,
+          logo: logo_path,
+          type: 'flatrate',
+        })
+      );
+      const buy = AT.buy?.map(
+        ({ logo_path, provider_id, provider_name }): ProviderProps => ({
+          id: provider_id,
+          name: provider_name,
+          logo: logo_path,
+          type: 'flatrate',
+        })
+      );
+
+      return {
+        url: AT.link,
+        providers: (flatrate ? flatrate : []).concat(buy ? buy : []),
+      };
+    } catch (error) {
+      return null;
+    }
+  }
+
+  subscribedProvider({ watchProviders }: ItemProps) {
+    if (!watchProviders) return [];
+    const { subscribed } = streaming;
+    const streams: any = [];
+
+    watchProviders.providers.every(({ name }) => {
+      const item = subscribed.find(({ name }) => name === name);
       if (!item) true;
 
-      stream = {
-        link: AT.link,
+      streams.push({
+        url: watchProviders.url,
         ...item,
-      };
+      });
 
       return false;
     });
 
-    return stream;
+    return streams;
   }
 
   async getBase(id: number, type: MovieDbTypeEnum) {
@@ -41,6 +72,7 @@ export class Client {
     const en = (await (isMovie ? api.movieInfo({ id, language: 'en' }) : api.tvInfo({ id, language: 'en' }))) as any;
     const credits = await (isMovie ? api.movieCredits({ id, language: 'en' }) : api.tvCredits({ id, language: 'en' }));
     const external_ids = await (isMovie ? api.movieExternalIds({ id, language: 'en' }) : api.tvExternalIds({ id, language: 'en' }));
+    const watchProviders = await this.watchProviders(isMovie, { id, language: 'en' });
 
     return {
       isMovie,
@@ -48,16 +80,19 @@ export class Client {
       en,
       credits,
       external_ids,
+      watchProviders,
     };
   }
 
   async dataForUpdate(id: number, type: MovieDbTypeEnum): Promise<Partial<ItemProps>> {
-    const { isMovie, de, en, credits, external_ids } = await this.getBase(id, type);
+    const { isMovie, de, en, credits, external_ids, watchProviders } = await this.getBase(id, type);
 
     return {
       external_ids,
-      tagline: en.tagline,
-      overview: en.overview,
+      overview: {
+        en: en.overview,
+        de: de.overview,
+      },
       name: {
         en: isMovie ? en.title : en.name,
         de: isMovie ? de.title : de.name,
@@ -74,6 +109,7 @@ export class Client {
       vote_count: en.vote_count,
       release_date: new Date(isMovie ? en.release_date : en.first_air_date).getTime(),
       credits: credits ? this.adaptCredits(credits) : null,
+      watchProviders,
     };
   }
 
@@ -125,14 +161,16 @@ export class Client {
   async adapt(
     id: number,
     type: MovieDbTypeEnum,
-    base?: { isMovie: boolean; de: any; en: any; credits: any; external_ids: any }
+    base?: { isMovie: boolean; de: any; en: any; credits: any; external_ids: any; watchProviders: any }
   ): Promise<Partial<ItemProps>> {
-    const { isMovie, de, en, credits, external_ids } = base ? base : await this.getBase(id, type);
+    const { isMovie, de, en, credits, external_ids, watchProviders } = base ? base : await this.getBase(id, type);
 
     return {
       external_ids,
-      tagline: en.tagline,
-      overview: en.overview,
+      overview: {
+        en: en.overview,
+        de: de.overview,
+      },
       genre_ids: (en?.genres ? en?.genres?.map(({ id }: any) => id) : en.genre_ids)?.concat(this.isAnime(en) ? [7424] : []),
       id_db: parseInt(id as any),
       name: {
@@ -154,6 +192,7 @@ export class Client {
       release_date: new Date(isMovie ? en.release_date : en.first_air_date).getTime(),
       type: isMovie ? 1 : 0,
       credits: credits ? this.adaptCredits(credits) : null,
+      watchProviders,
     };
   }
 
@@ -186,6 +225,7 @@ export class Client {
           en,
           credits: null,
           external_ids: null,
+          watchProviders: null,
         });
 
         return backend.toFrontendItem(adapted as any);

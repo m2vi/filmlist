@@ -45,8 +45,9 @@ export interface ItemProps {
   genre_ids: number[];
   id_db: number;
   external_ids: MovieExternalIdsResponse;
-  tagline: string;
-  overview: string;
+  overview: {
+    [locale: string]: string;
+  };
   name: {
     [locale: string]: string;
   };
@@ -64,17 +65,23 @@ export interface ItemProps {
   type: MovieDbTypeEnum;
   watched: boolean;
   credits: CreditProps | null;
+  watchProviders: ProviderEntryProps | null;
+}
+
+export interface ProviderEntryProps {
+  url: string | undefined;
+  providers: ProviderProps[];
 }
 
 export interface FrontendItemProps {
   _id: string | null;
   id_db: number;
-  genre_ids: number[];
   name: string;
   poster_path: string | null;
   backdrop_path: string | null;
   release_date: number;
   vote_average: number;
+  type: MovieDbOptions;
 }
 
 export interface NotificationItemProps {
@@ -148,4 +155,11 @@ export interface JwtPayload {
 export interface MovieDbOptions {
   favoured: boolean;
   watched: boolean;
+}
+
+export interface ProviderProps {
+  id?: number;
+  name?: string;
+  logo?: string;
+  type?: string;
 }

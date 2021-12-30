@@ -130,13 +130,12 @@ export class Api {
   }
 
   toFrontendItem(
-    { _id, genre_ids, name, poster_path, release_date, backdrop_path, id_db, title, first_air_date, vote_average }: any,
+    { _id, genre_ids, name, poster_path, release_date, backdrop_path, id_db, title, first_air_date, vote_average, type }: any,
     locale: string = 'en'
   ): FrontendItemProps {
     return {
       _id: _id ? _id.toString() : null,
       id_db: id_db ? id_db : null,
-      genre_ids: genre_ids ? genre_ids : [],
       name: typeof name === 'object' ? (name[locale] ? name[locale] : 'Invalid name') : name ? name : title,
       poster_path:
         typeof poster_path === 'object' && poster_path !== null ? (poster_path[locale] ? poster_path[locale] : null) : poster_path,
@@ -148,6 +147,7 @@ export class Api {
           : backdrop_path,
       release_date: (release_date ? release_date : first_air_date) ? (release_date ? release_date : first_air_date) : new Date().getTime(),
       vote_average: vote_average ? vote_average : 0,
+      type,
     };
   }
 
@@ -509,7 +509,7 @@ export class Api {
     return {
       raw: res,
       frontend: this.toFrontendItem(res, locale),
-      watchProvider: await client.watchProvider(!!res.type, { id: res.id_db, language: locale }),
+      subscribedProvider: client.subscribedProvider(res),
     };
   }
 }

@@ -24,26 +24,23 @@ const Carousel = ({ section: { items, length, name, route } }: { section: Browse
         lazy={true}
         className='mt-1'
         breakpoints={{
-          1540: {
-            slidesPerView: 9,
-          },
-          1370: {
+          1440: {
             slidesPerView: 7,
           },
-          1200: {
-            slidesPerView: 8,
-          },
-          1040: {
-            slidesPerView: 7,
-          },
-          900: {
+          1290: {
             slidesPerView: 6,
           },
-          725: {
+          1100: {
+            slidesPerView: 5,
+          },
+          920: {
             slidesPerView: 4,
           },
-          580: {
+          750: {
             slidesPerView: 3,
+          },
+          580: {
+            slidesPerView: 2,
           },
         }}
       >

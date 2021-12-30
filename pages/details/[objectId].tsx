@@ -10,10 +10,17 @@ import moment from 'moment';
 import genres from '@utils/themoviedb/genres';
 import Link from 'next/link';
 import frontend from '@utils/frontend/api';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 const Details = ({ data }: any) => {
   const { t } = useTranslation();
   const { _id, poster_path } = data.frontend;
+  const locale = useRouter().locale!;
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   return (
     <Full className='pt-10 flex justify-center'>
@@ -32,7 +39,7 @@ const Details = ({ data }: any) => {
           </div>
           <div className='w-full' style={{ maxWidth: '480px' }}>
             <h2>{data.frontend.name}</h2>
-            <p className='text-primary-300 mt-5 text-justify'>{data.raw.overview}</p>
+            <p className='text-primary-300 mt-5 text-justify'>{data.raw.overview[locale]}</p>
             <Rating className='mt-5' vote_average={data.frontend.vote_average} notchild={true} />
             <div className='w-full grid grid-cols-2 auto-rows-auto mt-5 gap-5'>
               <div className='flex flex-col'>
@@ -65,12 +72,20 @@ const Details = ({ data }: any) => {
               </div>
               <div className='flex flex-col'>
                 <span className='text-base text-primary-300 mb-1 l-1'>Director</span>
-                {[frontend.getDirector(data.raw)!].map((person: any, i) => {
-                  return (
-                    <Link href={`/person/${person?.id}`} key={i}>
-                      <a className='text-xl text-primary-200 hover:text-accent'>{person?.original_name}</a>
-                    </Link>
-                  );
+                {[frontend.getDirector(data.raw)].map((person, i) => {
+                  if (person) {
+                    return (
+                      <Link href={`/person/${person?.id}`} key={i}>
+                        <a className='text-xl text-primary-200 hover:text-accent'>{person?.original_name}</a>
+                      </Link>
+                    );
+                  } else {
+                    return (
+                      <span className='text-xl text-primary-200' key={i}>
+                        -
+                      </span>
+                    );
+                  }
                 })}
               </div>
             </div>
