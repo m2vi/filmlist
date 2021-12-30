@@ -110,7 +110,7 @@ export type State = -1 | 1 | 2;
 export interface InsertProps {
   id_db: number;
   type: MovieDbTypeEnum;
-  state: State;
+  state: number;
 }
 
 export interface TabFilterOptions {
