@@ -32,15 +32,15 @@ const Dropdown = () => {
               <div className='px-1 py-1'>
                 <Menu.Item>
                   {({ active }) => (
-                    <Link href='/insert' passHref={true}>
-                      <button
+                    <Link href='/manage' passHref={true}>
+                      <a
                         className={`${
                           active ? ' text-primary-200 opacity-80' : 'text-primary-100'
                         } group flex rounded-md items-center w-full px-2 py-1 text-sm`}
                       >
                         <IoAddOutline className='w-5 h-5 mr-2' aria-hidden='true' />
-                        Add Entry
-                      </button>
+                        Manage
+                      </a>
                     </Link>
                   )}
                 </Menu.Item>

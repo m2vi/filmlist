@@ -9,7 +9,7 @@ import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
-const Insert = () => {
+const Manage = () => {
   const [enabled, setEnabled] = useState(true);
   const categories = {
     Insert: {},
@@ -21,7 +21,7 @@ const Insert = () => {
   return (
     <Full className='flex justify-center items-center'>
       <Title title='Manage' />
-      <div className='w-full max-w-lg p-4 bg-primary-800 rounded-8'>
+      <div className='w-full max-w-lg p-4 bg-primary-900-80 border border-primary-700 rounded-15'>
         <Tab.Group>
           <Tab.List className='flex text-center border-b border-primary-600 h-8'>
             {Object.keys(categories).map((category) => (
@@ -81,7 +81,9 @@ const Insert = () => {
   );
 };
 
-export default Insert;
+Manage.layout = true;
+
+export default Manage;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
