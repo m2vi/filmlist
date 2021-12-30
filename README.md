@@ -1,1 +1,11 @@
-
+- [ ] /person/[id] erweitern
+- [ ] Design fixen (Hintergrund bei Scroll)
+- [ ] 404 hinzufügen
+- [ ] Error handling erweitern (Benachrichtigungen)
+- [ ] Manage Interface
+- [ ] Farben fixen
+- [ ] Responsive
+- [ ] /details/[objectId] zu /details/[type]/[id_db] ändern
+- [ ] Gastzugang erweitern
+- [ ] Beschleunigen
+- [ ] Watched, Favoured, ... zu state: 0, state: 1 ändern
