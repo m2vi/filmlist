@@ -10,7 +10,7 @@
 - [ ] Beschleunigen
 - [x] Watched, Favoured, ... zu state: 0, state: 1 ändern
 - [x] Config prepare function
-- [x] Multie State Filter
+- [x] Multi State Filter
 
 ### State
 
