@@ -290,6 +290,28 @@ export class Client {
 
     return result;
   }
+
+  async getPerson(id: number, locale: string) {
+    const data = await api.personInfo({ id, language: locale });
+
+    return {
+      info: data,
+      tab: await backend.getTab({ tab: 'person', locale, start: 0, end: 75, includePerson: id }),
+    };
+  }
+
+  async getRecommendations(isMovie: boolean, { id }: IdRequestParams, locale: string) {
+    try {
+      const res = (
+        await (isMovie ? api.movieRecommendations({ id: id, language: locale }) : api.tvRecommendations({ id, language: locale }))
+      ).results;
+      const adapted = await this.adaptTabs(this.getTabeBase(res, res));
+
+      return adapted;
+    } catch (error) {
+      return [];
+    }
+  }
 }
 
 export const client = new Client();

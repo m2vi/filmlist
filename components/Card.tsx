@@ -9,45 +9,61 @@ import Link from 'next/link';
 const Card = ({ _id, name, poster_path, release_date, id_db, vote_average, type }: FrontendItemProps) => {
   const { t } = useTranslation();
 
+  const Wrapper = ({ children }: any) => {
+    if (_id) {
+      return (
+        <Link href={`/details/${_id}`}>
+          <a className='flex flex-col flex-1 cursor-pointer relative overlay mb-2' style={{ width: config.cardWidth }}>
+            {children}
+          </a>
+        </Link>
+      );
+    }
+
+    return (
+      <div className='flex flex-col flex-1 cursor-pointer relative overlay mb-2' style={{ width: config.cardWidth }}>
+        {children}
+      </div>
+    );
+  };
+
   return (
-    <Link href={`/details/${_id}`}>
-      <a className='flex flex-col flex-1 cursor-pointer relative overlay mb-2' style={{ width: config.cardWidth }}>
-        <Rating vote_average={vote_average} />
-        <div className='h-full w-full grid place-items-center relative bg-primary-800 rounded-8 overflow-hidden'>
-          {poster_path ? (
-            <img
-              src={`https://image.tmdb.org/t/p/w${config.posterWidth}${poster_path}`}
-              alt={_id ? _id : ''}
-              style={{ aspectRatio: '2 / 3', width: '100%' }}
-              className='no-drag select-none w-full overflow-hidden relative'
-            />
-          ) : (
-            <div style={{ aspectRatio: '2 / 3', width: '100%' }} className='no-drag select-none w-full overflow-hidden relative' />
-          )}
-        </div>
-        <div className='absolute w-full h-full top-0 left-0 z-10 overlay-child flex items-end justify-start px-2'>
-          <div className='w-full pb-2'>
-            <p
-              className='font-semibold text-base overflow-hidden overflow-ellipsis whitespace-nowrap'
-              title={name?.toString()}
-              onClick={(e) => copy(id_db?.toString())}
+    <Wrapper>
+      <Rating vote_average={vote_average} />
+      <div className='h-full w-full grid place-items-center relative bg-primary-800 rounded-8 overflow-hidden'>
+        {poster_path ? (
+          <img
+            src={`https://image.tmdb.org/t/p/w${config.posterWidth}${poster_path}`}
+            alt={_id ? _id : ''}
+            style={{ aspectRatio: '2 / 3', width: '100%' }}
+            className='no-drag select-none w-full overflow-hidden relative'
+          />
+        ) : (
+          <div style={{ aspectRatio: '2 / 3', width: '100%' }} className='no-drag select-none w-full overflow-hidden relative' />
+        )}
+      </div>
+      <div className='absolute w-full h-full top-0 left-0 z-10 overlay-child flex items-end justify-start px-2'>
+        <div className='w-full pb-2'>
+          <p
+            className='font-semibold text-base overflow-hidden overflow-ellipsis whitespace-nowrap'
+            title={name?.toString()}
+            onClick={(e) => copy(id_db?.toString())}
+          >
+            {t(`pages.filmlist.menu.${name}`, {
+              defaultValue: name,
+            })}
+          </p>
+          <span className='flex items-center justify-between'>
+            <span
+              className='font-normal opacity-80 text-base overflow-hidden overflow-ellipsis whitespace-nowrap'
+              title={moment(release_date).format('YYYY-MM-DD')}
             >
-              {t(`pages.filmlist.menu.${name}`, {
-                defaultValue: name,
-              })}
-            </p>
-            <span className='flex items-center justify-between'>
-              <span
-                className='font-normal opacity-80 text-base overflow-hidden overflow-ellipsis whitespace-nowrap'
-                title={moment(release_date).format('YYYY-MM-DD')}
-              >
-                {moment(release_date).format('YYYY')}
-              </span>
+              {moment(release_date).format('YYYY')}
             </span>
-          </div>
+          </span>
         </div>
-      </a>
-    </Link>
+      </div>
+    </Wrapper>
   );
 };
 

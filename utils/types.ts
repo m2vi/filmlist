@@ -94,8 +94,8 @@ export interface NotificationItemProps {
 export interface BrowseSectionProps {
   length: number;
   items: FrontendItemProps[];
-  name: string;
-  route: string;
+  name: string | null;
+  route: string | null;
 }
 
 export interface GenreProps {

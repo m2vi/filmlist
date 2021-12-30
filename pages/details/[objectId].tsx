@@ -11,16 +11,11 @@ import genres from '@utils/themoviedb/genres';
 import Link from 'next/link';
 import frontend from '@utils/frontend/api';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 
 const Details = ({ data }: any) => {
   const { t } = useTranslation();
   const { _id, poster_path } = data.frontend;
   const locale = useRouter().locale!;
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   return (
     <Full className='pt-10 flex justify-center'>
