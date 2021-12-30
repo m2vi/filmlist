@@ -10,14 +10,14 @@
       "menu": {
         "browse": "Home",
         "tv": "TV Shows",
-        "movies": "Movies",
+        "movie": "Movies",
         "new": "New",
         "soon": "Coming soon",
         "anime": "Anime",
 
         "my list": "My List",
         "favourites": "Favourites",
-        "hall of fame": "Hall of Fame",
+        "highlighted": "Highlighted",
         "recently": "Recently Released",
         "latest": "Latest",
         "notifications": "Notifications",

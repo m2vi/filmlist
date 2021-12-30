@@ -40,8 +40,6 @@ export interface CreditProps {
 export interface ItemProps {
   adult: boolean;
   _id: Types.ObjectId | string | null;
-  hall_of_fame: boolean;
-  favoured: boolean;
   genre_ids: number[];
   id_db: number;
   external_ids: MovieExternalIdsResponse;
@@ -63,9 +61,9 @@ export interface ItemProps {
   vote_count: number;
   release_date: number;
   type: MovieDbTypeEnum;
-  watched: boolean;
   credits: CreditProps | null;
   watchProviders: ProviderEntryProps | null;
+  state: number | number[];
 }
 
 export interface ProviderEntryProps {
@@ -85,7 +83,7 @@ export interface FrontendItemProps {
 }
 
 export interface NotificationItemProps {
-  _id: string | null;
+  url: string;
   name: string;
   backdrop_path: string | null;
   release_date: string;
@@ -103,11 +101,16 @@ export interface GenreProps {
   name: string;
 }
 
+export type State = -1 | 1 | 2;
+// -1 - not watched
+// 1 - watched
+// 2 - favoured
+// 3 - highlighted
+
 export interface InsertProps {
   id_db: number;
   type: MovieDbTypeEnum;
-  favoured: string;
-  watched: string;
+  state: State;
 }
 
 export interface TabFilterOptions {

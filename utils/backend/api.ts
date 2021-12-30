@@ -1,10 +1,10 @@
-import { Connection, FilterQuery, UpdateQuery, Types, isValidObjectId } from 'mongoose';
+import { Connection, FilterQuery, UpdateQuery } from 'mongoose';
 import { connectToDatabase } from '../database';
 import { shuffle, sortByKey } from '../array';
 import tabs from '@data/tabs.json';
 import itemSchema from '@models/itemSchema';
 import _, { sortBy } from 'underscore';
-import { CreditProps, FrontendItemProps, GenreProps, InsertProps, ItemProps, MovieDbTypeEnum, Tabs } from '../types';
+import { CreditProps, FrontendItemProps, GenreProps, InsertProps, ItemProps, MovieDbTypeEnum, TabFilterOptions, Tabs } from '../types';
 import jwt from 'jsonwebtoken';
 import cookies from 'js-cookie';
 import client from '@utils/themoviedb/api';
@@ -40,6 +40,22 @@ export class Api {
     return this.tabs[name]!;
   }
 
+  deleteStateProperty(filter: Partial<ItemProps> | null): Partial<ItemProps> {
+    if (!filter) return {};
+    if (!_.has(filter, 'state')) return filter;
+    if (!Array.isArray(filter?.state)) return filter;
+
+    return [filter].map(({ state, ...props }) => ({ ...props }))[0];
+  }
+
+  prepareConfig(config: TabFilterOptions | null): [TabFilterOptions | null, Function] {
+    if (!config) return [{}, (data: any) => data];
+    if (!_.has(config, 'filter')) return [config, (data: any) => data];
+    if (!Array.isArray(config.filter?.state)) return [config, (data: any) => data];
+
+    return [config, (items: ItemProps[]) => items.filter(({ state }) => (config?.filter?.state as number[])?.includes(state as number))];
+  }
+
   async getTab(
     {
       tab,
@@ -64,19 +80,22 @@ export class Api {
   ) {
     let items = [];
     let extra = null;
-    const config = this.getTabConfig(tab);
-    if (config === null)
+    const c = this.getTabConfig(tab);
+    if (c === null)
       return {
-        length: (default_items ? default_items : []).length,
-        items: default_items ? default_items : [],
+        length: 0,
+        items: [],
       };
+    let [config, func] = this.prepareConfig(c);
 
     if (default_items) {
-      items = _.filter(default_items, config?.filter ? config?.filter : {});
+      items = _.filter(default_items, config?.filter ? this.deleteStateProperty(config?.filter) : {});
     } else {
       await this.init();
-      items = await this.find(config?.filter ? config?.filter : {}, config?.includeCredits || includeCredits);
+      items = await this.find(config?.filter ? this.deleteStateProperty(config?.filter) : {}, config?.includeCredits || includeCredits);
     }
+
+    items = func(items) as ItemProps[];
 
     if (typeof config?.sort_key === 'boolean') {
     } else if (typeof config?.sort_key === 'undefined') {
@@ -106,7 +125,7 @@ export class Api {
     items = config?.hide_unreleased ? items.filter(({ release_date }) => isReleased(release_date)) : items;
 
     items =
-      typeof config?.minVotes === 'number' ? items.filter(({ vote_count } = { vote_count: 0 }) => vote_count > config.minVotes!) : items;
+      typeof config?.minVotes === 'number' ? items.filter(({ vote_count } = { vote_count: 0 }) => vote_count > config?.minVotes!) : items;
 
     items = dontFrontend ? items : this.prepareForFrontend(items, locale, null, null, null, config?.reverse, config?.only_unreleased);
 
@@ -124,7 +143,6 @@ export class Api {
 
       return this.prepareForFrontend(raw as any, locale, null, 0, Number.MAX_SAFE_INTEGER);
     } catch (error: any) {
-      console.log(error.message);
       return [];
     }
   }
@@ -248,12 +266,12 @@ export class Api {
     }
   }
 
-  async insert({ id_db, type, favoured, watched }: InsertProps): Promise<ItemProps | any> {
+  async insert({ id_db, type, state }: InsertProps): Promise<ItemProps | any> {
     try {
       const exists = await this.exists({ id_db: parseInt(id_db as any), type: MovieDbTypeEnum[type] as any });
       if (exists) return this.error('Already exists');
 
-      const data = await client.get(id_db, type, { favoured, watched });
+      const data = await client.get(id_db, type, { state });
       const doc = new itemSchema(data);
 
       return await doc.save();
@@ -501,11 +519,8 @@ export class Api {
     return res;
   }
 
-  async details(id: string, locale: string) {
-    if (!isValidObjectId(id)) return this.error('ObjectId is not valid');
-    const objectId = new Types.ObjectId(id);
-
-    const res = this.toJSON(await this.findOne({ _id: new Types.ObjectId(objectId) }, true));
+  async details(type: string, id: number | string, locale: string) {
+    const res = this.toJSON(await this.findOne({ type: MovieDbTypeEnum[type as any] as any, id_db: parseInt(id as string) }, true));
     return {
       raw: res,
       frontend: this.toFrontendItem(res, locale),

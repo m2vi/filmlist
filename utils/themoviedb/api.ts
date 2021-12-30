@@ -1,6 +1,6 @@
 import backend from '@utils/backend/api';
 import { CreditProps, ItemProps, MovieDbTypeEnum, ProviderEntryProps, ProviderProps } from '@utils/types';
-import { stringToBoolean, validateEnv } from '@utils/utils';
+import { validateEnv } from '@utils/utils';
 import { MovieDb } from 'moviedb-promise';
 import companies from '@data/companies.json';
 import _, { shuffle } from 'underscore';
@@ -196,14 +196,12 @@ export class Client {
     };
   }
 
-  async get(id: number, type: MovieDbTypeEnum, { favoured = 'false', watched = 'false' }) {
+  async get(id: number, type: MovieDbTypeEnum, { state = -1 }) {
     const adapted = await this.adapt(id, type);
 
     return {
-      favoured: stringToBoolean(favoured),
       ...adapted,
-      watched: stringToBoolean(watched),
-      hall_of_fame: false,
+      state,
     };
   }
 

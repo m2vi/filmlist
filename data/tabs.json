@@ -5,7 +5,7 @@
       "type": 0
     }
   },
-  "movies": {
+  "movie": {
     "filter": {
       "type": 1
     }
@@ -26,21 +26,32 @@
   },
   "my list": {
     "filter": {
-      "watched": false
+      "state": -1
     },
     "sort_key": false,
     "hide_unreleased": true
   },
   "watched": {
     "filter": {
-      "watched": true
+      "state": [1, 2, 3]
     }
   },
   "favourites": {
     "filter": {
-      "favoured": true
+      "state": 2
     },
     "hide_unreleased": true
+  },
+  "favourites-2": {
+    "filter": {
+      "state": [2, 3]
+    },
+    "hide_unreleased": true
+  },
+  "highlighted": {
+    "filter": {
+      "state": 3
+    }
   },
   "recently": {
     "sort_key": "release_date",
@@ -49,22 +60,17 @@
   },
   "latest": {
     "filter": {
-      "watched": true
+      "state": [1, 2, 3]
     },
     "sort_key": false,
     "hide_unreleased": true
   },
   "notifications": {
     "filter": {
-      "watched": false
+      "state": -1
     },
     "sort_key": "release_date",
     "hide_unreleased": true
-  },
-  "hall of fame": {
-    "filter": {
-      "hall_of_fame": true
-    }
   },
   "top-rated": {
     "sort_key": "vote_average",
@@ -88,7 +94,8 @@
     "minVotes": 200
   },
   "person": {
-    "includeCredits": true
+    "includeCredits": true,
+    "sort_key": "vote_count"
   },
   "none": {},
   "unfiltered": {

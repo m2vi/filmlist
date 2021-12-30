@@ -1,7 +1,4 @@
 import Full from '@components/Full';
-import api from '@utils/backend/api';
-import { GetServerSideProps } from 'next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import config from '@data/config.json';
 import Rating from '@components/Rating';
 import Title from '@components/Title';
@@ -123,15 +120,4 @@ const Details = ({ data }: any) => {
   );
 };
 
-Details.layout = true;
-
 export default Details;
-
-export const getServerSideProps: GetServerSideProps = async ({ locale, query }: any) => {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale!, ['common', 'footer'])),
-      data: await api.details(query.objectId, locale),
-    },
-  };
-};

@@ -12,7 +12,7 @@ const Card = ({ _id, name, poster_path, release_date, id_db, vote_average, type 
   const Wrapper = ({ children }: any) => {
     if (_id) {
       return (
-        <Link href={`/details/${_id}`}>
+        <Link href={`/${type ? 'movie' : 'tv'}/${id_db}`}>
           <a className='flex flex-col flex-1 cursor-pointer relative overlay mb-2' style={{ width: config.cardWidth }}>
             {children}
           </a>

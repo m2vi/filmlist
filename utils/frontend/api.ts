@@ -39,9 +39,9 @@ export class Api {
   private toNotifications(items: FrontendItemProps[] = [], locale: string = 'en') {
     return items
       .filter(({ release_date }) => new Date().getTime() - release_date < 1000 * 60 * 60 * 24 * 30 * 6)
-      .map(({ _id, name, release_date, backdrop_path }) => {
+      .map(({ id_db, name, release_date, backdrop_path, type }) => {
         return {
-          _id,
+          url: `/${type ? 'movie' : 'tv'}/${id_db}`,
           name,
           backdrop_path,
           release_date: moment(release_date).locale(locale).fromNow(),

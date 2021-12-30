@@ -50,15 +50,15 @@ const PopoverEl = () => {
                   <Menu.Items className='divide-y divide-primary-700 h-300' unmount={false}>
                     {data.length > 0 ? (
                       <>
-                        {data.map(({ _id, name, backdrop_path, release_date }) => (
-                          <Link href={`/details/${_id}`} passHref key={_id}>
-                            <div className='p-3 hover:bg-primary-900 cursor-pointer' key={_id}>
+                        {data.map(({ name, backdrop_path, release_date, url }) => (
+                          <Link href={url} passHref key={url}>
+                            <div className='p-3 hover:bg-primary-900 cursor-pointer'>
                               <Menu.Item>
                                 <div className='flex'>
                                   <img
                                     className='max-h-11 rounded-3 mr-4'
                                     src={`https://image.tmdb.org/t/p/w${config.posterWidth}${backdrop_path}`}
-                                    alt={_id ? _id : ''}
+                                    alt={url}
                                   />
                                   <div className='flex flex-col pt-1'>
                                     <span className=''>{name}</span>

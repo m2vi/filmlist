@@ -10,14 +10,14 @@
       "menu": {
         "browse": "Startseite",
         "tv": "Serien",
-        "movies": "Filme",
+        "movie": "Filme",
         "new": "Neu",
         "soon": "Bald Verfügbar",
         "anime": "Anime",
 
         "my list": "Meine Liste",
         "favourites": "Favouriten",
-        "hall of fame": "Hall of Fame",
+        "highlighted": "Markiert",
         "recently": "Vor kurzem erschienen",
         "latest": "Aktuelles",
         "notifications": "Benachrichtigungen",
