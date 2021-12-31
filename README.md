@@ -11,6 +11,7 @@
 - [x] Watched, Favoured, ... zu state: 0, state: 1 ändern
 - [x] Config prepare function
 - [x] Multi State Filter
+- [x] Vorschläge anzeigen
 
 ### State
 

@@ -8,6 +8,8 @@ import genres from '@utils/themoviedb/genres';
 import Link from 'next/link';
 import frontend from '@utils/frontend/api';
 import { useRouter } from 'next/router';
+import CarouselAsync from './CarouselAsync';
+import { basicFetch } from '@utils/fetch';
 
 const Details = ({ data }: any) => {
   const { t } = useTranslation();
@@ -114,6 +116,17 @@ const Details = ({ data }: any) => {
               </span>
             </div>
           </div>
+        </div>
+        <div className='pt-80'>
+          <CarouselAsync
+            func={async () => {
+              const result = await basicFetch(
+                `/api/manage/items/item/${data.raw.id_db}?locale=${locale}&isMovie=${Boolean(data.raw.type)}`
+              );
+
+              return result;
+            }}
+          />
         </div>
       </main>
     </Full>
