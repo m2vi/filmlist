@@ -294,6 +294,11 @@ export class Client {
 
     return {
       info: data,
+    };
+  }
+
+  async getPersonItems(id: number, locale: string) {
+    return {
       tab: await backend.getTab({ tab: 'person', locale, start: 0, end: 75, includePerson: id }),
     };
   }

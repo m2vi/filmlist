@@ -5,17 +5,17 @@ import config from '@data/config.json';
 import Title from '@components/Title';
 import { useTranslation } from 'next-i18next';
 import moment from 'moment';
-
 import { useRouter } from 'next/router';
 import client from '@utils/themoviedb/api';
-import Carousel from '@components/Carousel';
 import { truncate } from '@utils/utils';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import CarouselAsync from '@components/CarouselAsync';
+import { basicFetch } from '@utils/fetch';
 
 const Person = ({ data }: any) => {
   const { t } = useTranslation();
   const locale = useRouter().locale!;
-
+  const [appearances, setAppearances] = useState('-');
   useEffect(() => console.log(data.info));
 
   return (
@@ -49,7 +49,7 @@ const Person = ({ data }: any) => {
               </div>
               <div className='flex flex-col'>
                 <span className='text-base text-primary-300 mb-1 l-1'>Appearances</span>
-                <span className='text-xl text-primary-200'>{data.tab.length}</span>
+                <span className='text-xl text-primary-200'>{appearances}</span>
               </div>
               <div className='flex flex-col'>
                 <span className='text-base text-primary-300 mb-1 l-1'>IMDb ID</span>
@@ -76,13 +76,11 @@ const Person = ({ data }: any) => {
           </div>
         </div>
         <div className='pt-80'>
-          <Carousel
-            section={{
-              name: null,
-              route: null,
-              ...data.tab,
-              items: data.tab.items,
-              length: data.tab.items.length,
+          <CarouselAsync
+            func={async () => {
+              const result = (await basicFetch(`/api/manage/items/person/${data.info.id}?locale=${locale}`)).tab;
+              setAppearances(result.length);
+              return result.items;
             }}
           />
         </div>
