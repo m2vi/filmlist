@@ -1,3 +1,5 @@
+import { CardProps } from '@components/Card';
+
 export function validateEnv<T extends string = string>(key: keyof NodeJS.ProcessEnv, defaultValue?: T, warnDefault = false): T {
   const value = process.env[key] as T | undefined;
 
@@ -54,3 +56,12 @@ export function classNames(...classes: string[]) {
 export function truncate(str: string, n: number) {
   return str.length > n ? str.substr(0, n - 1) + '…' : str;
 }
+
+export const placeholderCards = (n: number): Partial<CardProps>[] => {
+  return Array.from(
+    { length: n },
+    (): Partial<CardProps> => ({
+      isLoading: true,
+    })
+  );
+};

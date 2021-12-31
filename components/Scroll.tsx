@@ -58,7 +58,7 @@ const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number; 
           hasMore={data.length >= items.length}
           loader={null}
           scrollableTarget='scrollableDiv'
-          className='w-full p-0 grid gap-2 auto-rows-auto place-items-center !overflow-x-hidden '
+          className='w-full p-0 grid gap-2 auto-rows-auto place-items-center'
           style={{
             gridTemplateColumns: `repeat(auto-fit, minmax(${config.cardWidth}, 1fr))`,
             overflowX: 'hidden',

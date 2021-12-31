@@ -218,12 +218,6 @@ export class Api {
     return sliced;
   }
 
-  private getFilterForGenre(genre_id: number): FilterQuery<ItemProps> {
-    return {
-      genre_ids: genre_id,
-    };
-  }
-
   async find(filter: FilterQuery<ItemProps>, includeCredits: boolean = false): Promise<ItemProps[]> {
     await this.init();
     let items = [];

@@ -6,7 +6,11 @@ import config from '@data/config.json';
 import Rating from './Rating';
 import Link from 'next/link';
 
-const Card = ({ _id, name, poster_path, release_date, id_db, vote_average, type }: FrontendItemProps) => {
+export interface CardProps extends FrontendItemProps {
+  isLoading?: boolean;
+}
+
+const Card = ({ _id, name, poster_path, release_date, id_db, vote_average, type, isLoading = false }: CardProps) => {
   const { t } = useTranslation();
 
   const Wrapper = ({ children }: any) => {
@@ -26,6 +30,16 @@ const Card = ({ _id, name, poster_path, release_date, id_db, vote_average, type 
       </div>
     );
   };
+
+  if (isLoading) {
+    return (
+      <Wrapper>
+        <div className='h-full w-full grid place-items-center relative loading-animation rounded-8 overflow-hidden'>
+          <div style={{ aspectRatio: '2 / 3', width: '100%' }} className='no-drag select-none w-full overflow-hidden relative'></div>
+        </div>
+      </Wrapper>
+    );
+  }
 
   return (
     <Wrapper>
