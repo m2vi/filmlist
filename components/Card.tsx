@@ -13,23 +13,13 @@ export interface CardProps extends FrontendItemProps {
 const Card = ({ _id, name, poster_path, release_date, id_db, vote_average, type, state, isLoading = false }: CardProps) => {
   const { t } = useTranslation();
 
-  const Wrapper = ({ children }: any) => {
-    if (_id) {
-      return (
-        <Link href={`/${type ? 'movie' : 'tv'}/${id_db}`}>
-          <a className='flex flex-col flex-1 cursor-pointer relative overlay mb-2' style={{ width: config.cardWidth }}>
-            {children}
-          </a>
-        </Link>
-      );
-    }
-
-    return (
-      <div className='flex flex-col flex-1 cursor-pointer relative overlay mb-2' style={{ width: config.cardWidth }}>
+  const Wrapper = ({ children }: any) => (
+    <Link href={`/${type ? 'movie' : 'tv'}/${id_db}`}>
+      <a className='flex flex-col flex-1 cursor-pointer relative overlay mb-2' style={{ width: config.cardWidth }}>
         {children}
-      </div>
-    );
-  };
+      </a>
+    </Link>
+  );
 
   if (isLoading) {
     return (

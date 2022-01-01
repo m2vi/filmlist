@@ -505,7 +505,7 @@ export class Api {
     return await itemSchema.find();
   }
 
-  toJSON({ _id, ...props }: ItemProps): ItemProps {
+  toJSON({ _id, ...props }: any): ItemProps {
     const res = {
       _id: _id?.toString() ? _id?.toString() : null,
       ...props,
@@ -515,7 +515,21 @@ export class Api {
   }
 
   async details(type: string, id: number | string, locale: string) {
-    const res = this.toJSON(await this.findOne({ type: MovieDbTypeEnum[type as any] as any, id_db: parseInt(id as string) }, true));
+    let res: any = {
+      error: 'Unkown error',
+    };
+    try {
+      res = this.toJSON(await this.findOne({ type: MovieDbTypeEnum[type as any] as any, id_db: parseInt(id as string) }, true));
+    } catch (error) {
+      try {
+        res = this.toJSON(await client.get(parseInt(id as any), MovieDbTypeEnum[type as any] as any, { state: 0 }));
+      } catch (error: any) {
+        return {
+          error: error.message,
+        };
+      }
+    }
+
     return {
       raw: res,
       frontend: this.toFrontendItem(res, locale),

@@ -3,13 +3,16 @@ import { Spinner } from '@components/Spinner';
 
 const sizeClassnames = {
   big: 'py-2 px-6 text-sm rounded-lg',
+  middle: 'py-1 px-3 text-sm rounded-8',
   small: 'px-2 py-1 text-xs rounded-md',
+  none: '',
 };
 
 const colorClassnames = {
   primary: 'text-button bg-accent hover:bg-accent-hover disabled:text-accent-disabled disabled:bg-accent-hover',
   secondary: 'text-button bg-primary-700 hover:bg-primary-600 disabled:text-primary-300',
   'secondary-800': 'text-button bg-primary-800 hover:bg-primary-600 disabled:text-primary-300',
+  tertiary: 'text-button bg-accent-hover hover:opacity-80 disabled:text-primary-300',
 };
 
 export type ButtonProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> & {

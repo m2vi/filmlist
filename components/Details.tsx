@@ -10,14 +10,20 @@ import frontend from '@utils/frontend/api';
 import { useRouter } from 'next/router';
 import CarouselAsync from './CarouselAsync';
 import { basicFetch } from '@utils/fetch';
+import InfoBar from './InfoBar';
+import { useEffect, useState } from 'react';
 
 const Details = ({ data }: any) => {
+  const [showBar, setShowBar] = useState(false);
   const { t } = useTranslation();
   const { _id, poster_path } = data.frontend;
   const locale = useRouter().locale!;
 
+  useEffect(() => setShowBar(!data.raw.state), [data]);
+
   return (
     <Full className='pt-10 flex justify-center'>
+      {showBar ? <InfoBar name={data.frontend.name} setState={setShowBar} /> : null}
       <Title title={`${data.frontend.name} – ${t(`pages.filmlist.default`)}`} />
       <main className='w-full max-w-screen-2xl px-120 py-11'>
         <div className='w-full grid grid-cols-2 gap-80 px-80'>
