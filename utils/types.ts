@@ -80,6 +80,7 @@ export interface FrontendItemProps {
   release_date: number;
   vote_average: number;
   type: MovieDbOptions;
+  state: number;
 }
 
 export interface NotificationItemProps {
@@ -101,7 +102,7 @@ export interface GenreProps {
   name: string;
 }
 
-export type State = -1 | 1 | 2;
+export type State = -1 | 1 | 2 | 3;
 // -1 - not watched
 // 1 - watched
 // 2 - favoured

@@ -148,7 +148,7 @@ export class Api {
   }
 
   toFrontendItem(
-    { _id, genre_ids, name, poster_path, release_date, backdrop_path, id_db, title, first_air_date, vote_average, type }: any,
+    { _id, state, name, poster_path, release_date, backdrop_path, id_db, title, first_air_date, vote_average, type }: any,
     locale: string = 'en'
   ): FrontendItemProps {
     return {
@@ -166,6 +166,7 @@ export class Api {
       release_date: (release_date ? release_date : first_air_date) ? (release_date ? release_date : first_air_date) : new Date().getTime(),
       vote_average: vote_average ? vote_average : 0,
       type,
+      state: state ? state : 0,
     };
   }
 

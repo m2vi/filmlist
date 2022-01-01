@@ -10,7 +10,7 @@ export interface CardProps extends FrontendItemProps {
   isLoading?: boolean;
 }
 
-const Card = ({ _id, name, poster_path, release_date, id_db, vote_average, type, isLoading = false }: CardProps) => {
+const Card = ({ _id, name, poster_path, release_date, id_db, vote_average, type, state, isLoading = false }: CardProps) => {
   const { t } = useTranslation();
 
   const Wrapper = ({ children }: any) => {
@@ -43,7 +43,7 @@ const Card = ({ _id, name, poster_path, release_date, id_db, vote_average, type,
 
   return (
     <Wrapper>
-      <Rating vote_average={vote_average} />
+      <Rating vote_average={vote_average} state={state} />
       <div className='h-full w-full grid place-items-center relative bg-primary-800 rounded-8 overflow-hidden'>
         {poster_path ? (
           <img
