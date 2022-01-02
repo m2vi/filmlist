@@ -323,22 +323,25 @@ export class Api {
 
     if (!small) {
       return {
-        entries: collection?.length,
         general: {
+          entries: collection?.length,
           movies: find({ type: 1 }).length,
           tv: find({ type: 0 }).length,
-          genresWithLessThanTwentyItems: await this.getGenresWithLessThanNItems(20),
+          'my list': find({ state: -1 }).length,
         },
         genres: genreStats(collection),
         tabs: tabStats(),
         db: await this.dbStats(),
+        genresWithLessThanTwentyItems: await this.getGenresWithLessThanNItems(20),
         time: `${(performance.now() - start).toFixed(2)}ms`,
       };
     }
     return {
-      entries: collection?.map((item) => this.toFrontendItem(item)),
       general: {
         entries: collection?.length,
+        movies: find({ type: 1 }).length,
+        tv: find({ type: 0 }).length,
+        'my list': find({ state: -1 }).length,
       },
       time: `${(performance.now() - start).toFixed(2)}ms`,
     };

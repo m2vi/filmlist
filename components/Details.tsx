@@ -70,6 +70,14 @@ const Details = ({ data }: any) => {
                   {data.raw.external_ids.imdb_id}
                 </a>
               </div>
+              {data.raw.runtime ? (
+                <div className='flex flex-col'>
+                  <span className='text-base text-primary-300 mb-1 l-1'>{data.raw.type ? 'Runtime' : 'Episode run time'}</span>
+                  <span className='text-xl text-primary-200' title={data.raw.runtime}>
+                    {data.raw.runtime} min
+                  </span>
+                </div>
+              ) : null}
               <div className='flex flex-col'>
                 <span className='text-base text-primary-300 mb-1 l-1'>Director</span>
                 {[frontend.getDirector(data.raw)].map((person, i) => {

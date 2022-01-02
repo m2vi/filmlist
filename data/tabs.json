@@ -98,6 +98,7 @@
     "sort_key": "vote_count"
   },
   "none": {},
+  "entries": {},
   "unfiltered": {
     "sort_key": false,
     "reverse": true

@@ -108,7 +108,11 @@ export class Client {
       vote_average: en.vote_average,
       vote_count: en.vote_count,
       release_date: new Date(isMovie ? en.release_date : en.first_air_date).getTime(),
-      credits: credits ? this.adaptCredits(credits) : null,
+      runtime: (isMovie ? en.runtime : en.episode_run_time ? en.episode_run_time[0] : null)
+        ? isMovie
+          ? en.runtime
+          : en.episode_run_time[0]
+        : null,
       watchProviders,
     };
   }
@@ -190,6 +194,11 @@ export class Client {
       vote_average: en.vote_average,
       vote_count: en.vote_count,
       release_date: new Date(isMovie ? en.release_date : en.first_air_date).getTime(),
+      runtime: (isMovie ? en.runtime : en.episode_run_time ? en.episode_run_time[0] : null)
+        ? isMovie
+          ? en.runtime
+          : en.episode_run_time[0]
+        : null,
       type: isMovie ? 1 : 0,
       credits: credits ? this.adaptCredits(credits) : null,
       watchProviders,
@@ -312,6 +321,7 @@ export class Client {
 
       return adapted;
     } catch (error) {
+      console.log(error);
       return [];
     }
   }

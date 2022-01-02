@@ -60,6 +60,7 @@ export interface ItemProps {
   vote_average: number;
   vote_count: number;
   release_date: number;
+  runtime: number;
   type: MovieDbTypeEnum;
   credits: CreditProps | null;
   watchProviders: ProviderEntryProps | null;

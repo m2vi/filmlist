@@ -8,9 +8,11 @@
       "default": "Filmlist",
       "name": "filmlist",
       "menu": {
+        "entries": "Entries",
         "browse": "Home",
         "tv": "TV Shows",
         "movie": "Movies",
+        "movies": "Movies",
         "new": "New",
         "soon": "Coming soon",
         "anime": "Anime",

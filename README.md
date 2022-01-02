@@ -4,9 +4,8 @@
 - [ ] Error handling erweitern (Benachrichtigungen)
 - [ ] Manage Interface
 - [ ] Farben fixen
-- [ ] Responsive
+- [x] Responsive
 - [x] /details/[objectId] zu /details/[type]/[id_db] ändern
-- [ ] Gastzugang erweitern
 - [ ] Beschleunigen
 - [x] Watched, Favoured, ... zu state: 0, state: 1 ändern
 - [x] Config prepare function

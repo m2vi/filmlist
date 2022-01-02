@@ -1,6 +1,5 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import { IoAddOutline, IoLogOutOutline } from 'react-icons/io5';
 import Image from 'next/image';
 import api from '@utils/frontend/api';
 import { DiscordUser } from '@utils/types';
@@ -32,13 +31,25 @@ const Dropdown = () => {
               <div className='px-1 py-1'>
                 <Menu.Item>
                   {({ active }) => (
-                    <Link href='/manage' passHref={true}>
+                    <Link href='/dashboard'>
                       <a
                         className={`${
                           active ? ' text-primary-200 opacity-80' : 'text-primary-100'
                         } group flex rounded-md items-center w-full px-2 py-1 text-sm`}
                       >
-                        <IoAddOutline className='w-5 h-5 mr-2' aria-hidden='true' />
+                        Dashboard
+                      </a>
+                    </Link>
+                  )}
+                </Menu.Item>
+                <Menu.Item>
+                  {({ active }) => (
+                    <Link href='/manage'>
+                      <a
+                        className={`${
+                          active ? ' text-primary-200 opacity-80' : 'text-primary-100'
+                        } group flex rounded-md items-center w-full px-2 py-1 text-sm`}
+                      >
                         Manage
                       </a>
                     </Link>
@@ -50,15 +61,14 @@ const Dropdown = () => {
               <div className='px-1 py-1'>
                 <Menu.Item>
                   {({ active }) => (
-                    <Link href='/logout' passHref={true}>
-                      <button
+                    <Link href='/logout'>
+                      <a
                         className={`${
                           active ? ' text-primary-200 opacity-80' : 'text-primary-100'
                         } group flex rounded-md items-center w-full px-2 py-1 text-sm`}
                       >
-                        <IoLogOutOutline className='w-5 h-5 mr-2' aria-hidden='true' />
                         Log out
-                      </button>
+                      </a>
                     </Link>
                   )}
                 </Menu.Item>
