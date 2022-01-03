@@ -114,6 +114,7 @@ export class Client {
           : en.episode_run_time[0]
         : null,
       watchProviders,
+      collection: isMovie ? (en.belongs_to_collection ? en.belongs_to_collection : null) : null,
     };
   }
 
@@ -202,6 +203,7 @@ export class Client {
       type: isMovie ? 1 : 0,
       credits: credits ? this.adaptCredits(credits) : null,
       watchProviders,
+      collection: isMovie ? (en.belongs_to_collection ? en.belongs_to_collection : null) : null,
     };
   }
 

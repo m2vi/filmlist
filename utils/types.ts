@@ -65,6 +65,12 @@ export interface ItemProps {
   credits: CreditProps | null;
   watchProviders: ProviderEntryProps | null;
   state: number | number[];
+  collection: {
+    id: number;
+    name: string;
+    poster_path: string;
+    backdrop_path: string;
+  } | null;
 }
 
 export interface ProviderEntryProps {

@@ -251,6 +251,45 @@ export class Api {
     return item;
   }
 
+  async findCollection(name: string) {
+    const all = await this.collections(true);
+    const current = all[name];
+
+    return current ? current : null;
+  }
+
+  async collections(includeCredits: boolean = false) {
+    await this.init();
+    const items = await this.find(
+      {
+        collection: {
+          $ne: null,
+        },
+      },
+      includeCredits
+    );
+    let collections = {} as any;
+
+    items.forEach((item) => {
+      const { collection } = item;
+      if (!collection) return;
+
+      if (collections[collection.name]) {
+        collections[collection.name].items.push(item);
+      } else {
+        collections[collection.name] = {
+          id: collection.id,
+          name: collection.name,
+          poster_path: collection.poster_path,
+          backdrop_path: collection.backdrop_path,
+          items: [item],
+        };
+      }
+    });
+
+    return collections;
+  }
+
   async exists(filter: FilterQuery<ItemProps>): Promise<boolean> {
     try {
       const item = await this.findOne(filter);
