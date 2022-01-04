@@ -15,13 +15,14 @@ export class Client {
     this.api = api;
   }
 
-  async watchProviders(isMovie: boolean, params: IdRequestParams): Promise<ProviderEntryProps | null> {
+  async watchProviders(providers: any, isMovie: boolean, params: IdRequestParams): Promise<ProviderEntryProps | null> {
     try {
-      const { AT } = (await (isMovie ? api.movieWatchProviders(params) : api.tvWatchProviders(params))).results!;
+      let AT = providers.AT;
+      if (!AT) AT = (await (isMovie ? api.movieWatchProviders(params) : api.tvWatchProviders(params))).results!.AT;
       if (!AT) return null;
 
       const flatrate = AT.flatrate?.map(
-        ({ logo_path, provider_id, provider_name }): ProviderProps => ({
+        ({ logo_path, provider_id, provider_name }: any): ProviderProps => ({
           id: provider_id,
           name: provider_name,
           logo: logo_path,
@@ -29,7 +30,7 @@ export class Client {
         })
       );
       const buy = AT.buy?.map(
-        ({ logo_path, provider_id, provider_name }): ProviderProps => ({
+        ({ logo_path, provider_id, provider_name }: any): ProviderProps => ({
           id: provider_id,
           name: provider_name,
           logo: logo_path,
@@ -69,17 +70,17 @@ export class Client {
   async getBase(id: number, type: MovieDbTypeEnum) {
     const isMovie = (MovieDbTypeEnum[type] as any) === MovieDbTypeEnum.movie || type.toString() === '1';
     const de = (await (isMovie ? api.movieInfo({ id, language: 'de' }) : api.tvInfo({ id, language: 'de' }))) as any;
-    const en = (await (isMovie ? api.movieInfo({ id, language: 'en' }) : api.tvInfo({ id, language: 'en' }))) as any;
-    const credits = await (isMovie ? api.movieCredits({ id, language: 'en' }) : api.tvCredits({ id, language: 'en' }));
-    const external_ids = await (isMovie ? api.movieExternalIds({ id, language: 'en' }) : api.tvExternalIds({ id, language: 'en' }));
-    const watchProviders = await this.watchProviders(isMovie, { id, language: 'en' });
+    const en = (await (isMovie
+      ? api.movieInfo({ id, language: 'en', append_to_response: 'credits,watch/providers,external_ids' })
+      : api.tvInfo({ id, language: 'en', append_to_response: 'credits,watch/providers,external_ids' }))) as any;
+    const watchProviders = await this.watchProviders(en['watch/providers'], isMovie, { id, language: 'en' });
 
     return {
       isMovie,
       de,
       en,
-      credits,
-      external_ids,
+      credits: en.credits,
+      external_ids: en.external_ids,
       watchProviders,
     };
   }
