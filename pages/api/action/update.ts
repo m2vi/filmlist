@@ -20,6 +20,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return result;
   };
 
+  const calculateTimeElapsed = () => {
+    return performance.now() - total_start;
+  };
+
   for (const index in docs) {
     const { _id, id_db, type, name } = docs[index];
     const start = performance.now();
@@ -45,11 +49,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     updated += 1;
     times.push(end);
 
-    console.log(
-      `${((100 * (parseInt(index) + 1)) / length).toFixed(2)}% - ${moment(calculateTimeRemaining()).format('mm:ss')} - ${end.toFixed(
-        2
-      )}ms - ${_id?.toString()} - ${id_db}`
-    );
+    const log = {
+      progress: `${((100 * (parseInt(index) + 1)) / length).toFixed(2)}%`,
+      remaining_time: moment(calculateTimeRemaining()).format('mm:ss'),
+      elapsed_time: moment(calculateTimeElapsed()).format('mm:ss'),
+      average_time_per_job: `${end.toFixed(2)}ms`,
+      info: {
+        id: _id?.toString(),
+        tmdb_id: id_db,
+      },
+    };
+
+    console.log(JSON.stringify(log));
   }
 
   res.json({

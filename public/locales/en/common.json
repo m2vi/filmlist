@@ -56,7 +56,6 @@
         "war & politics": "War & Politics",
         "western": "Western"
       },
-
       "languages": {
         "default": "Original Language",
         "da": "Danish",
@@ -81,5 +80,31 @@
         "format": "MMM D, YYYY"
       }
     }
+  },
+  "person": {
+    "known_for": "Known for",
+    "appearances": "Appearances",
+    "birthday": "Birthday",
+    "deathday": "Deathday",
+    "age": "Age"
+  },
+  "details": {
+    "type": {
+      "title": "Type",
+      "movie": "Movie",
+      "tv show": "TV Show"
+    },
+    "release_date": "Release date",
+    "first_air_date": "First air date",
+    "runtime": "Runtime",
+    "episode_run_time": "Episode run time",
+    "collection": "Collection",
+    "genres": "Genres",
+    "stars": "Stars"
+  },
+  "collection": {
+    "count": "Count",
+    "local_count": "Local count",
+    "genres": "Genres"
   }
 }

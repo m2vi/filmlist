@@ -34,7 +34,7 @@ const Collection = ({ data }: any) => {
             <Rating className='mt-5' vote_average={data.vote_average} notchild={true} />
             <div className='w-full grid grid-cols-2 auto-rows-auto mt-5 gap-5'>
               <div className='flex flex-col'>
-                <span className='text-base text-primary-300 mb-1 l-1'>Count</span>
+                <span className='text-base text-primary-300 mb-1 l-1'>{t('collection.count')}</span>
                 <span className='text-xl text-primary-200'>{data.tmdb_count}</span>
               </div>
               <div className='flex flex-col'>
@@ -44,12 +44,12 @@ const Collection = ({ data }: any) => {
                 </a>
               </div>
               <div className='flex flex-col'>
-                <span className='text-base text-primary-300 mb-1 l-1'>Local count</span>
+                <span className='text-base text-primary-300 mb-1 l-1'>{t('collection.local_count')}</span>
                 <span className='text-xl text-primary-200'>{data.local_count}</span>
               </div>
             </div>
             <div className='flex flex-col mt-5'>
-              <span className='text-base text-primary-300 mb-1 l-1'>Genres</span>
+              <span className='text-base text-primary-300 mb-1 l-1'>{t('collection.genres')}</span>
               <span className='text-xl text-primary-200'>
                 {data.genre_ids.map((id: number, i: number) => {
                   return (

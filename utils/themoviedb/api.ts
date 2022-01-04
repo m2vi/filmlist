@@ -79,8 +79,14 @@ export class Client {
       isMovie,
       de,
       en,
-      credits: en.credits,
-      external_ids: en.external_ids,
+      credits: en.credits
+        ? {
+            id: en.credits.id ? en.credits.id : null,
+            cast: en.credits.cast ? en.credits.cast : null,
+            crew: en.credits.crew ? en.credits.crew : null,
+          }
+        : null,
+      external_ids: en.external_ids ? en.external_ids : null,
       watchProviders,
     };
   }

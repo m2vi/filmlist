@@ -80,5 +80,31 @@
         "format": "MMM D, YYYY"
       }
     }
+  },
+  "person": {
+    "known_for": "Bekannt für",
+    "appearances": "Auftritte",
+    "birthday": "Geburtstag",
+    "deathday": "Todestag",
+    "age": "Alter"
+  },
+  "details": {
+    "type": {
+      "title": "Typ",
+      "movie": "Film",
+      "tv show": "Serie"
+    },
+    "release_date": "Erscheinungsdatum",
+    "first_air_date": "Datum der Erstausstrahlung",
+    "runtime": "Laufzeit",
+    "episode_run_time": "Laufzeit der Episode",
+    "collection": "Sammlung",
+    "genres": "Genres",
+    "stars": "Stars"
+  },
+  "collection": {
+    "count": "Anzahl",
+    "local_count": "Lokale Anzahl",
+    "genres": "Genres"
   }
 }

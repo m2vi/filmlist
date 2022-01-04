@@ -47,7 +47,7 @@ const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number; 
         } – ${t(`pages.filmlist.default`)}`}
       />
       <main
-        className='w-full overflow-y-scroll dD5d-item max-w-screen-2xl px-120 py-11'
+        className='w-full overflow-y-scroll dD5d-item max-w-screen-2xl px-120 mt-11 pb-11'
         ref={ScrollRef}
         id='scrollableDiv'
         style={{ overflowX: 'hidden' }}

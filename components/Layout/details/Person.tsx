@@ -35,7 +35,7 @@ const Person = ({ data }: any) => {
             <p className='text-primary-300 mt-5 text-justify'>{truncate(data.info.biography, 690)}</p>
             <div className='w-full grid grid-cols-2 auto-rows-auto mt-5 gap-5'>
               <div className='flex flex-col'>
-                <span className='text-base text-primary-300 mb-1 l-1'>Known for</span>
+                <span className='text-base text-primary-300 mb-1 l-1'>{t('person.known_for')}</span>
                 <span className='text-xl text-primary-200'>{data.info.known_for_department}</span>
               </div>
               <div className='flex flex-col'>
@@ -45,7 +45,7 @@ const Person = ({ data }: any) => {
                 </a>
               </div>
               <div className='flex flex-col'>
-                <span className='text-base text-primary-300 mb-1 l-1'>Appearances</span>
+                <span className='text-base text-primary-300 mb-1 l-1'>{t('person.appearances')}</span>
                 <span className='text-xl text-primary-200'>{appearances}</span>
               </div>
               <div className='flex flex-col'>
@@ -55,17 +55,17 @@ const Person = ({ data }: any) => {
                 </a>
               </div>
               <div className='flex flex-col'>
-                <span className='text-base text-primary-300 mb-1 l-1'>Birthday</span>
+                <span className='text-base text-primary-300 mb-1 l-1'>{t('person.birthday')}</span>
                 <span className='text-xl text-primary-200'>{moment(data.info.birthday).format('l')}</span>
               </div>
               {data.info.deathday ? (
                 <div className='flex flex-col'>
-                  <span className='text-base text-primary-300 mb-1 l-1'>Deathday</span>
+                  <span className='text-base text-primary-300 mb-1 l-1'>{t('person.deathday')}</span>
                   <span className='text-xl text-primary-200'>{moment(data.info.deathday).format('l')}</span>
                 </div>
               ) : (
                 <div className='flex flex-col'>
-                  <span className='text-base text-primary-300 mb-1 l-1'>Age</span>
+                  <span className='text-base text-primary-300 mb-1 l-1'>{t('person.age')}</span>
                   <span className='text-xl text-primary-200'>{moment().diff(data.info.birthday, 'years', false)} years old</span>
                 </div>
               )}

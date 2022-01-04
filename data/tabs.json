@@ -53,6 +53,11 @@
       "state": 3
     }
   },
+  "previously": {
+    "sort_key": "release_date",
+    "hide_unreleased": true,
+    "reverse": true
+  },
   "recently": {
     "sort_key": "release_date",
     "hide_unreleased": true,

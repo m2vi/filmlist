@@ -45,8 +45,8 @@ const Details = ({ data }: any) => {
             <Rating className='mt-5' vote_average={data.frontend.vote_average} notchild={true} />
             <div className='w-full grid grid-cols-2 auto-rows-auto mt-5 gap-5'>
               <div className='flex flex-col'>
-                <span className='text-base text-primary-300 mb-1 l-1'>Type</span>
-                <span className='text-xl text-primary-200'>{data.raw.type ? 'Movie' : 'TV Show'}</span>
+                <span className='text-base text-primary-300 mb-1 l-1'>{t('details.type.title')}</span>
+                <span className='text-xl text-primary-200'>{t(`details.type.${data.raw.type ? 'movie' : 'tv show'}`)}</span>
               </div>
               <div className='flex flex-col'>
                 <span className='text-base text-primary-300 mb-1 l-1'>TMDB ID</span>
@@ -58,7 +58,9 @@ const Details = ({ data }: any) => {
                 </a>
               </div>
               <div className='flex flex-col'>
-                <span className='text-base text-primary-300 mb-1 l-1'>Release Date</span>
+                <span className='text-base text-primary-300 mb-1 l-1'>
+                  {t(`details.${data.raw.type ? 'release_date' : 'first_air_date'}`)}
+                </span>
                 {data.raw.release_date ? (
                   <span className='text-xl text-primary-200' title={moment(data.raw.release_date).format('YYYY-MM-DD')}>
                     {moment(data.raw.release_date).format('L')}
@@ -78,7 +80,10 @@ const Details = ({ data }: any) => {
               </div>
 
               <div className='flex flex-col'>
-                <span className='text-base text-primary-300 mb-1 l-1'>{data.raw.type ? 'Runtime' : 'Episode run time'}</span>
+                <span className='text-base text-primary-300 mb-1 l-1'>
+                  {' '}
+                  {t(`details.${data.raw.type ? 'runtime' : 'episode_run_time'}`)}
+                </span>
                 {data.raw.runtime ? (
                   <span className='text-xl text-primary-200' title={data.raw.runtime}>
                     {data.raw.runtime} min
@@ -90,7 +95,7 @@ const Details = ({ data }: any) => {
 
               {data.raw.collection ? (
                 <div className='flex flex-col'>
-                  <span className='text-base text-primary-300 mb-1 l-1'>Collection ID</span>
+                  <span className='text-base text-primary-300 mb-1 l-1'>{t('details.collection')} ID</span>
                   <Link href={`/collection/${data.raw.collection.id}`}>
                     <a className='text-xl text-primary-200 hover:text-accent'>{data.raw.collection.id}</a>
                   </Link>
@@ -110,7 +115,7 @@ const Details = ({ data }: any) => {
               ) : null}
             </div>
             <div className='flex flex-col mt-5'>
-              <span className='text-base text-primary-300 mb-1 l-1'>Genres</span>
+              <span className='text-base text-primary-300 mb-1 l-1'>{t('details.genres')}</span>
               <span className='text-xl text-primary-200'>
                 {data.raw.genre_ids.map((id: number, i: number) => {
                   return (
@@ -128,7 +133,7 @@ const Details = ({ data }: any) => {
               </span>
             </div>
             <div className='flex flex-col mt-5'>
-              <span className='text-base text-primary-300 mb-1 l-1'>Stars</span>
+              <span className='text-base text-primary-300 mb-1 l-1'>{t('details.stars')}</span>
               <span className='text-xl text-primary-200'>
                 {data.raw.credits.cast.slice(0, 3).map(({ id, original_name }: any, i: number) => {
                   return (
