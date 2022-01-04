@@ -612,6 +612,8 @@ export class Api {
       subscribedProvider: client.subscribedProvider(res),
     };
   }
+
+  async manage() {}
 }
 
 export const api = new Api();

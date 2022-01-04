@@ -2,10 +2,41 @@ import itemSchema from '@models/itemSchema';
 import api from '@utils/backend/api';
 import client from '@utils/themoviedb/api';
 import { LogProps } from '@utils/types';
-import { logUpdate } from '@utils/utils';
 import moment from 'moment';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { performance } from 'perf_hooks';
+import cliProgress from 'cli-progress';
+
+export const logUpdate = ({
+  errors,
+  progress,
+  updated,
+  modified,
+  remaining_time,
+  elapsed_time,
+  average_time_per_job,
+  info: { id, tmdb_id },
+}: LogProps) => {
+  console.clear();
+  console.log('Stats:'.green);
+  console.log('updated:', updated.toString().blue);
+  console.log('modified:', modified.toString().blue);
+  console.log('errors:', `${errors}`.blue);
+  console.log('');
+  console.log('Current task: '.green);
+  console.log('id:', id!.blue);
+  console.log('tmdb id:', tmdb_id.toString().blue);
+  console.log('');
+  console.log('Timing:'.green);
+  console.log('average time per job:', `${average_time_per_job}`.blue);
+  console.log('elapsed time:', `${elapsed_time}`.blue);
+  console.log('remaining time:', `${remaining_time}`.blue);
+  console.log('');
+  const b = new cliProgress.SingleBar({ format: '{bar}'.blue + ' {percentage}%' });
+  b.start(100, progress);
+  console.log('');
+};
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const docs = await api.find({});
   const length = docs.length;
