@@ -51,8 +51,18 @@ p {
   background-color: #5865f2 !important;
 }
 
-.btn-discord:hover {
-  background-color: rgb(121, 131, 245) !important;
+.btn-google {
+  color: rgba(0, 0, 0, 0.54) !important;
+  background-color: #fff !important;
+}
+
+.btn-apple {
+  color: #fff !important;
+  background-color: #000 !important;
+}
+
+.btn-apple svg {
+  margin-top: -3px;
 }
 
 .overlay .overlay-child {

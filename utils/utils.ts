@@ -65,3 +65,5 @@ export const placeholderCards = (n: number): Partial<CardProps>[] => {
     })
   );
 };
+
+export const rr = () => window.location.replace('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
