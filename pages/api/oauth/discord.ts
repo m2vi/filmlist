@@ -1,14 +1,14 @@
 import { serialize } from 'cookie';
-import { oauth } from '../../utils/config';
+import { oauth } from '../../../utils/config';
 import { sign } from 'jsonwebtoken';
-import { DiscordUser } from '../../utils/types';
+import { DiscordUser } from '../../../utils/types';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { baseUrl } from '@utils/fetch';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const scope = ['identify'].join(' ');
-    const REDIRECT_URI = `${baseUrl(req)}/api/oauth`;
+    const REDIRECT_URI = `${baseUrl(req)}/api/oauth/discord`;
 
     const OAUTH_QS = new URLSearchParams({
       client_id: oauth.clientId,
