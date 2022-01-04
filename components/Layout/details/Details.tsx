@@ -8,9 +8,9 @@ import genres from '@utils/themoviedb/genres';
 import Link from 'next/link';
 import frontend from '@utils/frontend/api';
 import { useRouter } from 'next/router';
-import CarouselAsync from './CarouselAsync';
+import CarouselAsync from '../../CarouselAsync';
 import { basicFetch } from '@utils/fetch';
-import InfoBar from './InfoBar';
+import InfoBar from '../../InfoBar';
 import { useEffect, useState } from 'react';
 
 const Details = ({ data }: any) => {
@@ -20,6 +20,8 @@ const Details = ({ data }: any) => {
   const locale = useRouter().locale!;
 
   useEffect(() => setShowBar(!data.raw.state), [data]);
+
+  const mainCrew = frontend.getMainCrew(data.raw);
 
   return (
     <Full className='pt-10 flex justify-center'>
@@ -57,9 +59,13 @@ const Details = ({ data }: any) => {
               </div>
               <div className='flex flex-col'>
                 <span className='text-base text-primary-300 mb-1 l-1'>Release Date</span>
-                <span className='text-xl text-primary-200' title={moment(data.raw.release_date).format('YYYY-MM-DD')}>
-                  {moment(data.raw.release_date).format('L')}
-                </span>
+                {data.raw.release_date ? (
+                  <span className='text-xl text-primary-200' title={moment(data.raw.release_date).format('YYYY-MM-DD')}>
+                    {moment(data.raw.release_date).format('L')}
+                  </span>
+                ) : (
+                  <span className='text-xl text-primary-200'>-</span>
+                )}
               </div>
               <div className='flex flex-col'>
                 <span className='text-base text-primary-300 mb-1 l-1'>IMDb ID</span>
@@ -70,32 +76,38 @@ const Details = ({ data }: any) => {
                   {data.raw.external_ids.imdb_id}
                 </a>
               </div>
-              {data.raw.runtime ? (
-                <div className='flex flex-col'>
-                  <span className='text-base text-primary-300 mb-1 l-1'>{data.raw.type ? 'Runtime' : 'Episode run time'}</span>
+
+              <div className='flex flex-col'>
+                <span className='text-base text-primary-300 mb-1 l-1'>{data.raw.type ? 'Runtime' : 'Episode run time'}</span>
+                {data.raw.runtime ? (
                   <span className='text-xl text-primary-200' title={data.raw.runtime}>
                     {data.raw.runtime} min
                   </span>
+                ) : (
+                  <span className='text-xl text-primary-200'>-</span>
+                )}
+              </div>
+
+              {data.raw.collection ? (
+                <div className='flex flex-col'>
+                  <span className='text-base text-primary-300 mb-1 l-1'>Collection ID</span>
+                  <Link href={`/collection/${data.raw.collection.id}`}>
+                    <a className='text-xl text-primary-200 hover:text-accent'>{data.raw.collection.id}</a>
+                  </Link>
                 </div>
               ) : null}
-              <div className='flex flex-col'>
-                <span className='text-base text-primary-300 mb-1 l-1'>Director</span>
-                {[frontend.getDirector(data.raw)].map((person, i) => {
-                  if (person) {
+              {mainCrew ? (
+                <div className='flex flex-col'>
+                  <span className='text-base text-primary-300 mb-1 l-1'>{mainCrew?.job}</span>
+                  {mainCrew.crew.map(({ id, original_name }, i) => {
                     return (
-                      <Link href={`/person/${person?.id}`} key={i}>
-                        <a className='text-xl text-primary-200 hover:text-accent'>{person?.original_name}</a>
+                      <Link href={`/person/${id}`} key={i}>
+                        <a className='text-xl text-primary-200 hover:text-accent'>{original_name}</a>
                       </Link>
                     );
-                  } else {
-                    return (
-                      <span className='text-xl text-primary-200' key={i}>
-                        -
-                      </span>
-                    );
-                  }
-                })}
-              </div>
+                  })}
+                </div>
+              ) : null}
             </div>
             <div className='flex flex-col mt-5'>
               <span className='text-base text-primary-300 mb-1 l-1'>Genres</span>
@@ -104,7 +116,9 @@ const Details = ({ data }: any) => {
                   return (
                     <span key={i}>
                       <Link href={`/genre/${id}`}>
-                        <a className='text-xl text-primary-200 hover:text-accent'>{genres.getName(id)}</a>
+                        <a className='text-xl text-primary-200 hover:text-accent'>
+                          {t(`pages.filmlist.menu.${genres.getName(id).toLowerCase()}`)}
+                        </a>
                       </Link>
 
                       <span>{data.raw.genre_ids.length > i + 1 ? ', ' : ''}</span>

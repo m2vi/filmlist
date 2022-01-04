@@ -81,6 +81,7 @@ export interface ProviderEntryProps {
 export interface FrontendItemProps {
   _id: string | null;
   id_db: number;
+  genre_ids: number[];
   name: string;
   poster_path: string | null;
   backdrop_path: string | null;

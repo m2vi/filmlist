@@ -1,6 +1,6 @@
 import { Connection, FilterQuery, UpdateQuery } from 'mongoose';
 import { connectToDatabase } from '../database';
-import { shuffle, sortByKey } from '../array';
+import { removeDuplicates, shuffle, sortByKey } from '../array';
 import tabs from '@data/tabs.json';
 import itemSchema from '@models/itemSchema';
 import _, { sortBy } from 'underscore';
@@ -148,12 +148,27 @@ export class Api {
   }
 
   toFrontendItem(
-    { _id, state, name, poster_path, release_date, backdrop_path, id_db, title, first_air_date, vote_average, type }: any,
+    {
+      _id,
+      state,
+      name,
+      poster_path,
+      release_date,
+      backdrop_path,
+      id_db,
+      title,
+      first_air_date,
+      vote_average,
+      type,
+      genres,
+      genre_ids,
+    }: any,
     locale: string = 'en'
   ): FrontendItemProps {
     return {
       _id: _id ? _id.toString() : null,
       id_db: id_db ? id_db : null,
+      genre_ids: genre_ids ? genre_ids : genres ? genres : [],
       name: typeof name === 'object' ? (name[locale] ? name[locale] : 'Invalid name') : name ? name : title,
       poster_path:
         typeof poster_path === 'object' && poster_path !== null ? (poster_path[locale] ? poster_path[locale] : null) : poster_path,
@@ -163,6 +178,7 @@ export class Api {
             ? backdrop_path[locale]
             : null
           : backdrop_path,
+
       release_date: (release_date ? release_date : first_air_date) ? (release_date ? release_date : first_air_date) : new Date().getTime(),
       vote_average: vote_average ? vote_average : 0,
       type,
@@ -209,7 +225,7 @@ export class Api {
     end: number | null = 50,
     reverse: boolean = false,
     only_unreleased: boolean = false
-  ): ItemProps[] {
+  ): FrontendItemProps[] {
     const mapped = items.map((item) => this.toFrontendItem(item, locale)).reverse();
     const sorted = !sortKey ? mapped : sortByKey(mapped, sortKey);
     const leased = only_unreleased ? sorted.filter(({ release_date }) => !isReleased(release_date)) : sorted;
@@ -251,11 +267,29 @@ export class Api {
     return item;
   }
 
-  async findCollection(name: string) {
-    const all = await this.collections(true);
-    const current = all[name];
+  async findCollection(id_db: number, locale: string) {
+    const { id, name, poster_path, backdrop_path, overview, parts } = await client.api.collectionInfo({ id: id_db, language: locale });
+    const local = await this.find({ 'collection.id': id_db });
+    const items = this.prepareForFrontend(
+      await client.adaptTabs(client.getTabeBase(parts, parts)),
+      locale,
+      'release_date',
+      0,
+      Number.MAX_SAFE_INTEGER
+    );
 
-    return current ? current : null;
+    return {
+      id,
+      name,
+      overview,
+      poster_path,
+      genre_ids: removeDuplicates(items.reduce((prev, { genre_ids }) => prev.concat(genre_ids), [] as number[])),
+      backdrop_path: backdrop_path,
+      local_count: local?.length,
+      tmdb_count: parts?.length,
+      vote_average: client.getAverageRating(parts as any),
+      items,
+    };
   }
 
   async collections(includeCredits: boolean = false) {
@@ -287,7 +321,7 @@ export class Api {
       }
     });
 
-    return collections;
+    return Object.entries(collections).map(([name, value]: any) => value);
   }
 
   async exists(filter: FilterQuery<ItemProps>): Promise<boolean> {

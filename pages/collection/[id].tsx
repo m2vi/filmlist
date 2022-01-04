@@ -1,21 +1,19 @@
+import Collection from '@components/Layout/details/Collection';
+import api from '@utils/backend/api';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import client from '@utils/themoviedb/api';
-import Person from '@components/Layout/details/Person';
 
-const Handler = ({ ...props }) => <Person {...props} />;
+const Handler = ({ ...props }) => <Collection {...props} />;
 
 Handler.layout = true;
 
 export default Handler;
 
 export const getServerSideProps: GetServerSideProps = async ({ locale, query }: any) => {
-  const data = await client.getPerson(parseInt(query.person), locale);
-
   return {
     props: {
       ...(await serverSideTranslations(locale!, ['common', 'footer'])),
-      data,
+      data: await api.findCollection(parseInt(query.id), locale),
     },
   };
 };

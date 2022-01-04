@@ -64,6 +64,31 @@ export class Api {
     if (!director) return null;
     return director;
   }
+
+  getMainCrew({ credits }: ItemProps) {
+    if (!credits) return null;
+
+    const find = (job: string) => _.filter(credits.crew, { job });
+
+    if (find('Novel').length > 0) {
+      return {
+        job: 'Novel',
+        crew: find('Novel'),
+      };
+    } else if (find('Director').length > 0) {
+      return {
+        job: 'Director',
+        crew: find('Director'),
+      };
+    } else if (find('Creator').length > 0) {
+      return {
+        job: 'Creator',
+        crew: find('Creator'),
+      };
+    } else {
+      return null;
+    }
+  }
 }
 
 export const api = new Api();

@@ -11,7 +11,11 @@ const Rating = ({ vote_average, state, notchild, className, ...props }: RatingPr
 
   return (
     <div className={`${!notchild ? 'absolute top-1 left-1 z-20' : 'w-10'}`} {...props}>
-      <div className={`p-1 flex items-center justify-center bg-black bg-opacity-80 rounded-5 ${nr ? 'opacity-60' : ''} ${className}`}>
+      <div
+        className={`p-1 flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-lg rounded-5 ${
+          nr ? 'opacity-60' : ''
+        } ${className}`}
+      >
         <span className={`flex items-center l-1 ${nr ? 'text-primary-300' : 'text-amber-500'}`}>
           {nr ? (
             'NR'

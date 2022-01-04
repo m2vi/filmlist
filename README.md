@@ -1,9 +1,9 @@
 - [x] /person/[id] erweitern
-- [ ] Design fixen (Hintergrund bei Scroll)
+- [x] Design fixen (Hintergrund bei Scroll)
 - [ ] 404 hinzufügen
 - [ ] Error handling erweitern (Benachrichtigungen)
 - [ ] Manage Interface
-- [ ] Farben fixen
+- [x] Farben fixen
 - [x] Responsive
 - [x] /details/[objectId] zu /details/[type]/[id_db] ändern
 - [ ] Beschleunigen
@@ -11,6 +11,7 @@
 - [x] Config prepare function
 - [x] Multi State Filter
 - [x] Vorschläge anzeigen
+- [ ] append_to_response verwenden
 
 ### State
 

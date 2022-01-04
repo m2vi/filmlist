@@ -327,6 +327,14 @@ export class Client {
       return [];
     }
   }
+
+  getAverageRating(items: ItemProps[]) {
+    items = items.filter(({ vote_average }) => vote_average);
+    const sum = items.reduce((a, { vote_average }) => a + vote_average, 0);
+    const avg = sum / items.length || 0;
+
+    return avg;
+  }
 }
 
 export const client = new Client();

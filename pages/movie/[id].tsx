@@ -1,13 +1,13 @@
-import Details from '@components/Details';
+import Details from '@components/Layout/details/Details';
 import api from '@utils/backend/api';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const Movie = ({ ...props }) => <Details {...props} />;
+const Handler = ({ ...props }) => <Details {...props} />;
 
-Movie.layout = true;
+Handler.layout = true;
 
-export default Movie;
+export default Handler;
 
 export const getServerSideProps: GetServerSideProps = async ({ locale, query }: any) => {
   return {
