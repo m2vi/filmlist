@@ -175,3 +175,17 @@ export interface ProviderProps {
   logo?: string;
   type?: string;
 }
+
+export interface LogProps {
+  progress: number;
+  remaining_time: string;
+  elapsed_time: string;
+  average_time_per_job: string;
+  errors: number;
+  updated: number;
+  modified: number;
+  info: {
+    id: string | undefined;
+    tmdb_id: number;
+  };
+}

@@ -1,6 +1,8 @@
 import itemSchema from '@models/itemSchema';
 import api from '@utils/backend/api';
 import client from '@utils/themoviedb/api';
+import { LogProps } from '@utils/types';
+import { logUpdate } from '@utils/utils';
 import moment from 'moment';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { performance } from 'perf_hooks';
@@ -9,7 +11,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const length = docs.length;
   const total_start = performance.now();
   let modified = 0;
-  let modifiedIds = [];
   let updated = 0;
   let errors = [];
   let times: number[] = [];
@@ -37,7 +38,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       );
       modified += result.modifiedCount;
-      result.modifiedCount && modifiedIds.push(name.en ? name.en : name);
     } catch (error: any) {
       errors.push({
         message: `ERROR - ${_id?.toString()} - ${error.message}`,
@@ -49,26 +49,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     updated += 1;
     times.push(end);
 
-    const log = {
-      progress: `${((100 * (parseInt(index) + 1)) / length).toFixed(2)}%`,
+    const log: LogProps = {
+      progress: (100 * (parseInt(index) + 1)) / length,
       remaining_time: moment(calculateTimeRemaining()).format('mm:ss'),
       elapsed_time: moment(calculateTimeElapsed()).format('mm:ss'),
       average_time_per_job: `${end.toFixed(2)}ms`,
+      errors: errors.length,
+      modified,
+      updated,
       info: {
         id: _id?.toString(),
         tmdb_id: id_db,
       },
     };
 
-    console.log(JSON.stringify(log));
+    logUpdate(log);
   }
 
   res.json({
-    updated,
-    modified: {
-      count: modified,
-      modifiedIds,
-    },
-    time: performance.now() - total_start,
+    success: true,
   });
 }

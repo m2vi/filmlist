@@ -12,6 +12,8 @@
     "@heroicons/react": "^1.0.5",
     "@svgr/webpack": "^6.1.2",
     "@tsndr/cloudflare-worker-jwt": "^1.1.5",
+    "cli-progress": "^3.9.1",
+    "colors": "^1.4.0",
     "cookie": "^0.4.1",
     "copy-to-clipboard": "^3.3.1",
     "fuse.js": "^6.4.6",
@@ -40,6 +42,8 @@
     "validator": "^13.7.0"
   },
   "devDependencies": {
+    "@types/cli-progress": "^3.9.2",
+    "@types/color": "^3.0.2",
     "@types/cookie": "^0.4.1",
     "@types/js-cookie": "^3.0.1",
     "@types/jsonwebtoken": "^8.5.6",
