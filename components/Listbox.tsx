@@ -1,18 +1,21 @@
 import { Fragment, useState } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { IoCheckmarkOutline } from 'react-icons/io5';
+import { useTranslation } from 'next-i18next';
+import _ from 'underscore';
 
-const types = [
-  { name: 'pages.filmlist.types.movie', value: 'movie' },
-  { name: 'pages.filmlist.types.tv', value: 'tv' },
-];
+export default function ListboxEl() {
+  const { t } = useTranslation();
+  const types = [
+    { name: t('details.type.movie'), value: '1' },
+    { name: t('details.type.tv show'), value: '0' },
+  ];
 
-export default function Example() {
   const [selected, setSelected] = useState(types[0]);
 
   return (
     <div className='w-full'>
-      <Listbox value={selected} onChange={setSelected}>
+      <Listbox value={selected} onChange={(value: any) => setSelected(_.find(types, { value })!)}>
         <div className='relative mt-1'>
           <Listbox.Button className='flex justify-between items-center relative w-full py-2 px-4 mb-2  text-left bg-primary-800 border border-primary-600 placeholder-primary-300 text-primary-100 rounded-8 shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm'>
             <span className='block truncate'>{selected.name}</span>

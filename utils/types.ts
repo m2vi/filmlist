@@ -122,6 +122,12 @@ export interface InsertProps {
   state: number;
 }
 
+export interface ManageInsertProps {
+  id_db: string;
+  type: string;
+  state: string;
+}
+
 export interface TabFilterOptions {
   filter?: Partial<ItemProps>;
   sort_key?: string | boolean;

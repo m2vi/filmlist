@@ -1,8 +1,8 @@
 import { Button } from '@components/Button';
 import Full from '@components/Full';
 import { Input } from '@components/Input';
+import Listbox from '@components/Listbox';
 import Title from '@components/Title';
-import Toggle from '@components/Toggle';
 import { Tab } from '@headlessui/react';
 import { classNames } from '@utils/utils';
 import { GetServerSideProps } from 'next';
@@ -42,14 +42,7 @@ const Manage = () => {
             <Tab.Panel>
               <Input className='mt-2' placeholder='Id' />
               <Input className='mt-2' placeholder='Type' />
-              <div className='flex justify-between  items-center mt-2'>
-                <span className='text-lg ml-2'>Favoured</span>
-                <Toggle enabled={enabled} onChange={setEnabled} />
-              </div>
-              <div className='flex justify-between items-center mt-2'>
-                <span className='text-lg ml-2'>Watched</span>
-                <Toggle enabled={enabled} onChange={setEnabled} />
-              </div>
+              <Listbox />
 
               <Button className='mt-3'>Submit</Button>
             </Tab.Panel>
