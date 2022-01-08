@@ -138,6 +138,7 @@ export interface TabFilterOptions {
   hide_unreleased?: boolean;
   minVotes?: number;
   includeCredits?: boolean;
+  language?: string;
 }
 
 export interface Tabs {

@@ -12,6 +12,9 @@ import CarouselAsync from '../../CarouselAsync';
 import { basicFetch } from '@utils/fetch';
 import InfoBar from '../../InfoBar';
 import { useEffect, useState } from 'react';
+import momentDurationFormatSetup from 'moment-duration-format';
+
+momentDurationFormatSetup(moment as any);
 
 const Details = ({ data }: any) => {
   const [showBar, setShowBar] = useState(false);
@@ -64,7 +67,7 @@ const Details = ({ data }: any) => {
                 </span>
                 {data.raw.release_date ? (
                   <span className='text-xl text-primary-200' title={moment(data.raw.release_date).format('YYYY-MM-DD')}>
-                    {moment(data.raw.release_date).format('L')}
+                    {moment(data.raw.release_date).locale(locale).format('L')}
                   </span>
                 ) : (
                   <span className='text-xl text-primary-200'>-</span>
@@ -87,7 +90,7 @@ const Details = ({ data }: any) => {
                 </span>
                 {data.raw.runtime ? (
                   <span className='text-xl text-primary-200' title={data.raw.runtime}>
-                    {data.raw.runtime} min
+                    {frontend.duration(data.raw.runtime, locale)}
                   </span>
                 ) : (
                   <span className='text-xl text-primary-200'>-</span>

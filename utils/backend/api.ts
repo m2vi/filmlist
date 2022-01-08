@@ -66,6 +66,7 @@ export class Api {
       includePerson,
       includeCredits,
       dontFrontend,
+      language,
     }: {
       tab: string;
       locale: string;
@@ -75,6 +76,7 @@ export class Api {
       includePerson?: number;
       includeCredits?: boolean;
       dontFrontend?: boolean;
+      language?: string;
     },
     default_items?: ItemProps[]
   ) {
@@ -103,7 +105,8 @@ export class Api {
     } else if (config?.sort_key) {
       items = sortByKey(items, config?.sort_key);
     }
-
+    items =
+      config?.language || language ? items.filter(({ original_language }) => original_language === (config?.language || language)) : items;
     items = config?.includeGenres
       ? items.filter(({ genre_ids }) => someIncludes(config?.includeGenres, genre_ids))
       : includeGenres

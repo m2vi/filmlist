@@ -5,6 +5,9 @@ import { ParsedUrlQuery } from 'querystring';
 import moment from 'moment';
 import { basicFetch } from '@utils/fetch';
 import _ from 'underscore';
+import momentDurationFormatSetup from 'moment-duration-format';
+
+momentDurationFormatSetup(moment as any);
 
 class Jwt {
   decode() {
@@ -26,7 +29,7 @@ export class Api {
         await fetch(
           `/api/manage/tab?tab=${query.tab ? query.tab : 'none'}&locale=${locale}&start=${start}&end=${start + 75}${
             query.id ? `&includeGenres=${query.id}` : ''
-          }`
+          }${query.lang ? `&language=${query.lang}` : ''}`
         )
       ).json();
 
@@ -88,6 +91,11 @@ export class Api {
     } else {
       return null;
     }
+  }
+
+  duration(minutes: number, locale: string) {
+    moment.locale(locale);
+    return moment.duration(minutes, 'minutes').format('h[h] mm[m]');
   }
 }
 
