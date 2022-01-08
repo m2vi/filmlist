@@ -43,7 +43,11 @@ const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number; 
             ? `Company ${(data as any).name ? (data as any).name : (data as any).id}`
             : data.extra
             ? `${data.extra.original_name}`
-            : `Genre ${query.id}`
+            : query.id
+            ? `Genre ${query.id}`
+            : query.lang
+            ? `Language ${query.lang}`
+            : ''
         } – ${t(`pages.filmlist.default`)}`}
       />
       <main
