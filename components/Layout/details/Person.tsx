@@ -13,7 +13,7 @@ const Person = ({ data }: any) => {
   const { t } = useTranslation();
   const locale = useRouter().locale!;
   const [appearances, setAppearances] = useState('-');
-  useEffect(() => console.log(data.info));
+  useEffect(() => console.log(data), [data]);
 
   return (
     <Full className='pt-10 flex justify-center'>
@@ -21,7 +21,7 @@ const Person = ({ data }: any) => {
       <main className='w-full max-w-screen-2xl px-120 py-11'>
         <div className='w-full grid grid-cols-2 gap-80 px-80'>
           <div className='flex flex-col relative mb-2 w-full' style={{ maxWidth: '480px' }}>
-            <div className='h-full w-full flex mr-11 relative bg-primary-800 rounded-15 overflow-hidden' style={{ aspectRatio: '2 / 3' }}>
+            <div className='w-full flex mr-11 relative bg-primary-800 rounded-15 overflow-hidden' style={{ aspectRatio: '2 / 3' }}>
               <img
                 src={`https://image.tmdb.org/t/p/w${config.highResPosterWidth}${data.info.profile_path}`}
                 alt=''

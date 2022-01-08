@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { MovieExternalIdsResponse } from 'moviedb-promise/dist/request-types';
+import { MovieExternalIdsResponse, Video, VideosResponse } from 'moviedb-promise/dist/request-types';
 
 export enum ItemTypeEnum {
   'tv' = 0,
@@ -71,6 +71,7 @@ export interface ItemProps {
     poster_path: string;
     backdrop_path: string;
   } | null;
+  trailers: Video[] | null;
 }
 
 export interface ProviderEntryProps {

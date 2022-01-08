@@ -10,7 +10,7 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          {/*           <link rel='apple-touch-icon' sizes='57x57' href='/favicon-57x57.png' />
+          <link rel='apple-touch-icon' sizes='57x57' href='/favicon-57x57.png' />
           <link rel='apple-touch-icon' sizes='60x60' href='/favicon-60x60.png' />
           <link rel='apple-touch-icon' sizes='72x72' href='/favicon-72x72.png' />
           <link rel='apple-touch-icon' sizes='76x76' href='/favicon-76x76.png' />
@@ -29,7 +29,7 @@ class MyDocument extends Document {
           <meta name='msapplication-TileImage' content='/favicon-144x144.png' />
           <meta name='msapplication-config' content='/browserconfig.xml' />
           <link rel='manifest' href='/manifest.json' />
-          <meta name='theme-color' content='#ffffff' /> */}
+          <meta name='theme-color' content='#ffffff' />
           <meta name='description' content='A list with all movies or series I have ever watched or still want to watch' />
         </Head>
         <body className='overflow-x-hidden'>

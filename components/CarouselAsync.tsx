@@ -13,10 +13,7 @@ const CarouselAsync = ({ func }: CarouselAsyncProps) => {
 
   useEffect(() => {
     func()
-      .then((items) => {
-        console.log(items);
-        setItems(items);
-      })
+      .then((items) => setItems(items))
       .catch((reason) => console.error(reason));
   }, [func]);
 

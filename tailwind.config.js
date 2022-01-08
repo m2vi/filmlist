@@ -21,6 +21,8 @@ module.exports = {
       '7xl': '5rem',
     },
     spacing: {
+      '2px': '2px',
+      36: '36px',
       0: '0px',
       1: '5px',
       2: '10px',

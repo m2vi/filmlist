@@ -1,7 +1,7 @@
 {
-  "name": "Filmlist",
-  "description": "",
-  "short_name": "List",
+  "name": "My App",
+  "description": "My App description",
+  "short_name": "My App",
   "icons": [
     {
       "src": "/favicon-72x72.png",
@@ -55,6 +55,6 @@
   "scope": "/",
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#0a84ff",
-  "background_color": "#141724"
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff"
 }

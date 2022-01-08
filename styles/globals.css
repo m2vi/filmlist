@@ -3,6 +3,13 @@
 @import url('https://dev.core.fluxi.ml/styles/components.css');
 @import url('https://dev.core.fluxi.ml/styles/animations.css');
 
+html,
+body,
+#__next {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !important;
+}
+
 h1,
 h2,
 h3,
@@ -66,20 +73,17 @@ p {
 }
 
 .overlay .overlay-child {
-  transition-duration: 0ms;
-  transition: none;
-  visibility: hidden;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.8) 100%);
+  background: rgba(0, 0, 0, 0.85);
   border-radius: 8px;
 }
 
-.overlay .overlay-child * {
-  transition-duration: 0ms;
-  transition: none;
+.overlay .overlay-child {
+  transition: 0.1s ease all;
+  opacity: 0;
 }
 
 .overlay:hover .overlay-child {
-  visibility: visible;
+  opacity: 1 !important;
 }
 
 .l-1 {

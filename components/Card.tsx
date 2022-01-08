@@ -33,7 +33,6 @@ const Card = ({ _id, name, poster_path, release_date, id_db, vote_average, type,
 
   return (
     <Wrapper>
-      <Rating vote_average={vote_average} state={state} />
       <div className='h-full w-full grid place-items-center relative bg-primary-800 rounded-8 overflow-hidden'>
         {poster_path ? (
           <img
@@ -47,6 +46,7 @@ const Card = ({ _id, name, poster_path, release_date, id_db, vote_average, type,
         )}
       </div>
       <div className='absolute w-full h-full top-0 left-0 z-10 overlay-child flex items-end justify-start px-2'>
+        <Rating vote_average={vote_average} state={state} />
         <div className='w-full pb-2'>
           <p
             className='font-semibold text-base overflow-hidden overflow-ellipsis whitespace-nowrap'

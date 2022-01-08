@@ -4,7 +4,7 @@ import { validateEnv } from '@utils/utils';
 import { MovieDb } from 'moviedb-promise';
 import companies from '@data/companies.json';
 import _, { shuffle } from 'underscore';
-import { CreditsResponse, IdRequestParams } from 'moviedb-promise/dist/request-types';
+import { CreditsResponse, IdRequestParams, VideosResponse } from 'moviedb-promise/dist/request-types';
 import streaming from '@data/streaming.json';
 
 export const api = new MovieDb(validateEnv('MOVIE_TOKEN'));
@@ -71,8 +71,8 @@ export class Client {
     const isMovie = (MovieDbTypeEnum[type] as any) === MovieDbTypeEnum.movie || type.toString() === '1';
     const de = (await (isMovie ? api.movieInfo({ id, language: 'de' }) : api.tvInfo({ id, language: 'de' }))) as any;
     const en = (await (isMovie
-      ? api.movieInfo({ id, language: 'en', append_to_response: 'credits,watch/providers,external_ids' })
-      : api.tvInfo({ id, language: 'en', append_to_response: 'credits,watch/providers,external_ids' }))) as any;
+      ? api.movieInfo({ id, language: 'en', append_to_response: 'credits,watch/providers,external_ids,videos' })
+      : api.tvInfo({ id, language: 'en', append_to_response: 'credits,watch/providers,external_ids,videos' }))) as any;
     const watchProviders = await this.watchProviders(en['watch/providers'], isMovie, { id, language: 'en' });
 
     return {
@@ -120,8 +120,10 @@ export class Client {
           ? en.runtime
           : en.episode_run_time[0]
         : null,
+      credits: credits ? this.adaptCredits(credits) : null,
       watchProviders,
       collection: isMovie ? (en.belongs_to_collection ? en.belongs_to_collection : null) : null,
+      trailers: en.videos ? this.getTrailers(en.videos) : null,
     };
   }
 
@@ -170,6 +172,12 @@ export class Client {
     };
   }
 
+  getTrailers(videos: VideosResponse) {
+    if (!videos.results) return null;
+
+    return videos.results.filter(({ site, type }) => site === 'YouTube' && type === 'Trailer');
+  }
+
   async adapt(
     id: number,
     type: MovieDbTypeEnum,
@@ -211,6 +219,7 @@ export class Client {
       credits: credits ? this.adaptCredits(credits) : null,
       watchProviders,
       collection: isMovie ? (en.belongs_to_collection ? en.belongs_to_collection : null) : null,
+      trailers: en.videos ? this.getTrailers(en.videos) : null,
     };
   }
 
