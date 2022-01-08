@@ -50,7 +50,7 @@
     "@types/jsonwebtoken": "^8.5.6",
     "@types/lodash": "^4.14.178",
     "@types/moment-duration-format": "^2.2.3",
-    "@types/node": "17.0.7",
+    "@types/node": "17.0.8",
     "@types/nprogress": "^0.2.0",
     "@types/react": "17.0.38",
     "@types/react-portal": "^4.0.4",
