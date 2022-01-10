@@ -7,7 +7,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       {},
       {
         $unset: {
-          tagline: 1,
+          tagline: '',
+          vote_average: '',
+          vote_count: '',
         },
       }
     )

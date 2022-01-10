@@ -107,5 +107,8 @@
   "unfiltered": {
     "sort_key": false,
     "reverse": true
+  },
+  "temp": {
+    "sort_key": "ratings.tmdb.vote_count"
   }
 }

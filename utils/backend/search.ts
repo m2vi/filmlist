@@ -1,8 +1,8 @@
-import { ItemProps } from '@utils/types';
+import { ItemProps, MovieDbTypeEnum } from '@utils/types';
 import Fuse from 'fuse.js';
 import { matchSorter } from 'match-sorter';
 import backend from './api';
-import { api } from '../themoviedb/api';
+import client, { api } from '../themoviedb/api';
 
 interface SearchOptions {
   items?: ItemProps[];
@@ -44,12 +44,11 @@ class Search {
 
   async get(pattern: string = '', { locale = 'en' }: SearchOptions) {
     try {
-      const db_results = await this.getDB(pattern, { locale });
       const tmdb_results = await this.getTMDB(pattern, { locale });
 
-      return [db_results, tmdb_results];
+      return tmdb_results;
     } catch (error) {
-      return [[], []];
+      return [];
     }
   }
 
@@ -67,7 +66,25 @@ class Search {
       ({ media_type }: any) => media_type === 'tv' || media_type === 'movie'
     );
 
-    const prepared = this.prepare(results as any, { locale, start: 0, end: 20 });
+    if (!results) return [];
+
+    const adapted = await Promise.all(
+      results!.map(async (item: any): Promise<any> => {
+        console.log(item);
+        return await client.adapt(item?.id, MovieDbTypeEnum[item.media_type as any] as any, {
+          de: item,
+          en: item,
+          credits: null,
+          external_ids: null,
+          isMovie: item.media_type === 'movie',
+          watchProviders: null,
+        });
+      })
+    );
+
+    console.log(adapted);
+
+    const prepared = this.prepare(adapted, { locale, start: 0, end: Number.MAX_SAFE_INTEGER });
 
     return prepared;
   }

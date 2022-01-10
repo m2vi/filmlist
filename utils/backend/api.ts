@@ -67,6 +67,7 @@ export class Api {
       includeCredits,
       dontFrontend,
       language,
+      release_year,
     }: {
       tab: string;
       locale: string;
@@ -77,6 +78,7 @@ export class Api {
       includeCredits?: boolean;
       dontFrontend?: boolean;
       language?: string;
+      release_year?: string;
     },
     default_items?: ItemProps[]
   ) {
@@ -105,6 +107,7 @@ export class Api {
     } else if (config?.sort_key) {
       items = sortByKey(items, config?.sort_key);
     }
+    items = release_year ? items.filter(({ release_date }) => new Date(release_date).getFullYear().toString() === release_year) : items;
     items =
       config?.language || language ? items.filter(({ original_language }) => original_language === (config?.language || language)) : items;
     items = config?.includeGenres
@@ -165,6 +168,7 @@ export class Api {
       type,
       genres,
       genre_ids,
+      ratings,
     }: any,
     locale: string = 'en'
   ): FrontendItemProps {
@@ -181,9 +185,8 @@ export class Api {
             ? backdrop_path[locale]
             : null
           : backdrop_path,
-
       release_date: (release_date ? release_date : first_air_date) ? (release_date ? release_date : first_air_date) : new Date().getTime(),
-      vote_average: vote_average ? vote_average : 0,
+      ratings: ratings ? ratings : null,
       type,
       state: state ? state : 0,
     };

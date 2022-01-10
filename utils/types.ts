@@ -57,8 +57,6 @@ export interface ItemProps {
   backdrop_path: {
     [locale: string]: string;
   };
-  vote_average: number;
-  vote_count: number;
   release_date: number;
   runtime: number;
   type: MovieDbTypeEnum;
@@ -72,6 +70,16 @@ export interface ItemProps {
     backdrop_path: string;
   } | null;
   trailers: Video[] | null;
+  ratings: {
+    imdb: VoteProps;
+    rotten_tomatoes: VoteProps;
+    tmdb: VoteProps;
+  } | null;
+}
+
+export interface VoteProps {
+  vote_average: number | null;
+  vote_count: number | null;
 }
 
 export interface ProviderEntryProps {
@@ -87,9 +95,13 @@ export interface FrontendItemProps {
   poster_path: string | null;
   backdrop_path: string | null;
   release_date: number;
-  vote_average: number;
   type: MovieDbOptions;
   state: number;
+  ratings: {
+    imdb: VoteProps;
+    rotten_tomatoes: VoteProps;
+    tmdb: VoteProps;
+  } | null;
 }
 
 export interface NotificationItemProps {
@@ -139,6 +151,7 @@ export interface TabFilterOptions {
   minVotes?: number;
   includeCredits?: boolean;
   language?: string;
+  release_year?: string;
 }
 
 export interface Tabs {

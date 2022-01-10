@@ -47,6 +47,8 @@ const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number; 
             ? `Genre ${query.id}`
             : query.lang
             ? `Language ${query.lang}`
+            : query.year
+            ? `Year: ${query.year}`
             : ''
         } – ${t(`pages.filmlist.default`)}`}
       />

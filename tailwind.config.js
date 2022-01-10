@@ -1,6 +1,6 @@
 module.exports = {
   darkMode: 'class',
-  content: ['./**/*.tsx', './public/index.html'],
+  content: ['./**/*.tsx'],
   theme: {
     fontFamily: {
       sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],

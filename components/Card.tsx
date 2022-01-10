@@ -10,7 +10,7 @@ export interface CardProps extends FrontendItemProps {
   isLoading?: boolean;
 }
 
-const Card = ({ _id, name, poster_path, release_date, id_db, vote_average, type, state, isLoading = false }: CardProps) => {
+const Card = ({ _id, name, poster_path, release_date, id_db, ratings, type, state, isLoading = false }: CardProps) => {
   const { t } = useTranslation();
 
   const Wrapper = ({ children }: any) => (
@@ -24,7 +24,7 @@ const Card = ({ _id, name, poster_path, release_date, id_db, vote_average, type,
   if (isLoading) {
     return (
       <Wrapper>
-        <div className='h-full w-full grid place-items-center relative loading-animation rounded-8 overflow-hidden'>
+        <div className='w-full grid place-items-center relative loading-animation rounded-8 overflow-hidden'>
           <div style={{ aspectRatio: '2 / 3', width: '100%' }} className='no-drag select-none w-full overflow-hidden relative'></div>
         </div>
       </Wrapper>
@@ -33,7 +33,7 @@ const Card = ({ _id, name, poster_path, release_date, id_db, vote_average, type,
 
   return (
     <Wrapper>
-      <div className='h-full w-full grid place-items-center relative bg-primary-800 rounded-8 overflow-hidden'>
+      <div className='w-full grid place-items-center relative bg-primary-800 rounded-8 overflow-hidden'>
         {poster_path ? (
           <img
             src={`https://image.tmdb.org/t/p/w${config.posterWidth}${poster_path}`}
@@ -46,7 +46,7 @@ const Card = ({ _id, name, poster_path, release_date, id_db, vote_average, type,
         )}
       </div>
       <div className='absolute w-full h-full top-0 left-0 z-10 overlay-child flex items-end justify-start px-2'>
-        <Rating vote_average={vote_average} state={state} />
+        <Rating ratings={ratings} state={state} />
         <div className='w-full pb-2'>
           <p
             className='font-semibold text-base overflow-hidden overflow-ellipsis whitespace-nowrap'

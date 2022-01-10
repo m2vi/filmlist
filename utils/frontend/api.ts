@@ -29,7 +29,7 @@ export class Api {
         await fetch(
           `/api/manage/tab?tab=${query.tab ? query.tab : 'none'}&locale=${locale}&start=${start}&end=${start + 75}${
             query.id ? `&includeGenres=${query.id}` : ''
-          }${query.lang ? `&language=${query.lang}` : ''}`
+          }${query.lang ? `&language=${query.lang}` : ''}${query.year ? `&release_year=${query.year}` : ''}`
         )
       ).json();
 

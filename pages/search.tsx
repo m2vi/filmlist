@@ -8,60 +8,49 @@ import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
-import { createRef, useState } from 'react';
+import { createRef, useEffect, useState } from 'react';
 
 const Search = () => {
   const { t } = useTranslation();
-  const [items, setItems] = useState<FrontendItemProps[][]>([[], []]);
+  const [items, setItems] = useState<FrontendItemProps[]>([]);
   const { locale } = useRouter();
   const InputRef = createRef<HTMLInputElement>();
+  const Router = useRouter();
 
-  const fetchMore = () => {
-    if (!InputRef.current) return;
+  useEffect(() => {
+    const query = Router.query.q?.toString();
+    if (!query) return;
+
     const start = window.performance.now();
-    const value = InputRef.current.value;
     search
-      .fetchMoreData(value, locale)
+      .fetchMoreData(query, locale)
       .then((data) => {
         setItems(data);
         const end = window.performance.now();
         const time = end - start;
 
         console.log({
-          query: value,
+          query: query,
           locale,
           time: `${moment(time).valueOf()}ms`,
           results: data,
         });
       })
       .catch(console.log);
-  };
+  }, [Router.query, locale]);
 
   return (
     <div className='h-full w-full flex items-center flex-col'>
       <Title title={t('pages.filmlist.menu.search')} />
       <div className='flex justify-center items-center w-full max-h-11 mt-11 pt-11 mb-11'>
-        <Input placeholder='Titles, Ids' className='max-w-lg w-full' ref={InputRef} onKeyDown={(e) => e.code === 'Enter' && fetchMore()} />
+        <Input
+          placeholder='Titles, Ids'
+          className='max-w-lg w-full'
+          ref={InputRef}
+          onChange={(e) => Router.push(`/search?q=${e.currentTarget.value}`)}
+        />
       </div>
       <main className='w-full flex flex-col'>
-        <div
-          className='w-full overflow-y-scroll dD5d-items max-w-screen-2xl px-11 pt-11'
-          id='scrollableDiv'
-          style={{ overflowX: 'hidden' }}
-        >
-          <div
-            className='w-full p-0 grid gap-2 auto-rows-auto place-items-center !overflow-x-hidden '
-            style={{
-              gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-              overflowX: 'hidden',
-            }}
-          >
-            {items[0].map(({ ...props }, i: number) => {
-              return <Card {...(props as FrontendItemProps)} key={i} />;
-            })}
-          </div>
-        </div>
-        <h2 className='w-full max-w-screen-2xl px-11 pt-11 pb-4'>TMDB Results</h2>
         <div className='w-full overflow-y-scroll dD5d-items max-w-screen-2xl px-11' id='scrollableDiv' style={{ overflowX: 'hidden' }}>
           <div
             className='w-full p-0 grid gap-2 auto-rows-auto place-items-center !overflow-x-hidden '
@@ -70,7 +59,7 @@ const Search = () => {
               overflowX: 'hidden',
             }}
           >
-            {items[1].map(({ ...props }, i: number) => {
+            {items.map(({ ...props }, i: number) => {
               return <Card {...(props as FrontendItemProps)} key={i} />;
             })}
           </div>

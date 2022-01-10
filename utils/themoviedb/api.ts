@@ -6,6 +6,7 @@ import companies from '@data/companies.json';
 import _, { shuffle } from 'underscore';
 import { CreditsResponse, IdRequestParams, VideosResponse } from 'moviedb-promise/dist/request-types';
 import streaming from '@data/streaming.json';
+import omdb from '@utils/omdb/api';
 
 export const api = new MovieDb(validateEnv('MOVIE_TOKEN'));
 
@@ -69,10 +70,10 @@ export class Client {
 
   async getBase(id: number, type: MovieDbTypeEnum) {
     const isMovie = (MovieDbTypeEnum[type] as any) === MovieDbTypeEnum.movie || type.toString() === '1';
-    const de = (await (isMovie ? api.movieInfo({ id, language: 'de' }) : api.tvInfo({ id, language: 'de' }))) as any;
+    const de = (await (isMovie ? api.movieInfo({ id, language: 'de-DE' }) : api.tvInfo({ id, language: 'de-DE' }))) as any;
     const en = (await (isMovie
-      ? api.movieInfo({ id, language: 'en', append_to_response: 'credits,watch/providers,external_ids,videos' })
-      : api.tvInfo({ id, language: 'en', append_to_response: 'credits,watch/providers,external_ids,videos' }))) as any;
+      ? api.movieInfo({ id, language: 'en-GB', append_to_response: 'credits,watch/providers,external_ids,videos' })
+      : api.tvInfo({ id, language: 'en-GB', append_to_response: 'credits,watch/providers,external_ids,videos' }))) as any;
     const watchProviders = await this.watchProviders(en['watch/providers'], isMovie, { id, language: 'en' });
 
     return {
@@ -112,8 +113,6 @@ export class Client {
         en: en.backdrop_path,
         de: de.backdrop_path,
       },
-      vote_average: en.vote_average,
-      vote_count: en.vote_count,
       release_date: new Date(isMovie ? en.release_date : en.first_air_date).getTime(),
       runtime: (isMovie ? en.runtime : en.episode_run_time ? en.episode_run_time[0] : null)
         ? isMovie
@@ -124,6 +123,7 @@ export class Client {
       watchProviders,
       collection: isMovie ? (en.belongs_to_collection ? en.belongs_to_collection : null) : null,
       trailers: en.videos ? this.getTrailers(en.videos) : null,
+      ratings: await omdb.ratings({ external_ids, vote_average: en.vote_average, vote_count: en.vote_count } as any),
     };
   }
 
@@ -207,8 +207,6 @@ export class Client {
         en: en.backdrop_path,
         de: en.backdrop_path,
       },
-      vote_average: en.vote_average,
-      vote_count: en.vote_count,
       release_date: new Date(isMovie ? en.release_date : en.first_air_date).getTime(),
       runtime: (isMovie ? en.runtime : en.episode_run_time ? en.episode_run_time[0] : null)
         ? isMovie
@@ -220,6 +218,7 @@ export class Client {
       watchProviders,
       collection: isMovie ? (en.belongs_to_collection ? en.belongs_to_collection : null) : null,
       trailers: en.videos ? this.getTrailers(en.videos) : null,
+      ratings: await omdb.ratings({ external_ids, vote_average: en.vote_average, vote_count: en.vote_count } as any),
     };
   }
 
@@ -345,8 +344,8 @@ export class Client {
   }
 
   getAverageRating(items: ItemProps[]) {
-    items = items.filter(({ vote_average }) => vote_average);
-    const sum = items.reduce((a, { vote_average }) => a + vote_average, 0);
+    items = items.filter(({ ratings }) => ratings?.tmdb.vote_average);
+    const sum = items.reduce((a, { ratings }) => a + ratings?.tmdb?.vote_average!, 0);
     const avg = sum / items.length || 0;
 
     return avg;
