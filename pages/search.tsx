@@ -1,43 +1,21 @@
 import Card from '@components/Card';
 import { Input } from '@components/Input';
 import Title from '@components/Title';
-import search from '@utils/frontend/search';
+import search from '@utils/backend/search';
 import { FrontendItemProps } from '@utils/types';
-import moment from 'moment';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
-import { createRef, useEffect, useState } from 'react';
+import { performance } from 'perf_hooks';
+import { createRef, useEffect } from 'react';
 
-const Search = () => {
+const Search = ({ results, log }: any) => {
   const { t } = useTranslation();
-  const [items, setItems] = useState<FrontendItemProps[]>([]);
-  const { locale } = useRouter();
   const InputRef = createRef<HTMLInputElement>();
   const Router = useRouter();
 
-  useEffect(() => {
-    const query = Router.query.q?.toString();
-    if (!query) return;
-
-    const start = window.performance.now();
-    search
-      .fetchMoreData(query, locale)
-      .then((data) => {
-        setItems(data);
-        const end = window.performance.now();
-        const time = end - start;
-
-        console.log({
-          query: query,
-          locale,
-          time: `${moment(time).valueOf()}ms`,
-          results: data,
-        });
-      })
-      .catch(console.log);
-  }, [Router.query, locale]);
+  useEffect(() => console.log(log), [log]);
 
   return (
     <div className='h-full w-full flex items-center flex-col'>
@@ -59,7 +37,7 @@ const Search = () => {
               overflowX: 'hidden',
             }}
           >
-            {items.map(({ ...props }, i: number) => {
+            {results.map(({ ...props }, i: number) => {
               return <Card {...(props as FrontendItemProps)} key={i} />;
             })}
           </div>
@@ -74,9 +52,25 @@ Search.layout = true;
 export default Search;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const start = performance.now();
+  const query = context.query.q?.toString();
+  const props = {
+    ...(await serverSideTranslations(context.locale!, ['common', 'footer'])),
+    results: query ? await search.get(query, { locale: context.locale! }) : [],
+  };
+
   return {
     props: {
-      ...(await serverSideTranslations(context.locale!, ['common', 'footer'])),
+      ...props,
+      log: {
+        query,
+        locale: context.locale,
+        time: performance.now() - start,
+        results: {
+          count: props.results.length,
+          items: props.results,
+        },
+      },
     },
   };
 };

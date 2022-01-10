@@ -4,7 +4,15 @@ import { validateEnv } from '@utils/utils';
 import { MovieDb } from 'moviedb-promise';
 import companies from '@data/companies.json';
 import _, { shuffle } from 'underscore';
-import { CreditsResponse, IdRequestParams, VideosResponse } from 'moviedb-promise/dist/request-types';
+import {
+  CreditsResponse,
+  IdRequestParams,
+  MovieImagesResponse,
+  MovieTranslationsResponse,
+  TvImagesResponse,
+  TvTranslationsResponse,
+  VideosResponse,
+} from 'moviedb-promise/dist/request-types';
 import streaming from '@data/streaming.json';
 
 export const api = new MovieDb(validateEnv('MOVIE_TOKEN'));
@@ -17,7 +25,7 @@ export class Client {
 
   async watchProviders(providers: any, isMovie: boolean, params: IdRequestParams): Promise<ProviderEntryProps | null> {
     try {
-      let AT = providers.AT;
+      let AT = providers.results.AT;
       if (!AT) AT = (await (isMovie ? api.movieWatchProviders(params) : api.tvWatchProviders(params))).results!.AT;
       if (!AT) return null;
 
@@ -67,13 +75,38 @@ export class Client {
     return streams;
   }
 
+  getTranslationsFromBase(
+    base: any,
+    translations: MovieTranslationsResponse | TvTranslationsResponse,
+    images: MovieImagesResponse | TvImagesResponse
+  ): any {
+    let translation = _.find(translations?.translations ? translations?.translations : [], { iso_639_1: 'de' })?.data;
+    if (!translation) translation = _.find(translations?.translations ? translations?.translations : [], { iso_639_1: 'en' })?.data;
+    const poster = _.find(images?.posters ? images?.posters : [], { iso_639_1: 'de' })?.file_path;
+    const backdrop = _.find(images?.backdrops ? images?.backdrops : [], { iso_639_1: 'de' as any })?.file_path;
+
+    const result = {
+      overview: translation?.overview ? translation?.overview : base?.overview,
+      name: translation?.title ? translation?.title : base?.title ? base?.title : base?.name,
+      poster_path: poster ? poster : base?.poster_path,
+      backdrop_path: backdrop ? backdrop : base?.backdrop_path,
+    };
+
+    return result;
+  }
+
   async getBase(id: number, type: MovieDbTypeEnum) {
+    const params = {
+      id,
+      language: 'en-GB',
+      include_image_language: 'en,de,null',
+      append_to_response: 'credits,watch/providers,external_ids,videos,images,translations',
+    };
     const isMovie = (MovieDbTypeEnum[type] as any) === MovieDbTypeEnum.movie || type.toString() === '1';
-    const de = (await (isMovie ? api.movieInfo({ id, language: 'de-DE' }) : api.tvInfo({ id, language: 'de-DE' }))) as any;
-    const en = (await (isMovie
-      ? api.movieInfo({ id, language: 'en-GB', append_to_response: 'credits,watch/providers,external_ids,videos' })
-      : api.tvInfo({ id, language: 'en-GB', append_to_response: 'credits,watch/providers,external_ids,videos' }))) as any;
+    const en = (await (isMovie ? api.movieInfo(params) : api.tvInfo(params))) as any;
     const watchProviders = await this.watchProviders(en['watch/providers'], isMovie, { id, language: 'en' });
+
+    const de = this.getTranslationsFromBase(en, en?.translations, en?.images);
 
     return {
       isMovie,
@@ -97,20 +130,20 @@ export class Client {
     return {
       external_ids,
       overview: {
-        en: en.overview,
-        de: de.overview,
+        en: en.overview ? en.overview : '',
+        de: de.overview ? de.overview : '',
       },
       name: {
-        en: isMovie ? en.title : en.name,
-        de: isMovie ? de.title : de.name,
+        en: en.title ? en.title : en.name,
+        de: de.title ? de.title : de.name,
       },
       poster_path: {
-        en: en.poster_path,
-        de: de.poster_path,
+        en: en.poster_path ? en.poster_path : null,
+        de: de.poster_path ? de.poster_path : en.poster_path ? en.poster_path : null,
       },
       backdrop_path: {
-        en: en.backdrop_path,
-        de: de.backdrop_path,
+        en: en.backdrop_path ? en.backdrop_path : null,
+        de: de.backdrop_path ? de.backdrop_path : en.backdrop_path ? en.backdrop_path : null,
       },
       release_date: new Date(isMovie ? en.release_date : en.first_air_date).getTime(),
       runtime: (isMovie ? en.runtime : en.episode_run_time ? en.episode_run_time[0] : null)
@@ -193,27 +226,27 @@ export class Client {
   ): Promise<Partial<ItemProps>> {
     const { isMovie, de, en, credits, external_ids, watchProviders } = base ? base : await this.getBase(id, type);
 
-    return {
+    const data = {
       external_ids,
       overview: {
-        en: en.overview,
-        de: de.overview,
+        en: en.overview ? en.overview : '',
+        de: de.overview ? de.overview : '',
       },
       genre_ids: (en?.genres ? en?.genres?.map(({ id }: any) => id) : en.genre_ids)?.concat(this.isAnime(en) ? [7424] : []),
       id_db: parseInt(id as any),
       name: {
-        en: isMovie ? en.title : en.name,
-        de: isMovie ? de.title : de.name,
+        en: en.title ? en.title : en.name,
+        de: de.title ? de.title : de.name,
       },
       original_language: en.original_language,
       original_name: isMovie ? en.original_title : en.original_name,
       poster_path: {
-        en: en.poster_path,
-        de: de.poster_path,
+        en: en.poster_path ? en.poster_path : null,
+        de: de.poster_path ? de.poster_path : en.poster_path ? en.poster_path : null,
       },
       backdrop_path: {
-        en: en.backdrop_path,
-        de: en.backdrop_path,
+        en: en.backdrop_path ? en.backdrop_path : null,
+        de: de.backdrop_path ? de.backdrop_path : en.backdrop_path ? en.backdrop_path : null,
       },
       release_date: new Date(isMovie ? en.release_date : en.first_air_date).getTime(),
       runtime: (isMovie ? en.runtime : en.episode_run_time ? en.episode_run_time[0] : null)
@@ -228,6 +261,8 @@ export class Client {
       trailers: en.videos ? this.getTrailers(en.videos) : null,
       ratings: this.ratings({ external_ids, vote_average: en.vote_average, vote_count: en.vote_count }),
     };
+
+    return data;
   }
 
   async get(id: number, type: MovieDbTypeEnum, { state = -1 }) {
