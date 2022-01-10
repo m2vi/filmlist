@@ -1,11 +1,7 @@
-export const sortByKey = (array: Array<any>, key?: string, key2?: string) => {
-  if (array && key && !key2) {
-    return array.sort((a, b) => (a[key] > b[key] ? 1 : b[key] > a[key] ? -1 : 0));
-  } else if (array && key && key2) {
-    return array.sort((a, b) => (a[key][key2] > b[key][key2] ? 1 : b[key][key2] > a[key][key2] ? -1 : 0));
-  } else {
-    return array.sort((a, b) => (a > b ? 1 : b > a ? -1 : 0));
-  }
+import _ from 'lodash';
+
+export const sortByKey = (array: Array<any>, path: string) => {
+  return array.sort((a, b) => (_.get(a, path) > _.get(b, path) ? 1 : _.get(b, path) > _.get(a, path) ? -1 : 0));
 };
 
 export const removeDuplicates = (array: Array<any>): any[] => {
@@ -21,12 +17,7 @@ export const searchArray = (array: any[], key: string, value: any) => {
 };
 
 export const shuffle = (array: any[]) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-
-  return array;
+  return _.shuffle(array);
 };
 
 export const removeArray = (array: any[], toRemove: any[]) => {

@@ -8,7 +8,9 @@ import {
   CreditsResponse,
   IdRequestParams,
   MovieImagesResponse,
+  MovieResponse,
   MovieTranslationsResponse,
+  ShowResponse,
   TvImagesResponse,
   TvTranslationsResponse,
   VideosResponse,
@@ -386,10 +388,10 @@ export class Client {
     }
   }
 
-  getAverageRating(items: ItemProps[]) {
-    items = items.filter(({ ratings }) => ratings?.tmdb?.vote_average);
-    const sum = items.reduce((a, { ratings }) => a + ratings?.tmdb?.vote_average!, 0);
-    const avg = sum / items.length || 0;
+  getAverageRating(items: Array<MovieResponse | ShowResponse>) {
+    const filtered = items.filter(({ vote_average }) => vote_average);
+    const sum = filtered.reduce((a, { vote_average }) => a + vote_average!, 0);
+    const avg = sum / filtered.length || 0;
 
     return avg;
   }

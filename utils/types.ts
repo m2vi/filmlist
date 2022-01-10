@@ -94,6 +94,7 @@ export interface FrontendItemProps {
   type: MovieDbOptions;
   state: number;
   ratings: RatingsProps | null;
+  watchProviders: ProviderEntryProps | null;
 }
 
 export interface RatingsProps {
@@ -197,7 +198,7 @@ export interface LogProps {
   progress: number;
   remaining_time: string;
   elapsed_time: string;
-  average_time_per_job: string;
+  average_time_per_job: number;
   errors: number;
   updated: number;
   modified: number;

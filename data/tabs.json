@@ -78,7 +78,7 @@
     "hide_unreleased": true
   },
   "top-rated": {
-    "sort_key": "vote_average",
+    "sort_key": "ratings.tmdb.vote_average",
     "hide_unreleased": true,
     "minVotes": 200
   },
@@ -86,7 +86,7 @@
     "filter": {
       "type": 0
     },
-    "sort_key": "vote_average",
+    "sort_key": "ratings.tmdb.vote_average",
     "hide_unreleased": true,
     "minVotes": 200
   },
@@ -94,13 +94,13 @@
     "filter": {
       "type": 1
     },
-    "sort_key": "vote_average",
+    "sort_key": "ratings.tmdb.vote_averages",
     "hide_unreleased": true,
     "minVotes": 200
   },
   "person": {
     "includeCredits": true,
-    "sort_key": "vote_count"
+    "sort_key": "ratings.tmdb.vote_count"
   },
   "none": {},
   "entries": {},

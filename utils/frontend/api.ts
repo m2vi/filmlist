@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import cookies from 'js-cookie';
-import { DiscordUser, FrontendItemProps, ItemProps, NotificationItemProps } from '@utils/types';
+import { DiscordUser, FrontendItemProps, ItemProps, NotificationItemProps, ProviderEntryProps } from '@utils/types';
 import { ParsedUrlQuery } from 'querystring';
 import moment from 'moment';
 import { basicFetch } from '@utils/fetch';
@@ -21,6 +21,12 @@ export class Api {
   jwt: Jwt;
   constructor() {
     this.jwt = new Jwt();
+  }
+
+  streamableOnNetflix(providers: ProviderEntryProps | null): boolean {
+    if (!providers) return false;
+    const results = _.find(providers?.providers, { name: 'Netflix' });
+    return Boolean(results);
   }
 
   async fetchMoreData(query: ParsedUrlQuery, locale: string | undefined, start: number) {

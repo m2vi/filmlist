@@ -70,7 +70,6 @@ class Search {
 
     const adapted = await Promise.all(
       results!.map(async (item: any): Promise<any> => {
-        console.log(item);
         return await client.adapt(item?.id, MovieDbTypeEnum[item.media_type as any] as any, {
           de: item,
           en: item,
@@ -81,8 +80,6 @@ class Search {
         });
       })
     );
-
-    console.log(adapted);
 
     const prepared = this.prepare(adapted, { locale, start: 0, end: Number.MAX_SAFE_INTEGER });
 

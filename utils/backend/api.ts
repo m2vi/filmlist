@@ -103,7 +103,7 @@ export class Api {
 
     if (typeof config?.sort_key === 'boolean') {
     } else if (typeof config?.sort_key === 'undefined') {
-      items = sortByKey(items, 'name', locale).reverse();
+      items = sortByKey(items, `name.${locale}`).reverse();
     } else if (config?.sort_key) {
       items = sortByKey(items, config?.sort_key);
     }
@@ -170,6 +170,7 @@ export class Api {
       genres,
       genre_ids,
       ratings,
+      watchProviders,
       ...props
     }: any,
     locale: string = 'en'
@@ -191,6 +192,7 @@ export class Api {
       ratings: ratings ? ratings : null,
       type,
       state: state ? state : 0,
+      watchProviders: watchProviders ? watchProviders : null,
     };
   }
 

@@ -6,9 +6,10 @@
 - [x] Farben fixen
 - [ ] Responsive
 - [x] /details/[objectId] zu /details/[type]/[id_db] ändern
-- [ ] Beschleunigen
+- [x] Beschleunigen
 - [x] Watched, Favoured, ... zu state: 0, state: 1 ändern
 - [x] Config prepare function
 - [x] Multi State Filter
 - [x] Vorschläge anzeigen
 - [x] append_to_response verwenden
+- [ ] background jobs

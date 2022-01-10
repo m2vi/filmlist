@@ -5,13 +5,20 @@ import { useTranslation } from 'react-i18next';
 import config from '@data/config.json';
 import Rating from './Rating';
 import Link from 'next/link';
+import api from '@utils/frontend/api';
+import { useRouter } from 'next/router';
+import _ from 'underscore';
 
 export interface CardProps extends FrontendItemProps {
   isLoading?: boolean;
 }
 
-const Card = ({ _id, name, poster_path, release_date, id_db, ratings, type, state, isLoading = false }: CardProps) => {
+const Card = ({ _id, name, poster_path, release_date, id_db, ratings, type, state, isLoading = false, watchProviders }: CardProps) => {
   const { t } = useTranslation();
+  const { query, route } = useRouter();
+  const onNetflix = api.streamableOnNetflix(watchProviders);
+
+  if (route === '/[tab]' && _.has(query, 'netflix') && !onNetflix) return null;
 
   const Wrapper = ({ children }: any) => (
     <Link href={`/${type ? 'movie' : 'tv'}/${id_db}`}>
@@ -35,12 +42,14 @@ const Card = ({ _id, name, poster_path, release_date, id_db, ratings, type, stat
     <Wrapper>
       <div className='w-full grid place-items-center relative bg-primary-800 rounded-8 overflow-hidden'>
         {poster_path ? (
-          <img
-            src={`https://image.tmdb.org/t/p/w${config.posterWidth}${poster_path}`}
-            alt={_id ? _id : ''}
-            style={{ aspectRatio: '2 / 3', width: '100%' }}
-            className='no-drag select-none w-full overflow-hidden relative'
-          />
+          <>
+            <img
+              src={`https://image.tmdb.org/t/p/w${config.posterWidth}${poster_path}`}
+              alt={_id ? _id : ''}
+              style={{ aspectRatio: '2 / 3', width: '100%' }}
+              className='no-drag select-none w-full overflow-hidden relative'
+            />
+          </>
         ) : (
           <div style={{ aspectRatio: '2 / 3', width: '100%' }} className='no-drag select-none w-full overflow-hidden relative' />
         )}

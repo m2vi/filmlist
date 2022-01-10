@@ -23,7 +23,7 @@ export interface RatingCircleProps {
 }
 
 export const RatingCircle = ({ provider, colorClassName }: RatingCircleProps) => {
-  const nr = !provider || !provider?.vote_count || !provider?.vote_average;
+  const nr = !provider || !provider?.vote_average;
 
   return (
     <div className='flex justify-center items-center h-36 w-36 relative'>

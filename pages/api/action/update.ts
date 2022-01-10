@@ -28,7 +28,7 @@ export const logUpdate = ({
   console.log('tmdb id:', tmdb_id.toString().blue);
   console.log('');
   console.log('Timing:'.green);
-  console.log('average time per job:', `${average_time_per_job}`.blue);
+  console.log('average time per job:', `${average_time_per_job.toFixed(2)}`.blue);
   console.log('elapsed time:', `${elapsed_time}`.blue);
   console.log('remaining time:', `${remaining_time}`.blue);
   console.log('');
@@ -84,7 +84,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       progress: (100 * (parseInt(index) + 1)) / length,
       remaining_time: moment(calculateTimeRemaining()).format('mm:ss'),
       elapsed_time: moment(calculateTimeElapsed()).format('mm:ss'),
-      average_time_per_job: (times.reduce((b, a) => b + a, 0) / times.length).toString(),
+      average_time_per_job: times.reduce((b, a) => b + a, 0) / times.length,
       errors: errors.length,
       modified,
       updated,
