@@ -70,11 +70,7 @@ export interface ItemProps {
     backdrop_path: string;
   } | null;
   trailers: Video[] | null;
-  ratings: {
-    imdb: VoteProps;
-    rotten_tomatoes: VoteProps;
-    tmdb: VoteProps;
-  } | null;
+  ratings: RatingsProps | null;
 }
 
 export interface VoteProps {
@@ -97,11 +93,11 @@ export interface FrontendItemProps {
   release_date: number;
   type: MovieDbOptions;
   state: number;
-  ratings: {
-    imdb: VoteProps;
-    rotten_tomatoes: VoteProps;
-    tmdb: VoteProps;
-  } | null;
+  ratings: RatingsProps | null;
+}
+
+export interface RatingsProps {
+  [provider: string]: VoteProps | null;
 }
 
 export interface NotificationItemProps {

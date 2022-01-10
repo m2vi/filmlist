@@ -165,10 +165,12 @@ export class Api {
       title,
       first_air_date,
       vote_average,
+      vote_count,
       type,
       genres,
       genre_ids,
       ratings,
+      ...props
     }: any,
     locale: string = 'en'
   ): FrontendItemProps {

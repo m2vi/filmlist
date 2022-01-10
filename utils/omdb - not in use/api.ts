@@ -12,7 +12,21 @@ export class Api {
   }
 
   async ratings(reponse: any) {
-    if (!reponse?.external_ids?.imdb_id) return null;
+    if (!reponse?.external_ids?.imdb_id)
+      return {
+        imdb: {
+          vote_average: null,
+          vote_count: null,
+        },
+        rotten_tomatoes: {
+          vote_average: null,
+          vote_count: null,
+        },
+        tmdb: {
+          vote_average: reponse.vote_average ? reponse.vote_average : null,
+          vote_count: reponse.vote_count ? reponse.vote_count : null,
+        },
+      };
     const data = await this.raw(reponse.external_ids.imdb_id);
     if (!data) return null;
 

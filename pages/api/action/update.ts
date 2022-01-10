@@ -84,7 +84,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       progress: (100 * (parseInt(index) + 1)) / length,
       remaining_time: moment(calculateTimeRemaining()).format('mm:ss'),
       elapsed_time: moment(calculateTimeElapsed()).format('mm:ss'),
-      average_time_per_job: `${end.toFixed(2)}ms`,
+      average_time_per_job: (times.reduce((b, a) => b + a, 0) / times.length).toString(),
       errors: errors.length,
       modified,
       updated,

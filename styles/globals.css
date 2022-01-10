@@ -134,3 +134,15 @@ p {
     background-position: 5000px 0;
   }
 }
+
+.tmdb {
+  stroke: var(--color-accent);
+}
+
+.imdb {
+  stroke: #f5c518;
+}
+
+.rotten {
+  stroke: #fa320a;
+}

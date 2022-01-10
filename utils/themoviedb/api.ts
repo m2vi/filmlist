@@ -6,7 +6,6 @@ import companies from '@data/companies.json';
 import _, { shuffle } from 'underscore';
 import { CreditsResponse, IdRequestParams, VideosResponse } from 'moviedb-promise/dist/request-types';
 import streaming from '@data/streaming.json';
-import omdb from '@utils/omdb/api';
 
 export const api = new MovieDb(validateEnv('MOVIE_TOKEN'));
 
@@ -123,7 +122,16 @@ export class Client {
       watchProviders,
       collection: isMovie ? (en.belongs_to_collection ? en.belongs_to_collection : null) : null,
       trailers: en.videos ? this.getTrailers(en.videos) : null,
-      ratings: await omdb.ratings({ external_ids, vote_average: en.vote_average, vote_count: en.vote_count } as any),
+      ratings: this.ratings({ external_ids, vote_average: en.vote_average, vote_count: en.vote_count }),
+    };
+  }
+
+  ratings(item: Partial<any>) {
+    return {
+      tmdb: {
+        vote_average: item.vote_average ? item.vote_average : null,
+        vote_count: item.vote_count ? item.vote_count : null,
+      },
     };
   }
 
@@ -218,7 +226,7 @@ export class Client {
       watchProviders,
       collection: isMovie ? (en.belongs_to_collection ? en.belongs_to_collection : null) : null,
       trailers: en.videos ? this.getTrailers(en.videos) : null,
-      ratings: await omdb.ratings({ external_ids, vote_average: en.vote_average, vote_count: en.vote_count } as any),
+      ratings: this.ratings({ external_ids, vote_average: en.vote_average, vote_count: en.vote_count }),
     };
   }
 
@@ -344,7 +352,7 @@ export class Client {
   }
 
   getAverageRating(items: ItemProps[]) {
-    items = items.filter(({ ratings }) => ratings?.tmdb.vote_average);
+    items = items.filter(({ ratings }) => ratings?.tmdb?.vote_average);
     const sum = items.reduce((a, { ratings }) => a + ratings?.tmdb?.vote_average!, 0);
     const avg = sum / items.length || 0;
 
