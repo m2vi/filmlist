@@ -63,8 +63,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       ...props,
       log: {
-        query,
-        locale: context.locale,
+        query: query ? query : '',
+        locale: context.locale ? context.locale : null,
         time: performance.now() - start,
         results: {
           count: props.results.length,

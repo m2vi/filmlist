@@ -72,7 +72,7 @@ const Collection = ({ data }: any) => {
                 {data.genre_ids.map((id: number, i: number) => {
                   return (
                     <span key={i}>
-                      <Link href={`/genre/${id}`}>
+                      <Link href='/genre/[id]' as={`/genre/${id}`}>
                         <a className='text-xl text-primary-200 hover:text-accent'>
                           {t(`pages.filmlist.menu.${genres.getName(id).toLowerCase()}`)}
                         </a>

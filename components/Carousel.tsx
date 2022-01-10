@@ -13,7 +13,7 @@ const Carousel = ({ section: { items, length, name, route } }: { section: Browse
       {name ? (
         <>
           {route ? (
-            <Link href={route} passHref={true}>
+            <Link href={route}>
               <a className='carousel-title hover:text-primary-200'>
                 {t(`pages.filmlist.menu.${name.toLowerCase()}`, { defaultValue: name })}
               </a>

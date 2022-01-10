@@ -15,7 +15,7 @@ const Dashboard = ({ data }: any) => {
       <div className='w-full grid grid-cols-4 auto-rows-auto py-11 gap-4'>
         {Object.entries(data.general).map(([name, value]: any, i) => {
           return (
-            <Link href={`/${name}`} key={i}>
+            <Link href='/[tab]' as={`/${name}`} key={i}>
               <a className='flex flex-col justify-center items-center text-center bg-primary-800 p-6 rounded-xl'>
                 <span className='text-3xl text-primary-200'>{value}</span>
                 <span className='text-base text-primary-300 mb-1 l-1'>{t(`pages.filmlist.menu.${name}`)}</span>
