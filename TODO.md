@@ -1,10 +1,6 @@
 - [x] /person/[id] erweitern
 - [x] Design fixen (Hintergrund bei Scroll)
-- [ ] 404 hinzufügen
-- [ ] Error handling erweitern (Benachrichtigungen)
-- [ ] Manage Interface
 - [x] Farben fixen
-- [ ] Responsive
 - [x] /details/[objectId] zu /details/[type]/[id_db] ändern
 - [x] Beschleunigen
 - [x] Watched, Favoured, ... zu state: 0, state: 1 ändern
@@ -13,3 +9,8 @@
 - [x] Vorschläge anzeigen
 - [x] append_to_response verwenden
 - [ ] background jobs
+- [ ] href + as überall verwenden
+- [ ] 404 hinzufügen
+- [ ] Error handling erweitern (Benachrichtigungen)
+- [ ] Manage Interface
+- [ ] Responsive
