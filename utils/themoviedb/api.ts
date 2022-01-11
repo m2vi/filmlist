@@ -370,7 +370,17 @@ export class Client {
 
   async getPersonItems(id: number, locale: string) {
     return {
-      tab: await backend.getTab({ tab: 'person', locale, start: 0, end: 75, includePerson: id }),
+      tab: await backend.getTab({
+        tab: '',
+        custom_config: {
+          includeCredits: true,
+          sort_key: 'ratings.tmdb.vote_count',
+        },
+        locale,
+        start: 0,
+        end: 75,
+        includePerson: id,
+      }),
     };
   }
 

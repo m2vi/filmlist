@@ -68,6 +68,7 @@ export class Api {
       dontFrontend,
       language,
       release_year,
+      custom_config,
     }: {
       tab: string;
       locale: string;
@@ -79,12 +80,13 @@ export class Api {
       dontFrontend?: boolean;
       language?: string;
       release_year?: string;
+      custom_config?: TabFilterOptions | null;
     },
     default_items?: ItemProps[]
   ) {
     let items = [];
     let extra = null;
-    const c = this.getTabConfig(tab);
+    const c = custom_config ? custom_config : this.getTabConfig(tab);
     if (c === null)
       return {
         length: 0,

@@ -19,9 +19,14 @@ const Header = () => {
         style={{ height: '75px' }}
       >
         <div className='md:flex items-center hidden'>
+          <span className='cursor-pointer mr-4 text-primary-100 hover:opacity-80'>
+            <Link href='/browse'>
+              <a>{t('pages.filmlist.menu.browse')}</a>
+            </Link>
+          </span>
           {routes.map((route) => (
             <span className='cursor-pointer mr-4 text-primary-100 hover:opacity-80' key={route}>
-              <Link href={`/${route}`} passHref={true}>
+              <Link href='/[tab]' as={`/${route}`}>
                 <a>{t(`pages.filmlist.menu.${route}`)}</a>
               </Link>
             </span>
@@ -30,7 +35,7 @@ const Header = () => {
         <div className='flex items-center justify-end'>
           <Search />
 
-          <Link href='/anime'>
+          <Link href='/[tab]' as='/anime'>
             <a className='font-normal text-sm text-center ml-4 l-1 h-7 flex items-center'>Anime</a>
           </Link>
 

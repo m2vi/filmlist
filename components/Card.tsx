@@ -21,7 +21,7 @@ const Card = ({ _id, name, poster_path, release_date, id_db, ratings, type, stat
   if (route === '/[tab]' && _.has(query, 'netflix') && !onNetflix) return null;
 
   const Wrapper = ({ children }: any) => (
-    <Link href={`/${type ? 'movie' : 'tv'}/${id_db}`}>
+    <Link href={`/${type ? 'movie' : 'tv'}/[id]`} as={`/${type ? 'movie' : 'tv'}/${id_db}`}>
       <a className='flex flex-col flex-1 cursor-pointer relative overlay mb-2' style={{ width: config.cardWidth }}>
         {children}
       </a>
