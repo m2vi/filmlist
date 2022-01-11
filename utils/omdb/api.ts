@@ -11,7 +11,11 @@ export class Api {
 
       return {
         tmdb: tmdb,
-        omdb: await basicFetch(`${this.baseUrl}?apikey=${'daf5c972'}&i=${encodeURIComponent(tmdb.external_ids?.imdb_id!)}`),
+        omdb: await basicFetch(
+          `${this.baseUrl}?apikey=${'daf5c972'}&i=${encodeURIComponent(tmdb.external_ids?.imdb_id!)}&type=${
+            type === 'movie' || type.toString() === '1' ? 'movie' : 'series'
+          }`
+        ),
       };
     } catch (error) {
       return null;

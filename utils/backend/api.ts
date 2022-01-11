@@ -4,22 +4,12 @@ import { removeDuplicates, shuffle, sortByKey } from '../array';
 import tabs from '@data/tabs.json';
 import itemSchema from '@models/itemSchema';
 import _, { sortBy } from 'underscore';
-import {
-  CreditProps,
-  FrontendItemProps,
-  GenreProps,
-  InsertProps,
-  ItemProps,
-  MovieDbTypeEnum,
-  TabFilterOptions,
-  TabFilterOptionsMongoose,
-  Tabs,
-} from '../types';
+import { FrontendItemProps, GenreProps, InsertProps, ItemProps, MovieDbTypeEnum, TabFilterOptions, Tabs } from '../types';
 import jwt from 'jsonwebtoken';
 import cookies from 'js-cookie';
 import client from '@utils/themoviedb/api';
 import genres from '@utils/themoviedb/genres';
-import { isReleased, someIncludes } from '@utils/utils';
+import { isReleased } from '@utils/utils';
 import { performance } from 'perf_hooks';
 
 class Jwt {
@@ -66,52 +56,30 @@ export class Api {
     return [config, (items: ItemProps[]) => items.filter(({ state }) => (config?.filter?.state as number[])?.includes(state as number))];
   }
 
-  async getTab(
-    {
-      tab,
-      locale,
-      start,
-      end,
-      includeGenres,
-      includePerson,
-      includeCredits,
-      dontFrontend,
-      language,
-      release_year,
-      custom_config,
-    }: {
-      tab: string;
-      locale: string;
-      start: number;
-      end: number;
-      includeGenres?: number;
-      includePerson?: number;
-      includeCredits?: boolean;
-      dontFrontend?: boolean;
-      language?: string;
-      release_year?: string;
-      custom_config?: TabFilterOptionsMongoose | null;
-    },
-    default_items?: ItemProps[]
-  ) {
+  async getTab({
+    tab,
+    locale,
+    start,
+    end,
+    includeCredits,
+    dontFrontend,
+    release_year,
+    custom_config,
+  }: {
+    tab: string;
+    locale: string;
+    start: number;
+    end: number;
+    includeCredits?: boolean;
+    dontFrontend?: boolean;
+    release_year?: string;
+    custom_config?: TabFilterOptions | null;
+  }) {
     let items = [];
     let extra = null;
-    const c = custom_config ? custom_config : this.getTabConfig(tab);
-    if (c === null)
-      return {
-        length: 0,
-        items: [],
-      };
-    let [config, func] = this.prepareConfig(c as any);
-
-    if (default_items) {
-      items = _.filter(default_items, config?.filter ? this.deleteStateProperty(config?.filter) : {});
-    } else {
-      await this.init();
-      items = await this.find(config?.filter ? this.deleteStateProperty(config?.filter) : {}, config?.includeCredits || includeCredits);
-    }
-
-    items = func(items) as ItemProps[];
+    const config = custom_config ? custom_config : this.getTabConfig(tab);
+    await this.init();
+    items = await this.find(config?.filter ? config?.filter : {}, config?.includeCredits || includeCredits);
 
     if (typeof config?.sort_key === 'boolean') {
     } else if (typeof config?.sort_key === 'undefined') {
@@ -119,31 +87,10 @@ export class Api {
     } else if (config?.sort_key) {
       items = sortByKey(items, config?.sort_key);
     }
-    items = release_year ? items.filter(({ release_date }) => new Date(release_date).getFullYear().toString() === release_year) : items;
-    items =
-      config?.language || language ? items.filter(({ original_language }) => original_language === (config?.language || language)) : items;
-    items = config?.includeGenres
-      ? items.filter(({ genre_ids }) => someIncludes(config?.includeGenres, genre_ids))
-      : includeGenres
-      ? items.filter(({ genre_ids }) => genre_ids.includes(includeGenres))
-      : items;
-    items =
-      includePerson && config?.includeCredits
-        ? items.filter(({ credits: { cast, crew } }: { credits: CreditProps }) => {
-            const both = cast.concat(crew as any);
-            const ids = both.map(({ id }) => id);
-            if (ids.includes(includePerson)) {
-              extra = both.find(({ id }) => id === includePerson);
-              return true;
-            } else {
-              return false;
-            }
-          })
-        : items;
-    items = config?.hide_unreleased ? items.filter(({ release_date }) => isReleased(release_date)) : items;
 
-    items =
-      typeof config?.minVotes === 'number' ? items.filter(({ vote_count } = { vote_count: 0 }) => vote_count > config?.minVotes!) : items;
+    items = release_year ? items.filter(({ release_date }) => new Date(release_date).getFullYear().toString() === release_year) : items;
+
+    items = config?.hide_unreleased ? items.filter(({ release_date }) => isReleased(release_date)) : items;
 
     items = dontFrontend ? items : this.prepareForFrontend(items, locale, null, null, null, config?.reverse, config?.only_unreleased);
 
@@ -394,28 +341,6 @@ export class Api {
       return genres;
     };
 
-    const tabStats = () => {
-      let tabs = {} as any;
-
-      Object.entries(this.tabs).forEach(([name, { filter = {}, includeGenres = null }]) => {
-        let results = _.where(collection, filter);
-
-        if (includeGenres) {
-          results = (results as any[]).reduce((results, result) => {
-            const { genre_ids } = result;
-
-            genre_ids.some((id: number) => includeGenres?.includes(id)) && results.push(result);
-
-            return results;
-          }, []);
-        }
-
-        tabs[name.toLowerCase()] = results.length;
-      });
-
-      return tabs;
-    };
-
     if (!small) {
       return {
         general: {
@@ -425,7 +350,7 @@ export class Api {
           'my list': find({ state: -1 }).length,
         },
         genres: genreStats(collection),
-        tabs: tabStats(),
+        tabs: null,
         db: await this.dbStats(),
         genresWithLessThanTwentyItems: await this.getGenresWithLessThanNItems(20),
         time: `${(performance.now() - start).toFixed(2)}ms`,
@@ -493,8 +418,9 @@ export class Api {
     return result;
   }
 
-  getBrowseGenres(items: ItemProps[] = [], locale: string = 'en') {
+  async getBrowseGenres(locale: string = 'en') {
     const { ids } = genres;
+    const items = await this.find({});
     const shuffled = shuffle(ids);
     let entries = {} as any;
 
@@ -566,13 +492,13 @@ export class Api {
   }
 
   async getBrowse(locale?: string) {
-    const items = await this.find({});
+    console.time();
     const moviedbtabs = await client.getTabs();
 
-    const myList = (await this.getTab({ tab: 'my list', locale: locale!, start: 0, end: 20 }, items)).items;
-    const latest = (await this.getTab({ tab: 'latest', locale: locale!, start: 0, end: 20 }, items)).items;
-    const soon = (await this.getTab({ tab: 'soon', locale: locale!, start: 0, end: 20 }, items)).items;
-
+    const myList = (await this.getTab({ tab: 'my list', locale: locale!, start: 0, end: 20 })).items;
+    const latest = (await this.getTab({ tab: 'latest', locale: locale!, start: 0, end: 20 })).items;
+    const soon = (await this.getTab({ tab: 'soon', locale: locale!, start: 0, end: 20 })).items;
+    console.timeEnd();
     return {
       myList: {
         length: myList.length,
@@ -593,7 +519,6 @@ export class Api {
         route: '/soon',
         items: soon,
       },
-      ...this.getBrowseGenres(items, locale),
     };
   }
 

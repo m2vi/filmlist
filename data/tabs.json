@@ -19,10 +19,21 @@
     "reverse": true
   },
   "anime": {
-    "includeGenres": [7424]
+    "filter": {
+      "genre_ids": 7424
+    }
   },
   "kids": {
-    "includeGenres": [10751, 10762]
+    "filter": {
+      "$or": [
+        {
+          "genre_ids": 10751
+        },
+        {
+          "genre_ids": 10762
+        }
+      ]
+    }
   },
   "my list": {
     "filter": {
@@ -33,18 +44,22 @@
   },
   "watched": {
     "filter": {
-      "state": [1, 2, 3]
+      "$or": [
+        {
+          "state": 1
+        },
+        {
+          "state": 2
+        },
+        {
+          "state": 3
+        }
+      ]
     }
   },
   "favourites": {
     "filter": {
       "state": 2
-    },
-    "hide_unreleased": true
-  },
-  "favourites-2": {
-    "filter": {
-      "state": [2, 3]
     },
     "hide_unreleased": true
   },
@@ -65,7 +80,9 @@
   },
   "latest": {
     "filter": {
-      "state": [1, 2, 3]
+      "state": {
+        "$ne": -1
+      }
     },
     "sort_key": false,
     "hide_unreleased": true
@@ -78,37 +95,18 @@
     "hide_unreleased": true
   },
   "top-rated": {
-    "sort_key": "ratings.tmdb.vote_average",
-    "hide_unreleased": true,
-    "minVotes": 200
-  },
-  "top-rated 0": {
     "filter": {
-      "type": 0
+      "ratings.tmdb.vote_count": {
+        "$gte": 200
+      }
     },
     "sort_key": "ratings.tmdb.vote_average",
-    "hide_unreleased": true,
-    "minVotes": 200
-  },
-  "top-rated 1": {
-    "filter": {
-      "type": 1
-    },
-    "sort_key": "ratings.tmdb.vote_averages",
-    "hide_unreleased": true,
-    "minVotes": 200
-  },
-  "person": {
-    "includeCredits": true,
-    "sort_key": "ratings.tmdb.vote_count"
+    "hide_unreleased": true
   },
   "none": {},
   "entries": {},
   "unfiltered": {
     "sort_key": false,
     "reverse": true
-  },
-  "temp": {
-    "sort_key": "ratings.tmdb.vote_count"
   }
 }

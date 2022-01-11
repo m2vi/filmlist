@@ -22,7 +22,7 @@ const Collection = ({ data }: any) => {
           <div className='flex flex-col cursor-pointer relative mb-2 w-full' style={{ maxWidth: '480px' }}>
             <div className='w-full flex mr-11 relative bg-primary-800 rounded-15 overflow-hidden' style={{ aspectRatio: '2 / 3' }}>
               <img
-                src={`https://image.tmdb.org/t/p/w${config.highResPosterWidth}${data.poster_path}`}
+                src={`https://image.tmdb.org/t/p/${config.highResPosterWidth}${data.poster_path}`}
                 alt={data.id}
                 style={{ aspectRatio: '2 / 3' }}
                 className='no-drag select-none overflow-hidden relative w-full'

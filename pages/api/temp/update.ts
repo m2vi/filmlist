@@ -10,6 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           tagline: '',
           vote_average: '',
           vote_count: '',
+          watched: '',
         },
       }
     )
