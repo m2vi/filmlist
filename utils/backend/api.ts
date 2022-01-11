@@ -4,7 +4,17 @@ import { removeDuplicates, shuffle, sortByKey } from '../array';
 import tabs from '@data/tabs.json';
 import itemSchema from '@models/itemSchema';
 import _, { sortBy } from 'underscore';
-import { CreditProps, FrontendItemProps, GenreProps, InsertProps, ItemProps, MovieDbTypeEnum, TabFilterOptions, Tabs } from '../types';
+import {
+  CreditProps,
+  FrontendItemProps,
+  GenreProps,
+  InsertProps,
+  ItemProps,
+  MovieDbTypeEnum,
+  TabFilterOptions,
+  TabFilterOptionsMongoose,
+  Tabs,
+} from '../types';
 import jwt from 'jsonwebtoken';
 import cookies from 'js-cookie';
 import client from '@utils/themoviedb/api';
@@ -80,7 +90,7 @@ export class Api {
       dontFrontend?: boolean;
       language?: string;
       release_year?: string;
-      custom_config?: TabFilterOptions | null;
+      custom_config?: TabFilterOptionsMongoose | null;
     },
     default_items?: ItemProps[]
   ) {
@@ -92,7 +102,7 @@ export class Api {
         length: 0,
         items: [],
       };
-    let [config, func] = this.prepareConfig(c);
+    let [config, func] = this.prepareConfig(c as any);
 
     if (default_items) {
       items = _.filter(default_items, config?.filter ? this.deleteStateProperty(config?.filter) : {});

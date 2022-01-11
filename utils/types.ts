@@ -1,4 +1,4 @@
-import { Types } from 'mongoose';
+import { FilterQuery, Types } from 'mongoose';
 import { MovieExternalIdsResponse, Video, VideosResponse } from 'moviedb-promise/dist/request-types';
 
 export enum ItemTypeEnum {
@@ -140,6 +140,19 @@ export interface ManageInsertProps {
 
 export interface TabFilterOptions {
   filter?: Partial<ItemProps>;
+  sort_key?: string | boolean;
+  reverse?: boolean;
+  includeGenres?: number[];
+  only_unreleased?: boolean;
+  hide_unreleased?: boolean;
+  minVotes?: number;
+  includeCredits?: boolean;
+  language?: string;
+  release_year?: string;
+}
+
+export interface TabFilterOptionsMongoose {
+  filter?: FilterQuery<ItemProps>;
   sort_key?: string | boolean;
   reverse?: boolean;
   includeGenres?: number[];
