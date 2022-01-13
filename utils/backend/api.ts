@@ -44,7 +44,21 @@ export class Api {
   }
 
   async getTab({ tab, locale, start, end, includeCredits, dontFrontend, release_year, custom_config, purpose = 'tab' }: GetTabProps) {
-    if (tab === 'trends') return await tmdb.getTrends(locale);
+    if (tab === 'trends')
+      return {
+        ...(await tmdb.getTrends(locale)),
+        query: removeEmpty({
+          tab,
+          locale,
+          start,
+          end,
+          includeCredits,
+          dontFrontend,
+          release_year,
+          custom_config,
+          purpose,
+        }),
+      };
     let items = [];
     let extra = null;
     const config = custom_config ? custom_config : this.getTabConfig(tab);
