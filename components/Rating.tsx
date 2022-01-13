@@ -1,17 +1,105 @@
-import { FrontendItemProps, VoteProps } from '@utils/types';
-import { HTMLAttributes } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { FrontendItemProps, RatingsProps, VoteProps } from '@utils/types';
+import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
+import { Fragment, HTMLAttributes, useEffect, useState } from 'react';
+import { Spinner } from './Spinner';
 
 interface RatingProps extends Partial<FrontendItemProps>, HTMLAttributes<HTMLDivElement> {
   notchild?: boolean;
 }
 
-const Rating = ({ ratings, state, notchild, className, ...props }: RatingProps) => {
+const Rating = ({ ratings, state, notchild, className, type, id_db, ...props }: RatingProps) => {
+  const Router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+  const [data, setData] = useState<RatingsProps | null>(null);
+  const { t } = useTranslation();
+
+  useEffect(() => setData(null), [id_db, type]);
+
+  const fetchData = () => {
+    fetch(`/api/ratings/${type ? 'movie' : 'tv'}/${id_db}`)
+      .then((data) => data.json())
+      .then((data) => {
+        if (data) setData(data);
+      })
+      .catch(console.log);
+  };
+
+  const openModal = () => {
+    if (!notchild) return;
+    setIsOpen(true);
+    fetchData();
+  };
+  const closeModal = () => setIsOpen(false);
+
   return (
-    <div className={`${!notchild ? 'absolute top-2 right-2 z-20' : 'w-10'} grid grid-flow-col gap-4 ${className}`} {...props}>
-      <RatingCircle provider={ratings?.tmdb} colorClassName='tmdb' />
-      {/*  <RatingCircle provider={ratings?.imdb} colorClassName='imdb' />
-      <RatingCircle provider={ratings?.rotten_tomatoes} colorClassName='rotten'/> */}
-    </div>
+    <>
+      <div
+        className={`${!notchild ? 'absolute top-2 right-2 z-20' : 'w-10'} grid grid-flow-col gap-4 cursor-pointer ${className}`}
+        onClick={openModal}
+        {...props}
+      >
+        <RatingCircle provider={ratings?.tmdb} colorClassName='tmdb' />
+      </div>
+      <>
+        <Transition appear show={isOpen} as={Fragment}>
+          <Dialog as='div' className='fixed inset-0 z-10 overflow-y-auto' onClose={closeModal}>
+            <div className='min-h-screen px-4 text-center'>
+              <Transition.Child
+                as={Fragment}
+                enter='ease-out duration-300'
+                enterFrom='opacity-0'
+                enterTo='opacity-100'
+                leave='ease-in duration-200'
+                leaveFrom='opacity-100'
+                leaveTo='opacity-0'
+              >
+                <Dialog.Overlay className='fixed inset-0 bg-black bg-opacity-0' />
+              </Transition.Child>
+              <span className='inline-block h-screen align-middle' aria-hidden='true'>
+                &#8203;
+              </span>
+              <Transition.Child
+                as={Fragment}
+                enter='ease-out duration-300'
+                enterFrom='opacity-0 scale-95'
+                enterTo='opacity-100 scale-100'
+                leave='ease-in duration-200'
+                leaveFrom='opacity-100 scale-100'
+                leaveTo='opacity-0 scale-95'
+              >
+                <div className='border border-primary-700 inline-block w-full max-w-md px-8 py-6 my-8 overflow-hidden text-left align-middle bg-primary-900-80 rounded-8 shadow-1 relative'>
+                  <div className={`absolute inset-0 w-full h-full grid place-items-center ${!data ? 'visible' : 'invisible'}`}>
+                    <Spinner size='6' />
+                  </div>
+                  <div className={`grid grid-cols-2 justify-between gap-2 w-full ${data ? 'visible' : 'invisible'}`}>
+                    <div className='grid grid-flow-col justify-start'>
+                      <RatingCircle provider={data?.tmdb} colorClassName='tmdb' />
+                      <div className='flex flex-col justify-center ml-2'>
+                        <span className='leading-5 text-primary-200'>TMDB</span>
+                        <span className='l-1 text-primary-300 text-sm'>
+                          {data?.tmdb?.vote_count ? data?.tmdb?.vote_count?.toLocaleString(Router.locale) : 0} {t('details.votes')}
+                        </span>
+                      </div>
+                    </div>
+                    <div className='grid grid-flow-col justify-end'>
+                      <RatingCircle provider={data?.imdb} colorClassName='imdb' />
+                      <div className='flex flex-col justify-center ml-2'>
+                        <span className='leading-5 text-primary-200'>IMDb</span>
+                        <span className='l-1 text-primary-300 text-sm'>
+                          {data?.imdb?.vote_count ? data?.imdb?.vote_count?.toLocaleString(Router.locale) : 0} {t('details.votes')}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Transition.Child>
+            </div>
+          </Dialog>
+        </Transition>
+      </>
+    </>
   );
 };
 

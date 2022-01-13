@@ -46,53 +46,56 @@ const PopoverEl = () => {
                 leaveFrom='transform opacity-100 scale-100'
                 leaveTo='transform opacity-0 scale-95'
               >
-                <div className='absolute right-0 overflow-y-auto w-400 mt-3 origin-top-right bg-primary-800 rounded-5 border border-primary-700'>
-                  <Menu.Items className='divide-y divide-primary-700 h-300' unmount={false}>
-                    {data.length > 0 ? (
-                      <>
-                        {data.map(({ name, backdrop_path, release_date, url }) => (
-                          <Link href={url} passHref key={url}>
-                            <div className='p-3 hover:bg-primary-900 cursor-pointer'>
-                              <Menu.Item>
-                                <div className='flex'>
-                                  <img
-                                    className='max-h-11 rounded-3 mr-4'
-                                    src={`https://image.tmdb.org/t/p/w${config.posterWidth}${backdrop_path}`}
-                                    alt={url}
-                                  />
-                                  <div className='flex flex-col pt-1'>
-                                    <span className=''>{name}</span>
-                                    <span className='text-primary-300 text-sm'>{release_date}</span>
+                <div className='grid grid-flow-row absolute right-0 bg-primary-800 w-400 mt-3 origin-top-right rounded-8 shadow-1 overflow-hidden  border border-primary-700'>
+                  <div className='w-full overflow-y-auto h-full'>
+                    <Menu.Items className='divide-y divide-primary-700 h-300' unmount={false}>
+                      {data.length > 0 ? (
+                        <>
+                          {data.map(({ name, backdrop_path, release_date, url }) => (
+                            <Link href={url} passHref key={url}>
+                              <div className='p-3 hover:bg-primary-900 cursor-pointer'>
+                                <Menu.Item>
+                                  <div className='flex'>
+                                    <img
+                                      className='max-h-11 rounded-3 mr-4'
+                                      src={`https://image.tmdb.org/t/p/w${config.posterWidth}${backdrop_path}`}
+                                      alt={url}
+                                    />
+                                    <div className='flex flex-col pt-1'>
+                                      <span className=''>{name}</span>
+                                      <span className='text-primary-300 text-sm'>{release_date}</span>
+                                    </div>
                                   </div>
-                                </div>
-                              </Menu.Item>
-                            </div>
-                          </Link>
-                        ))}
-                        <div className='px-3 py-2 hover:bg-primary-900 cursor-pointer'>
-                          <Menu.Item>
-                            <Link href='/notifications'>
-                              <a className='w-full flex justify-center' title='View more'>
-                                <svg
-                                  xmlns='http://www.w3.org/2000/svg'
-                                  className='h-4 w-4 mr-1'
-                                  fill='none'
-                                  viewBox='0 0 24 24'
-                                  stroke='currentColor'
-                                >
-                                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 9l-7 7-7-7' />
-                                </svg>
-                              </a>
+                                </Menu.Item>
+                              </div>
                             </Link>
-                          </Menu.Item>
+                          ))}
+                        </>
+                      ) : (
+                        <div className='h-full w-full grid place-items-center'>
+                          <Spinner size='6' />
                         </div>
-                      </>
-                    ) : (
-                      <div className='h-full w-full grid place-items-center'>
-                        <Spinner size='6' />
+                      )}
+                    </Menu.Items>
+                  </div>
+                  <div className='w-full'>
+                    <Link as='/notifications' passHref href='/[tab]'>
+                      <div
+                        className='w-full flex justify-center px-3 rounded-b-8 py-3 border border-transparent border-t-primary-700 hover:bg-primary-900 cursor-pointer'
+                        title='View more'
+                      >
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          className='h-4 w-4 mr-1'
+                          fill='none'
+                          viewBox='0 0 24 24'
+                          stroke='currentColor'
+                        >
+                          <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 9l-7 7-7-7' />
+                        </svg>
                       </div>
-                    )}
-                  </Menu.Items>
+                    </Link>
+                  </div>
                 </div>
               </Transition>
             </>

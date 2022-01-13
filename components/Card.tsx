@@ -8,6 +8,7 @@ import Link from 'next/link';
 import api from '@utils/frontend/api';
 import { useRouter } from 'next/router';
 import _ from 'underscore';
+import { capitalizeFirstLetter } from '@utils/utils';
 
 export interface CardProps extends FrontendItemProps {
   isLoading?: boolean;
@@ -16,9 +17,11 @@ export interface CardProps extends FrontendItemProps {
 const Card = ({ _id, name, poster_path, release_date, id_db, ratings, type, state, isLoading = false, watchProviders }: CardProps) => {
   const { t } = useTranslation();
   const { query, route } = useRouter();
-  const onNetflix = api.streamableOnNetflix(watchProviders);
 
-  if (route === '/[tab]' && _.has(query, 'netflix') && !onNetflix) return null;
+  if (route === '/[tab]' && _.has(query, 'provider')) {
+    const str = capitalizeFirstLetter(query?.provider?.toString().toLowerCase()!);
+    if (!api.streamableOnProvider(str, watchProviders)) return null;
+  }
 
   const Wrapper = ({ children }: any) => (
     <Link href={`/${type ? 'movie' : 'tv'}/[id]`} as={`/${type ? 'movie' : 'tv'}/${id_db}`}>
@@ -55,7 +58,7 @@ const Card = ({ _id, name, poster_path, release_date, id_db, ratings, type, stat
         )}
       </div>
       <div className='absolute w-full h-full top-0 left-0 z-10 overlay-child flex items-end justify-start px-2'>
-        <Rating ratings={ratings} state={state} />
+        <Rating ratings={ratings} state={state} id_db={id_db} type={type} />
         <div className='w-full pb-2'>
           <p
             className='font-semibold text-base overflow-hidden overflow-ellipsis whitespace-nowrap'

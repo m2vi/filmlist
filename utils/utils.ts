@@ -70,3 +70,20 @@ export const placeholderCards = (n: number): Partial<CardProps>[] => {
 };
 
 export const rr = () => window.location.replace('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+
+export const capitalizeFirstLetter = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
+
+interface ObjProps {
+  [key: string]: any;
+}
+
+export const removeEmpty = (obj: ObjProps) => {
+  const newObj: ObjProps = {};
+
+  Object.entries(obj).forEach(([key, value]) => {
+    if (value === undefined) return;
+    newObj[key] = value;
+  });
+
+  return newObj;
+};

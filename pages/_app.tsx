@@ -9,7 +9,7 @@ import { NextSeo } from 'next-seo';
 import { Router } from 'next/dist/client/router';
 import nProgress from 'nprogress';
 import { NextPage } from 'next';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Layout from '@components/Layout/Layout';
 import Null from '@components/Null';
 import 'moment/locale/en-gb';
@@ -28,6 +28,7 @@ type AppPropsWithLayout = AppProps & {
 };
 
 const SeoWrapper = ({ children }: { children: React.ReactNode }) => {
+  useEffect(() => console.log(Buffer.from(JSON.stringify({ tab: 'lol' }), 'utf8').toString('base64')), []);
   return (
     <>
       <NextSeo defaultTitle='Filmlist' />

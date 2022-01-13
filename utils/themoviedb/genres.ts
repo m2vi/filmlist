@@ -1,4 +1,5 @@
 import genreList from '@data/genres.json';
+import config from '@data/config.json';
 import { removeDuplicates, sortByKey } from '@utils/array';
 
 class Genres {
@@ -13,6 +14,10 @@ class Genres {
 
   get ids() {
     return this.array.map(({ id }) => id);
+  }
+
+  get browseIds() {
+    return this.ids.filter((id) => !config.hideGenresFromBrowse.includes(id));
   }
 
   get names() {

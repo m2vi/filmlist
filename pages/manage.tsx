@@ -21,7 +21,7 @@ const Manage = () => {
   return (
     <Full className='flex justify-center items-center'>
       <Title title='Manage' />
-      <div className='w-full max-w-lg p-4 bg-primary-800 border border-primary-700 rounded-15'>
+      <div className='w-full max-w-lg p-4 bg-primary-900-80 border border-primary-700 rounded-15'>
         <Tab.Group>
           <Tab.List className='flex text-center border-b border-primary-600 h-8'>
             {Object.keys(categories).map((category) => (

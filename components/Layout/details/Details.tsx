@@ -46,7 +46,14 @@ const Details = ({ data }: any) => {
           <div className='w-full' style={{ maxWidth: '480px' }}>
             <h2>{data.frontend.name}</h2>
             <p className='text-primary-300 mt-5 text-justify'>{data.raw.overview[locale]}</p>
-            <Rating className='mt-5' ratings={data.frontend.ratings} notchild={true} />
+            <Rating
+              className='mt-5'
+              ratings={data.frontend.ratings}
+              notchild={true}
+              state={data.frontend.state}
+              id_db={data.frontend.id_db}
+              type={data.frontend.type}
+            />
             <div className='w-full grid grid-cols-2 auto-rows-auto mt-5 gap-5'>
               <div className='flex flex-col'>
                 <span className='text-base text-primary-300 mb-1 l-1'>{t('details.type.title')}</span>

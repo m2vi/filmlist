@@ -5,9 +5,12 @@ import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 const Dashboard = ({ data }: any) => {
   const { t } = useTranslation();
+
+  useEffect(() => console.log(data), [data]);
 
   return (
     <div className='pt-100 w-full flex flex-col items-center px-120 max-w-screen-2xl'>

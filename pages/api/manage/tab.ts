@@ -1,18 +1,23 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import api from '@utils/backend/api';
+import { stringToBoolean } from '@utils/utils';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { tab, locale, start, end, includeGenres, language, release_year } = req.query as any;
+  const { ...props } = Object.freeze(req.query) as any;
 
   res.status(200).json(
     await api.getTab({
-      tab,
-      locale,
-      start: parseInt(start),
-      end: parseInt(end),
-      includeGenres: includeGenres ? parseInt(includeGenres) : undefined,
-      language: language ? language : undefined,
-      release_year: release_year ? release_year : undefined,
+      tab: props.tab,
+      locale: props.locale,
+      start: parseInt(props.start),
+      end: parseInt(props.end),
+      release_year: props.release_year,
+      custom_config: props.custom_config && JSON.parse(props.custom_config),
+      dontFrontend: props.dontFrontend && stringToBoolean(props.dontFrontend),
+      purpose: props.purpose,
+      includeCredits: props.includeCredits && stringToBoolean(props.includeCredits),
     })
   );
 }
+
+// repair

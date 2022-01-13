@@ -302,21 +302,17 @@ export class Client {
     );
   }
 
-  async getTrends() {
+  async getTrends(locale: string) {
     //! CHECK
-    const base = this.getTabeBase(
-      (await api.trending({ language: 'de', time_window: 'day', media_type: 'all' })).results,
-      (await api.trending({ language: 'en', time_window: 'day', media_type: 'all' })).results
-    );
+    const trending = (await api.trending({ language: locale, time_window: 'day', media_type: 'all' })).results;
+    const base = this.getTabeBase(trending, trending);
     const adapted = await this.adaptTabs(base);
 
     return {
-      trends: {
-        length: adapted.length,
-        name: 'trends',
-        route: null,
-        items: adapted,
-      },
+      length: adapted.length,
+      name: 'trends',
+      route: null,
+      items: adapted,
     };
   }
 
@@ -335,12 +331,6 @@ export class Client {
       name: jr.name,
       route: jr.homepage,
       items: adapted,
-    };
-  }
-
-  async getTabs() {
-    return {
-      ...(await this.getTrends()),
     };
   }
 

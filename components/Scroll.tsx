@@ -4,13 +4,12 @@ import { useRouter } from 'next/router';
 import { createRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import _ from 'underscore';
 import Card from './Card';
 import Full from './Full';
 import Title from './Title';
 import config from '@data/config.json';
 
-const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number; extra: any } }) => {
+const Scroll = ({ data }: { data: any }) => {
   const ScrollRef = createRef<HTMLDivElement>();
   const [items, setItems] = useState(data.items);
   const { t } = useTranslation();
@@ -27,7 +26,7 @@ const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number; 
   const fetchMoreData = () => {
     try {
       api
-        .fetchMoreData(query, locale, items.length)
+        .fetchMoreData(data, items)
         .then((toConcat) => setItems(items.concat(toConcat)))
         .catch((err) => console.log(err));
     } catch (error) {}
@@ -35,23 +34,7 @@ const Scroll = ({ data }: { data: { items: FrontendItemProps[]; length: number; 
 
   return (
     <Full className='pt-10 flex justify-center'>
-      <Title
-        title={`${
-          query.tab
-            ? t(`pages.filmlist.menu.${query.tab}`)
-            : _.has(data, 'name')
-            ? `Company ${(data as any).name ? (data as any).name : (data as any).id}`
-            : data.extra
-            ? `${data.extra.original_name}`
-            : query.id
-            ? `Genre ${query.id}`
-            : query.lang
-            ? `Language ${query.lang}`
-            : query.year
-            ? `Year: ${query.year}`
-            : ''
-        } – ${t(`pages.filmlist.default`)}`}
-      />
+      <Title title={api.getTitle(query)} />
       <main
         className='w-full overflow-y-scroll dD5d-item max-w-screen-2xl px-120 mt-11 pb-11'
         ref={ScrollRef}

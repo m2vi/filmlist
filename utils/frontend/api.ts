@@ -1,11 +1,21 @@
 import jwt from 'jsonwebtoken';
 import cookies from 'js-cookie';
-import { DiscordUser, FrontendItemProps, ItemProps, NotificationItemProps, ProviderEntryProps } from '@utils/types';
-import { ParsedUrlQuery } from 'querystring';
+import {
+  DiscordUser,
+  FrontendItemProps,
+  GetBrowseGenreProps,
+  GetTabProps,
+  ItemProps,
+  NotificationItemProps,
+  ProviderEntryProps,
+} from '@utils/types';
 import moment from 'moment';
 import { basicFetch } from '@utils/fetch';
 import _ from 'underscore';
 import momentDurationFormatSetup from 'moment-duration-format';
+import qs from 'qs';
+import { i18n } from 'next-i18next';
+import genres from '@utils/themoviedb/genres';
 
 momentDurationFormatSetup(moment as any);
 
@@ -23,22 +33,39 @@ export class Api {
     this.jwt = new Jwt();
   }
 
-  streamableOnNetflix(providers: ProviderEntryProps | null): boolean {
+  getTitle(query: any) {
+    const m = i18n?.t('pages.filmlist.default');
+
+    if (query.tab) {
+      return `${i18n?.t(`pages.filmlist.menu.${query.tab}`)} – ${m}`;
+    } else if (query.id) {
+      return `${i18n?.t(`pages.filmlist.menu.${genres.getName(parseInt(query.id)).toLowerCase()}`)} – ${m}`;
+    } else if (query.year) {
+      return `${query.year} – ${m}`;
+    } else if (query.lang) {
+      return `${i18n?.t(`pages.filmlist.menu.${query.lang}`)}`;
+    }
+
+    return `${m}`;
+  }
+
+  async getTab({ custom_config, ...props }: GetTabProps) {
+    console.log(custom_config && JSON.stringify(custom_config));
+    const params = qs.stringify({ custom_config: custom_config && JSON.stringify(custom_config), ...props });
+    const data = await basicFetch(`/api/manage/tab?${params}`);
+
+    return data;
+  }
+
+  streamableOnProvider(name: string, providers: ProviderEntryProps | null): boolean {
     if (!providers) return false;
-    const results = _.find(providers?.providers, { name: 'Netflix' });
+    const results = _.find(providers?.providers, { name });
     return Boolean(results);
   }
 
-  async fetchMoreData(query: ParsedUrlQuery, locale: string | undefined, start: number) {
+  async fetchMoreData(data: any, items: any[]) {
     try {
-      const res = await (
-        await fetch(
-          `/api/manage/tab?tab=${query.tab ? query.tab : 'none'}&locale=${locale}&start=${start}&end=${start + 75}${
-            query.id ? `&includeGenres=${query.id}` : ''
-          }${query.lang ? `&language=${query.lang}` : ''}${query.year ? `&release_year=${query.year}` : ''}`
-        )
-      ).json();
-
+      const res = await this.getTab({ ...(data.query ? data.query : {}), start: items.length, end: items.length + 75 });
       return res.items ? res.items : [];
     } catch (error) {
       return [];
@@ -102,6 +129,18 @@ export class Api {
   duration(minutes: number, locale: string) {
     moment.locale(locale);
     return moment.duration(minutes, 'minutes').format('h[h] mm[m]');
+  }
+
+  async getBrowseGenre({ locale, seed, index }: GetBrowseGenreProps) {
+    const data = await basicFetch(`/api/manage/browse_genre?locale=${locale}&seed=${seed}&index=${index}`);
+
+    return data;
+  }
+
+  async getTrends() {
+    const data = await basicFetch(`/api/manage/trends`);
+
+    return data;
   }
 }
 

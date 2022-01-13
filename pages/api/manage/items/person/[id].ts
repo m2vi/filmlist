@@ -4,5 +4,10 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { id, locale } = req.query as any;
 
-  res.status(200).json(await client.getPersonItems(parseInt(id), locale));
+  const tab = await client.getPersonItems(parseInt(id), locale);
+
+  res.status(200).json({
+    route: null,
+    ...tab,
+  });
 }

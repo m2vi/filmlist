@@ -12,6 +12,24 @@ export enum MovieDbTypeEnum {
   'movie' = 1,
 }
 
+export interface GetBrowseGenreProps {
+  locale: string;
+  seed: string;
+  index: number;
+}
+
+export interface GetTabProps {
+  tab: string;
+  locale: string;
+  start: number;
+  end: number;
+  includeCredits?: boolean;
+  dontFrontend?: boolean;
+  release_year?: string;
+  custom_config?: TabFilterOptions | null;
+  purpose?: string;
+}
+
 export interface CastProps {
   character: string;
   gender: number | null;

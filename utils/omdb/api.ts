@@ -29,8 +29,8 @@ export class Api {
 
     return {
       imdb: {
-        vote_average: data?.omdb?.imdbRating ? parseInt(data?.omdb?.imdbRating) : null,
-        vote_count: data?.omdb?.imdbVotes ? parseInt(data?.omdb?.imdbVotes?.replace(/,/g, '')) : null,
+        vote_average: data?.omdb?.imdbRating ? parseFloat(data?.omdb?.imdbRating) : null,
+        vote_count: data?.omdb?.imdbVotes ? parseFloat(data?.omdb?.imdbVotes?.replace(/,/g, '')) : null,
       },
       tmdb: {
         vote_average: data?.tmdb?.ratings?.tmdb?.vote_average ? data?.tmdb?.ratings?.tmdb?.vote_average : null,

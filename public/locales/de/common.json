@@ -100,7 +100,8 @@
     "episode_run_time": "Laufzeit der Episode",
     "collection": "Sammlung",
     "genres": "Genres",
-    "stars": "Stars"
+    "stars": "Stars",
+    "votes": "Votes"
   },
   "collection": {
     "count": "Anzahl",

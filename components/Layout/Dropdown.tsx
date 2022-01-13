@@ -26,29 +26,29 @@ const Dropdown = () => {
           leaveFrom='transform opacity-100 scale-100'
           leaveTo='transform opacity-0 scale-95'
         >
-          <div className='absolute right-0 w-170 mt-3 origin-top-right bg-primary-800 divide-y divide-primary-700 rounded-5'>
+          <div className='absolute right-0 w-200 mt-3 p-1 origin-top-right bg-primary-800 divide-y divide-primary-700 rounded-5 border border-primary-700'>
             <Menu.Items>
-              <div className='px-1 py-1'>
+              <div className='px-3 py-1'>
                 <Menu.Item>
                   {({ active }) => (
-                    <Link href='/dashboard'>
-                      <a
+                    <Link href='/dashboard' passHref>
+                      <div
                         className={`${
                           active ? ' text-primary-200 opacity-80' : 'text-primary-100'
-                        } group flex rounded-md items-center w-full px-2 py-1 text-sm`}
+                        } group flex rounded-md items-center w-full px-2 py-1 text-sm cursor-pointer`}
                       >
                         Dashboard
-                      </a>
+                      </div>
                     </Link>
                   )}
                 </Menu.Item>
                 <Menu.Item>
                   {({ active }) => (
-                    <Link href='/manage'>
+                    <Link href='/manage' passHref>
                       <a
                         className={`${
                           active ? ' text-primary-200 opacity-80' : 'text-primary-100'
-                        } group flex rounded-md items-center w-full px-2 py-1 text-sm`}
+                        } group flex rounded-md items-center w-full px-2 py-1 text-sm cursor-pointer`}
                       >
                         Manage
                       </a>
@@ -58,14 +58,14 @@ const Dropdown = () => {
               </div>
             </Menu.Items>
             <Menu.Items>
-              <div className='px-1 py-1'>
+              <div className='px-3 py-1'>
                 <Menu.Item>
                   {({ active }) => (
-                    <Link href='/logout'>
+                    <Link href='/logout' passHref>
                       <a
                         className={`${
                           active ? ' text-primary-200 opacity-80' : 'text-primary-100'
-                        } group flex rounded-md items-center w-full px-2 py-1 text-sm`}
+                        } group flex rounded-md items-center w-full px-2 py-1 text-sm cursor-pointer`}
                       >
                         Log out
                       </a>
