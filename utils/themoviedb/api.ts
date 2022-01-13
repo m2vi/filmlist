@@ -311,7 +311,7 @@ export class Client {
     return {
       length: adapted.length,
       name: 'trends',
-      route: null,
+      route: '/trends',
       items: adapted,
     };
   }
