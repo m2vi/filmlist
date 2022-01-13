@@ -75,9 +75,10 @@ const Person = ({ data }: any) => {
         <div className='pt-80'>
           <CarouselAsync
             func={async () => {
-              const result = (await basicFetch(`/api/manage/items/person/${data.info.id}?locale=${locale}`)).tab;
+              const result = await basicFetch(`/api/manage/items/person/${data.info.id}?locale=${locale}`);
               setAppearances(result.length);
-              return result.items;
+
+              return result;
             }}
           />
         </div>

@@ -359,20 +359,18 @@ export class Client {
   }
 
   async getPersonItems(id: number, locale: string) {
-    return {
-      tab: await backend.getTab({
-        tab: 'none',
-        custom_config: {
-          filter: {
-            $or: [{ 'credits.cast.id': id }, { 'credits.crew.id': id }],
-          },
-          sort_key: 'ratings.tmdb.vote_count',
+    return await backend.getTab({
+      tab: 'none',
+      custom_config: {
+        filter: {
+          $or: [{ 'credits.cast.id': id }, { 'credits.crew.id': id }],
         },
-        locale,
-        start: 0,
-        end: 75,
-      }),
-    };
+        sort_key: 'ratings.tmdb.vote_count',
+      },
+      locale,
+      start: 0,
+      end: 75,
+    });
   }
 
   async getRecommendations(isMovie: boolean, { id }: IdRequestParams, locale: string) {

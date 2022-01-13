@@ -7,7 +7,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const tab = await client.getPersonItems(parseInt(id), locale);
 
   res.status(200).json({
-    route: null,
     ...tab,
+    name: '',
+    route: null,
   });
 }
