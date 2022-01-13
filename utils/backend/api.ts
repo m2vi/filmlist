@@ -189,10 +189,10 @@ export class Api {
     let items = [];
 
     if (includeCredits) {
-      items = await itemSchema.find({ ...filter }).lean<any>();
+      items = await itemSchema.find(Object.freeze({ ...filter })).lean<any>();
     } else {
       items = await itemSchema
-        .find({ ...filter })
+        .find(Object.freeze({ ...filter }))
         .select('-credits')
         .lean<any>();
     }
@@ -205,10 +205,10 @@ export class Api {
     let item = [];
 
     if (includeCredits) {
-      item = await itemSchema.findOne({ ...filter }).lean<any>();
+      item = await itemSchema.findOne(Object.freeze({ ...filter })).lean<any>();
     } else {
       item = await itemSchema
-        .findOne({ ...filter })
+        .findOne(Object.freeze({ ...filter }))
         .select('-credits')
         .lean<any>();
     }
