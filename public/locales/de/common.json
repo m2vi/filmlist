@@ -101,7 +101,9 @@
     "collection": "Sammlung",
     "genres": "Genres",
     "stars": "Stars",
-    "votes": "Votes"
+    "votes": "Votes",
+    "subscribedProviders": "Abonnierte Anbieter",
+    "providers": "Anbieter"
   },
   "collection": {
     "count": "Anzahl",

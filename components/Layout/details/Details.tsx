@@ -1,5 +1,4 @@
 import Full from '@components/Full';
-import config from '@data/config.json';
 import Rating from '@components/Rating';
 import Title from '@components/Title';
 import { useTranslation } from 'next-i18next';
@@ -13,13 +12,14 @@ import { basicFetch } from '@utils/fetch';
 import InfoBar from '../../InfoBar';
 import { useEffect, useState } from 'react';
 import momentDurationFormatSetup from 'moment-duration-format';
+import Poster from './Poster';
+import { IoPlay } from 'react-icons/io5';
 
 momentDurationFormatSetup(moment as any);
 
 const Details = ({ data }: any) => {
   const [showBar, setShowBar] = useState(false);
   const { t } = useTranslation();
-  const { _id, poster_path } = data.frontend;
   const locale = useRouter().locale!;
 
   useEffect(() => setShowBar(!data.raw.state), [data]);
@@ -34,17 +34,22 @@ const Details = ({ data }: any) => {
       <main className='w-full max-w-screen-2xl px-120 py-11'>
         <div className='w-full grid grid-cols-2 gap-80 px-80'>
           <div className='flex flex-col cursor-pointer relative mb-2 w-full' style={{ maxWidth: '480px' }}>
-            <div className='w-full flex mr-11 relative bg-primary-800 rounded-15 overflow-hidden' style={{ aspectRatio: '2 / 3' }}>
-              <img
-                src={`https://image.tmdb.org/t/p/${config.highResPosterWidth}${poster_path}`}
-                alt={_id ? _id : ''}
-                style={{ aspectRatio: '2 / 3' }}
-                className='no-drag select-none overflow-hidden relative w-full'
-              />
-            </div>
+            <Poster data={data} />
           </div>
           <div className='w-full' style={{ maxWidth: '480px' }}>
-            <h2>{data.frontend.name}</h2>
+            {data?.subscribedProvider?.length > 0 ? (
+              <a
+                href={data?.subscribedProvider[0]?.url}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='flex items-center text-3xl font-bold hover:text-accent cursor-pointer'
+              >
+                <span className='mr-2'>{data.frontend.name}</span> <IoPlay className='h-4 w-4' />
+              </a>
+            ) : (
+              <span className='text-3xl font-bold'>{data.frontend.name}</span>
+            )}
+
             <p className='text-primary-300 mt-5 text-justify'>{data.raw.overview[locale]}</p>
             <Rating
               className='mt-5'
@@ -92,7 +97,6 @@ const Details = ({ data }: any) => {
 
               <div className='flex flex-col'>
                 <span className='text-base text-primary-300 mb-1 l-1'>
-                  {' '}
                   {t(`details.${data.raw.type ? 'runtime' : 'episode_run_time'}`)}
                 </span>
                 {data.raw.runtime ? (
@@ -159,6 +163,47 @@ const Details = ({ data }: any) => {
                 })}
               </span>
             </div>
+
+            {data?.subscribedProvider?.length > 0 ? (
+              <div className='flex flex-col mt-5'>
+                <span className='text-base text-primary-300 mb-1 l-1'>{t('details.subscribedProviders')}</span>
+                <span className='text-xl text-primary-200'>
+                  {data?.subscribedProvider?.map(({ name, url }: any, i: number) => {
+                    return (
+                      <span key={i}>
+                        <a href={url} target='_blank' rel='noopener noreferrer' className='text-xl text-primary-200 hover:text-accent'>
+                          {name}
+                        </a>
+
+                        <span>{data?.subscribedProvider?.length > i + 1 ? ', ' : ''}</span>
+                      </span>
+                    );
+                  })}
+                </span>
+              </div>
+            ) : (
+              <div className='flex flex-col mt-5'>
+                <span className='text-base text-primary-300 mb-1 l-1'>{t('details.providers')}</span>
+                <span className='text-xl text-primary-200'>
+                  {data?.importantProviders?.map(({ name, url }: any, i: number) => {
+                    return (
+                      <span key={i}>
+                        <a
+                          href={url}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='text-xl text-primary-200 hover:text-accent cursor-pointer'
+                        >
+                          {name}
+                        </a>
+
+                        <span>{data?.importantProviders?.length > i + 1 ? ', ' : ''}</span>
+                      </span>
+                    );
+                  })}
+                </span>
+              </div>
+            )}
           </div>
         </div>
         <div className='pt-80'>

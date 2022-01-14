@@ -57,24 +57,42 @@ export class Client {
     }
   }
 
-  subscribedProvider({ watchProviders }: ItemProps) {
+  importantProviders({ watchProviders }: Partial<ItemProps>) {
     if (!watchProviders) return [];
-    const { subscribed } = streaming;
-    const streams: any = [];
+    const config = streaming;
 
-    watchProviders.providers.every(({ name }) => {
-      const item = subscribed.find(({ name }) => name === name);
-      if (!item) true;
+    const important = watchProviders.providers
+      .map((item) => {
+        if (!config.important.includes(item.name!.toLowerCase())) return null;
+        return {
+          ...item,
+          url: watchProviders.url,
+        };
+      })
+      .filter((item) => item);
 
-      streams.push({
-        url: watchProviders.url,
-        ...item,
-      });
+    return important;
+  }
 
-      return false;
-    });
+  subscribedProvider({ watchProviders }: Partial<ItemProps>) {
+    if (!watchProviders) return [];
+    const config = streaming;
 
-    return streams;
+    const subscribed = watchProviders.providers
+      .map((item) => {
+        const subbed = _.find(config.subscribed, {
+          name: item.name?.toLowerCase(),
+        });
+
+        if (!subbed) return null;
+        return {
+          ...item,
+          url: watchProviders.url,
+        };
+      })
+      .filter((item) => item);
+
+    return subscribed;
   }
 
   getTranslationsFromBase(

@@ -35,7 +35,7 @@ const Dropdown = () => {
                       <div
                         className={`${
                           active ? ' text-primary-200 opacity-80' : 'text-primary-100'
-                        } group flex rounded-md items-center w-full px-2 py-1 text-sm cursor-pointer`}
+                        } group flex rounded-md items-center w-full px-2 py-1 text-sm cursor-pointer hover:bg-primary-900`}
                       >
                         Dashboard
                       </div>
@@ -43,17 +43,17 @@ const Dropdown = () => {
                   )}
                 </Menu.Item>
                 <Menu.Item>
-                  {({ active }) => (
-                    <Link href='/manage' passHref>
-                      <a
+                  {({ active }) => {
+                    return (
+                      <div
                         className={`${
                           active ? ' text-primary-200 opacity-80' : 'text-primary-100'
-                        } group flex rounded-md items-center w-full px-2 py-1 text-sm cursor-pointer`}
+                        } group flex rounded-md items-center w-full px-2 py-1 text-sm cursor-pointer hover:bg-primary-900`}
                       >
                         Manage
-                      </a>
-                    </Link>
-                  )}
+                      </div>
+                    );
+                  }}
                 </Menu.Item>
               </div>
             </Menu.Items>
@@ -65,7 +65,7 @@ const Dropdown = () => {
                       <a
                         className={`${
                           active ? ' text-primary-200 opacity-80' : 'text-primary-100'
-                        } group flex rounded-md items-center w-full px-2 py-1 text-sm cursor-pointer`}
+                        } group flex rounded-md items-center w-full px-2 py-1 text-sm cursor-pointer hover:bg-primary-900`}
                       >
                         Log out
                       </a>

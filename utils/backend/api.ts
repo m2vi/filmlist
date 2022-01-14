@@ -516,6 +516,7 @@ export class Api {
       raw: res,
       frontend: this.toFrontendItem(res, locale),
       subscribedProvider: client.subscribedProvider(res),
+      importantProviders: client.importantProviders(res),
     };
   }
 
