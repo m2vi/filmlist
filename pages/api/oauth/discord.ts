@@ -58,9 +58,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.redirect(OAUTH_URI);
     }
 
-    const toSign = { ...(!oauth.allowedIDs.includes(me.id) ? { ...me, isGuest: true } : me) };
+    if (!oauth.allowedIDs.includes(me.id)) throw Error('');
 
-    const token = sign(toSign, oauth.jwtSecret, { expiresIn: '48h' });
+    const token = sign(me, oauth.jwtSecret, { expiresIn: '48h' });
 
     res.setHeader(
       'Set-Cookie',

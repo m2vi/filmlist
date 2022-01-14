@@ -9,7 +9,7 @@
 - [x] Vorschläge anzeigen
 - [x] append_to_response verwenden
 - [ ] background jobs
-- [ ] href + as überall verwenden
+- [x] href + as überall verwenden
 - [ ] 404 hinzufügen
 - [ ] Error handling erweitern (Benachrichtigungen)
 - [ ] Manage Interface

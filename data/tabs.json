@@ -108,5 +108,17 @@
   "unfiltered": {
     "sort_key": false,
     "reverse": true
+  },
+  "temp": {
+    "filter": {
+      "ratings.tmdb.vote_count": {
+        "$gte": 200
+      },
+
+      "state": {
+        "$ne": -1
+      }
+    },
+    "sort_key": "ratings.tmdb.vote_average"
   }
 }

@@ -10,13 +10,13 @@ import { NextSeo } from 'next-seo';
 import { Router } from 'next/dist/client/router';
 import nProgress from 'nprogress';
 import { NextPage } from 'next';
-import React, { useEffect } from 'react';
+import React from 'react';
 import Layout from '@components/Layout/Layout';
 import Null from '@components/Null';
 import 'moment/locale/en-gb';
 import 'moment/locale/de';
-import Manage from '@components/Manage';
 import { ToastContainer } from 'react-toastify';
+// import Manage from '@components/Manage';
 
 Router.events.on('routeChangeStart', () => nProgress.start());
 Router.events.on('routeChangeComplete', () => nProgress.done());
@@ -31,7 +31,6 @@ type AppPropsWithLayout = AppProps & {
 };
 
 const SeoWrapper = ({ children }: { children: React.ReactNode }) => {
-  useEffect(() => console.log(Buffer.from(JSON.stringify({ tab: 'lol' }), 'utf8').toString('base64')), []);
   return (
     <>
       <ToastContainer
@@ -46,7 +45,7 @@ const SeoWrapper = ({ children }: { children: React.ReactNode }) => {
         pauseOnHover
         theme='dark'
       />
-      <Manage />
+      {/*  <Manage /> */}
       <NextSeo defaultTitle='Filmlist' />
       {children}
     </>

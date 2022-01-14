@@ -17,6 +17,7 @@
     "colors": "^1.4.0",
     "cookie": "^0.4.1",
     "copy-to-clipboard": "^3.3.1",
+    "form-data": "^4.0.0",
     "fuse.js": "^6.4.6",
     "js-cookie": "^3.0.1",
     "jsonwebtoken": "^8.5.1",
