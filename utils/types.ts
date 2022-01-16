@@ -97,8 +97,8 @@ export interface VoteProps {
 }
 
 export interface ProviderEntryProps {
-  url: string | undefined;
-  providers: ProviderProps[];
+  url: string | undefined | null;
+  providers: ProviderProps[] | null;
 }
 
 export interface FrontendItemProps {
@@ -224,4 +224,14 @@ export interface LogProps {
     id: string | undefined;
     tmdb_id: number;
   };
+}
+
+export interface FindOptions {
+  includeCredits?: boolean;
+  sort?: SortProps;
+}
+
+export interface SortProps {
+  key?: string;
+  order?: 1 | -1;
 }

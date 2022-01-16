@@ -29,7 +29,11 @@ export class Client {
     try {
       let AT = providers.results.AT;
       if (!AT) AT = (await (isMovie ? api.movieWatchProviders(params) : api.tvWatchProviders(params))).results!.AT;
-      if (!AT) return null;
+      if (!AT)
+        return {
+          url: null,
+          providers: null,
+        };
 
       const flatrate = AT.flatrate?.map(
         ({ logo_path, provider_id, provider_name }: any): ProviderProps => ({
@@ -58,7 +62,7 @@ export class Client {
   }
 
   importantProviders({ watchProviders }: Partial<ItemProps>) {
-    if (!watchProviders) return [];
+    if (!watchProviders?.providers) return [];
     const config = streaming;
 
     const important = watchProviders.providers
@@ -74,11 +78,15 @@ export class Client {
     return important;
   }
 
+  certifications(base: any) {
+    const results = base?.release_dates?.results;
+  }
+
   subscribedProvider({ watchProviders }: Partial<ItemProps>) {
-    if (!watchProviders) return [];
+    if (!watchProviders?.providers) return [];
     const config = streaming;
 
-    const subscribed = watchProviders.providers
+    const subscribed = watchProviders?.providers
       .map((item) => {
         const subbed = _.find(config.subscribed, {
           name: item.name?.toLowerCase(),

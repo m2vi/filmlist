@@ -59,7 +59,7 @@ export class Api {
 
   streamableOnProvider(name: string, providers: ProviderEntryProps | null): boolean {
     if (!providers) return false;
-    const results = _.find(providers?.providers, { name });
+    const results = _.find(providers?.providers!, { name });
     return Boolean(results);
   }
 

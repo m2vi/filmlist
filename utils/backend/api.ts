@@ -4,12 +4,24 @@ import { removeDuplicates, sortByKey } from '../array';
 import tabs from '@data/tabs.json';
 import itemSchema from '@models/itemSchema';
 import _, { sortBy } from 'underscore';
-import { FrontendItemProps, GenreProps, GetBrowseGenreProps, GetTabProps, InsertProps, ItemProps, MovieDbTypeEnum, Tabs } from '../types';
+import {
+  FindOptions,
+  FrontendItemProps,
+  GenreProps,
+  GetBrowseGenreProps,
+  GetTabProps,
+  InsertProps,
+  ItemProps,
+  MovieDbTypeEnum,
+  SortProps,
+  TabFilterOptions,
+  Tabs,
+} from '../types';
 import jwt from 'jsonwebtoken';
 import cookies from 'js-cookie';
 import client from '@utils/themoviedb/api';
 import genres from '@utils/themoviedb/genres';
-import { isReleased, removeEmpty } from '@utils/utils';
+import { removeEmpty } from '@utils/utils';
 import { performance } from 'perf_hooks';
 import shuffle from 'shuffle-seed';
 import seedRandom from 'seed-random';
@@ -43,6 +55,39 @@ export class Api {
     return this.tabs[name]!;
   }
 
+  getYearNumbers(year: number | string): FilterQuery<ItemProps> {
+    // maybe dumb asf
+    const start = new Date(`${year}-01-01 00:00:00`).getTime();
+    const end = new Date(`${year}-12-31 24:00:00`).getTime();
+
+    return {
+      release_date: {
+        $lte: end,
+        $gte: start,
+      },
+    };
+  }
+
+  getReleaseConfig(config: TabFilterOptions | null): FilterQuery<ItemProps> {
+    if (config?.release_year) {
+      return this.getYearNumbers(config?.release_year);
+    } else if (config?.hide_unreleased) {
+      return {
+        release_date: {
+          $lte: new Date().getTime(),
+        },
+      };
+    } else if (config?.only_unreleased) {
+      return {
+        release_date: {
+          $gte: new Date().getTime(),
+        },
+      };
+    }
+
+    return {};
+  }
+
   async getTab({ tab, locale, start, end, includeCredits, dontFrontend, release_year, custom_config, purpose = 'tab' }: GetTabProps) {
     if (tab === 'trends')
       return {
@@ -61,28 +106,31 @@ export class Api {
       };
     let items = [];
     let extra = null;
-    const config = custom_config ? custom_config : this.getTabConfig(tab);
+    const config = (custom_config ? custom_config : this.getTabConfig(tab) ? this.getTabConfig(tab) : {})!;
     await this.init();
-    items = await this.find(config?.filter ? config?.filter : {}, config?.includeCredits || includeCredits);
+    items = await this.find(
+      {
+        ...config.filter,
+        ...this.getReleaseConfig({
+          ...config,
+          release_year: config?.release_year ? config?.release_year : release_year ? release_year : undefined,
+        }),
+      },
+      {
+        includeCredits: config?.includeCredits || includeCredits,
+        sort: {
+          key:
+            typeof config?.sort_key === 'boolean'
+              ? undefined
+              : typeof config?.sort_key === 'undefined'
+              ? `name.${locale}`
+              : config?.sort_key,
+          order: typeof config?.sort_key === 'undefined' ? -1 : 1,
+        },
+      }
+    );
 
-    if (typeof config?.sort_key === 'boolean') {
-    } else if (typeof config?.sort_key === 'undefined') {
-      items = sortByKey(items, `name.${locale}`).reverse();
-    } else if (config?.sort_key) {
-      items = sortByKey(items, config?.sort_key);
-    }
-
-    items = items.filter(({ release_date }) => {
-      if (
-        (release_year || config?.release_year) &&
-        !(new Date(release_date).getFullYear().toString() === (release_year || config?.release_year))
-      )
-        return false;
-      if (config?.hide_unreleased && !isReleased(release_date)) return false;
-      if (config?.only_unreleased && isReleased(release_date)) return false;
-
-      return true;
-    });
+    items = config?.sort_key === 'shuffle' ? _.shuffle(items) : items;
 
     items = config?.reverse ? items.reverse() : items;
     items = dontFrontend ? items : this.prepareForFrontend(items, locale);
@@ -198,7 +246,15 @@ export class Api {
     return mapped;
   }
 
-  async find(filter: FilterQuery<ItemProps>, includeCredits: boolean = false): Promise<ItemProps[]> {
+  getSort(sort: SortProps | undefined) {
+    if (!sort || !sort.key) return {};
+
+    return {
+      [sort.key]: sort.order ? sort.order : 1,
+    };
+  }
+
+  async find(filter: FilterQuery<ItemProps>, { includeCredits, sort }: FindOptions = { includeCredits: false }): Promise<ItemProps[]> {
     await this.init();
     let items = [];
 
@@ -208,6 +264,7 @@ export class Api {
       items = await itemSchema
         .find(Object.freeze({ ...filter }))
         .select('-credits')
+        .sort(this.getSort(sort))
         .lean<any>();
     }
 
@@ -260,7 +317,7 @@ export class Api {
           $ne: null,
         },
       },
-      includeCredits
+      { includeCredits }
     );
     let collections = {} as any;
 
@@ -319,7 +376,7 @@ export class Api {
   async stats(small?: boolean) {
     const start = performance.now();
     const db = await this.init();
-    const collection = await this.find({}, false);
+    const collection = await this.find({});
     const find = api.arrayToFind(collection);
 
     const genreStats = (collection: any[]) => {
@@ -424,6 +481,7 @@ export class Api {
         filter: {
           genre_ids: id,
         },
+        sort_key: 'shuffle',
       },
     });
 
@@ -431,7 +489,7 @@ export class Api {
       length: tab.length,
       name: genres.getName(id),
       route: `/genre/${id}`,
-      items: shuffle.shuffle(tab.items, rng()),
+      items: tab.items,
     };
   }
 
