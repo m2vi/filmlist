@@ -111,7 +111,7 @@ const Details = ({ data }: any) => {
               {data.raw.collection ? (
                 <div className='flex flex-col'>
                   <span className='text-base text-primary-300 mb-1 l-1'>{t('details.collection')} ID</span>
-                  <Link href='/collection/[id]' as={`/collection/${data.raw.collection.id}`}>
+                  <Link href='/collection/[id]' as={`/collection/${data.raw.collection.id}`} prefetch={false}>
                     <a className='text-xl text-primary-200 hover:text-accent'>{data.raw.collection.id}</a>
                   </Link>
                 </div>
@@ -121,7 +121,7 @@ const Details = ({ data }: any) => {
                   <span className='text-base text-primary-300 mb-1 l-1'>{mainCrew?.job}</span>
                   {mainCrew.crew.map(({ id, original_name }, i) => {
                     return (
-                      <Link href='/person/[person]' as={`/person/${id}`} key={i}>
+                      <Link href='/person/[person]' as={`/person/${id}`} key={i} prefetch={false}>
                         <a className='text-xl text-primary-200 hover:text-accent'>{original_name}</a>
                       </Link>
                     );
@@ -135,7 +135,7 @@ const Details = ({ data }: any) => {
                 {data.raw.genre_ids.map((id: number, i: number) => {
                   return (
                     <span key={i}>
-                      <Link href='/genre/[id]' as={`/genre/${id}`}>
+                      <Link href='/genre/[id]' as={`/genre/${id}`} prefetch={false}>
                         <a className='text-xl text-primary-200 hover:text-accent'>
                           {t(`pages.filmlist.menu.${genres.getName(id).toLowerCase()}`)}
                         </a>
@@ -153,7 +153,7 @@ const Details = ({ data }: any) => {
                 {data.raw.credits.cast.slice(0, 3).map(({ id, original_name }: any, i: number) => {
                   return (
                     <span key={i}>
-                      <Link href='/person/[person]' as={`/person/${id}`}>
+                      <Link href='/person/[person]' as={`/person/${id}`} prefetch={false}>
                         <a className='text-xl text-primary-200 hover:text-accent'>{original_name}</a>
                       </Link>
 

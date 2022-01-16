@@ -20,13 +20,13 @@ const Header = () => {
       >
         <div className='md:flex items-center hidden'>
           <span className='cursor-pointer mr-4 text-primary-100 hover:opacity-80'>
-            <Link href='/browse'>
+            <Link href='/browse' prefetch={false}>
               <a>{t('pages.filmlist.menu.browse')}</a>
             </Link>
           </span>
           {routes.map((route) => (
             <span className='cursor-pointer mr-4 text-primary-100 hover:opacity-80' key={route}>
-              <Link href='/[tab]' as={`/${route}`}>
+              <Link href='/[tab]' as={`/${route}`} prefetch={false}>
                 <a>{t(`pages.filmlist.menu.${route}`)}</a>
               </Link>
             </span>
@@ -35,7 +35,7 @@ const Header = () => {
         <div className='flex items-center justify-end'>
           <Search />
 
-          <Link href='/[tab]' as='/anime'>
+          <Link href='/[tab]' as='/anime' prefetch={false}>
             <a className='font-normal text-sm text-center ml-4 l-1 h-7 flex items-center'>Anime</a>
           </Link>
 

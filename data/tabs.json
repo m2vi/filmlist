@@ -111,13 +111,7 @@
   },
   "temp": {
     "filter": {
-      "ratings.tmdb.vote_count": {
-        "$gte": 200
-      },
-
-      "state": {
-        "$ne": -1
-      }
+      "state": 2
     },
     "sort_key": "ratings.tmdb.vote_average"
   }

@@ -120,7 +120,7 @@ export class Client {
       id,
       language: 'en-GB',
       include_image_language: 'en,de,null',
-      append_to_response: 'credits,watch/providers,external_ids,videos,images,translations',
+      append_to_response: 'credits,watch/providers,external_ids,videos,images,translations,release_dates',
     };
     const isMovie = (MovieDbTypeEnum[type] as any) === MovieDbTypeEnum.movie || type.toString() === '1';
     const en = (await (isMovie ? api.movieInfo(params) : api.tvInfo(params))) as any;

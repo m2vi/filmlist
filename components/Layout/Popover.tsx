@@ -52,7 +52,7 @@ const PopoverEl = () => {
                       {data.length > 0 ? (
                         <>
                           {data.map(({ name, backdrop_path, release_date, url }) => (
-                            <Link href={url} passHref key={url}>
+                            <Link href={url} passHref key={url} prefetch={false}>
                               <div className='p-3 hover:bg-primary-900 cursor-pointer'>
                                 <Menu.Item>
                                   <div className='flex'>
@@ -79,7 +79,7 @@ const PopoverEl = () => {
                     </Menu.Items>
                   </div>
                   <div className='w-full'>
-                    <Link as='/notifications' passHref href='/[tab]'>
+                    <Link as='/notifications' passHref href='/[tab]' prefetch={false}>
                       <div
                         className='w-full flex justify-center px-3 rounded-b-8 py-3 border border-transparent border-t-primary-700 hover:bg-primary-900 cursor-pointer'
                         title='View more'
