@@ -25,7 +25,6 @@ import { removeEmpty } from '@utils/utils';
 import { performance } from 'perf_hooks';
 import shuffle from 'shuffle-seed';
 import seedRandom from 'seed-random';
-import tmdb from '@utils/themoviedb/api';
 
 class Jwt {
   decode() {
@@ -89,21 +88,6 @@ export class Api {
   }
 
   async getTab({ tab, locale, start, end, includeCredits, dontFrontend, release_year, custom_config, purpose = 'tab' }: GetTabProps) {
-    if (tab === 'trends')
-      return {
-        ...(await tmdb.getTrends(locale)),
-        query: removeEmpty({
-          tab,
-          locale,
-          start,
-          end,
-          includeCredits,
-          dontFrontend,
-          release_year,
-          custom_config,
-          purpose,
-        }),
-      };
     let items = [];
     let extra = null;
     const config = (custom_config ? custom_config : this.getTabConfig(tab) ? this.getTabConfig(tab) : {})!;
@@ -508,10 +492,11 @@ export class Api {
         ).items;
     let result = {} as any;
 
-    items.forEach(({ credits }: ItemProps) => {
-      const c = credits?.cast;
+    items.forEach((item: any) => {
+      const c = item?.credits?.cast;
+      if (!c) return;
 
-      c?.forEach(({ original_name, profile_path, gender, id, known_for_department }) => {
+      c?.forEach(({ original_name, profile_path, gender, id, known_for_department }: any) => {
         if (result[original_name]) {
           result[original_name].items++;
         } else {

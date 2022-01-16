@@ -10,6 +10,31 @@
       "type": 1
     }
   },
+  "favourites": {
+    "filter": {
+      "state": 2
+    },
+    "hide_unreleased": true
+  },
+  "highlighted": {
+    "filter": {
+      "state": 3
+    }
+  },
+  "my list": {
+    "filter": {
+      "state": -1
+    },
+    "sort_key": false,
+    "hide_unreleased": true
+  },
+  "watched": {
+    "filter": {
+      "state": {
+        "$in": [1, 2, 3]
+      }
+    }
+  },
   "new": {
     "sort_key": false
   },
@@ -34,44 +59,6 @@
         }
       ]
     }
-  },
-  "my list": {
-    "filter": {
-      "state": -1
-    },
-    "sort_key": false,
-    "hide_unreleased": true
-  },
-  "watched": {
-    "filter": {
-      "$or": [
-        {
-          "state": 1
-        },
-        {
-          "state": 2
-        },
-        {
-          "state": 3
-        }
-      ]
-    }
-  },
-  "favourites": {
-    "filter": {
-      "state": 2
-    },
-    "hide_unreleased": true
-  },
-  "highlighted": {
-    "filter": {
-      "state": 3
-    }
-  },
-  "previously": {
-    "sort_key": "release_date",
-    "hide_unreleased": true,
-    "reverse": true
   },
   "recently": {
     "sort_key": "release_date",
@@ -103,6 +90,14 @@
     "sort_key": "ratings.tmdb.vote_average",
     "hide_unreleased": true
   },
+  "popular": {
+    "filter": {
+      "popularity": {
+        "$ne": null
+      }
+    },
+    "sort_key": "popularity"
+  },
   "none": {},
   "entries": {},
   "unfiltered": {
@@ -113,6 +108,7 @@
     "filter": {
       "state": 2
     },
-    "sort_key": "ratings.tmdb.vote_average"
+    "sort_key": "id_db",
+    "reverse": true
   }
 }

@@ -56,7 +56,6 @@ export interface CreditProps {
 }
 
 export interface ItemProps {
-  adult: boolean;
   _id: Types.ObjectId | string | null;
   genre_ids: number[];
   id_db: number;
@@ -89,6 +88,7 @@ export interface ItemProps {
   } | null;
   trailers: Video[] | null;
   ratings: RatingsProps | null;
+  popularity: number | null;
 }
 
 export interface VoteProps {

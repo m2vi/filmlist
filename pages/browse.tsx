@@ -14,7 +14,7 @@ const Home = ({ ...props }) => {
       <div className='w-full items-center py-11 px-120 max-w-screen-2xl'>
         <CarouselAsync name='my list' func={async () => await frontend.getTab({ tab: 'my list', locale: locale!, start: 0, end: 20 })} />
         <CarouselAsync name='latest' func={async () => await frontend.getTab({ tab: 'latest', locale: locale!, start: 0, end: 20 })} />
-        <CarouselAsync name='trends' func={async () => await frontend.getTab({ tab: 'trends', locale: locale!, start: 0, end: 20 })} />
+        <CarouselAsync name='popular' func={async () => await frontend.getTab({ tab: 'popular', locale: locale!, start: 0, end: 20 })} />
         <CarouselAsync name='soon' func={async () => await frontend.getTab({ tab: 'soon', locale: locale!, start: 0, end: 20 })} />
 
         {Array.from({ length: 5 }).map((v, i) => {

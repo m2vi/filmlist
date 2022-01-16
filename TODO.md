@@ -14,3 +14,4 @@
 - [ ] Error handling erweitern (Benachrichtigungen)
 - [ ] Manage Interface
 - [ ] Responsive
+- [ ] tmdb tabs hinzufügen (trends, top-rated, now-playing, popular)

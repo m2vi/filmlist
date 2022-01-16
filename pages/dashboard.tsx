@@ -1,6 +1,7 @@
 import Title from '@components/Title';
 import api from '@utils/backend/api';
 import streaming from '@data/streaming.json';
+import tabs from '@data/tabs.json';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -35,6 +36,18 @@ const Dashboard = ({ data }: any) => {
             <a href={homepage} className='flex flex-col justify-center items-center text-center bg-primary-800 p-6 rounded-xl' key={i}>
               <span className='text-base l-1 text-accent font-bold'>{capitalizeFirstLetter(name)}</span>
             </a>
+          );
+        })}
+      </div>
+      <div className='w-full text-center flex items-center justify-center font-bold text-lg pb-4'>Tabs</div>
+      <div className='w-full grid grid-cols-3 grid-flow-row auto pb-11 gap-4'>
+        {Object.entries(tabs).map(([key, v], i) => {
+          return (
+            <Link href='/tab' as={`/${key}`} key={key}>
+              <a className='flex flex-col justify-center items-center text-center bg-primary-800 p-6 rounded-xl' key={i}>
+                <span className='text-base l-1 text-accent font-bold'>{t(`pages.filmlist.menu.${key}`)}</span>
+              </a>
+            </Link>
           );
         })}
       </div>

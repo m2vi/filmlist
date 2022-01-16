@@ -23,8 +23,13 @@
         "recently": "Recently Released",
         "latest": "Latest",
         "notifications": "Notifications",
+        "unfiltered": "Unfiltered",
+        "watched": "Watched",
+        "temp": "Temporary Tab",
+        "top-rated": "Top rated",
+        "popular": "Popular",
 
-        "none": "Unbearbeitet",
+        "none": "Unedited",
         "search": "Search",
         "trends": "Trends",
 

@@ -43,18 +43,10 @@ export class Client {
           type: 'flatrate',
         })
       );
-      const buy = AT.buy?.map(
-        ({ logo_path, provider_id, provider_name }: any): ProviderProps => ({
-          id: provider_id,
-          name: provider_name,
-          logo: logo_path,
-          type: 'flatrate',
-        })
-      );
 
       return {
         url: AT.link,
-        providers: (flatrate ? flatrate : []).concat(buy ? buy : []),
+        providers: flatrate,
       };
     } catch (error) {
       return null;
@@ -184,6 +176,7 @@ export class Client {
       collection: isMovie ? (en.belongs_to_collection ? en.belongs_to_collection : null) : null,
       trailers: en.videos ? this.getTrailers(en.videos) : null,
       ratings: this.ratings({ external_ids, vote_average: en.vote_average, vote_count: en.vote_count }),
+      popularity: en.popularity,
     };
   }
 
@@ -254,7 +247,7 @@ export class Client {
   ): Promise<Partial<ItemProps>> {
     const { isMovie, de, en, credits, external_ids, watchProviders } = base ? base : await this.getBase(id, type);
 
-    const data = {
+    return {
       external_ids,
       overview: {
         en: en.overview ? en.overview : '',
@@ -288,9 +281,8 @@ export class Client {
       collection: isMovie ? (en.belongs_to_collection ? en.belongs_to_collection : null) : null,
       trailers: en.videos ? this.getTrailers(en.videos) : null,
       ratings: this.ratings({ external_ids, vote_average: en.vote_average, vote_count: en.vote_count }),
+      popularity: en.popularity ? en.popularity : null,
     };
-
-    return data;
   }
 
   async get(id: number, type: MovieDbTypeEnum, { state = -1 }) {
