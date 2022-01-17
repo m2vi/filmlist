@@ -105,9 +105,6 @@
     "reverse": true
   },
   "temp": {
-    "filter": {
-      "state": 2
-    },
     "sort_key": "id_db",
     "reverse": true
   }
