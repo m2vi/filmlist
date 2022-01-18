@@ -66,6 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         { id_db, type },
         {
           ...n,
+          index: parseInt(index),
         }
       );
       modified += result.modifiedCount;

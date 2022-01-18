@@ -89,6 +89,7 @@ export interface ItemProps {
   trailers: Video[] | null;
   ratings: RatingsProps | null;
   popularity: number | null;
+  v: number;
 }
 
 export interface VoteProps {

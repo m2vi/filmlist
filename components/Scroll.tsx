@@ -44,7 +44,7 @@ const Scroll = ({ data }: { data: any }) => {
         <InfiniteScroll
           dataLength={items.length}
           next={fetchMoreData}
-          hasMore={data.length >= items.length}
+          hasMore={true}
           loader={null}
           scrollableTarget='scrollableDiv'
           className='w-full p-0 grid gap-2 auto-rows-auto place-items-center'

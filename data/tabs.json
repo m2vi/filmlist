@@ -26,6 +26,7 @@
       "state": -1
     },
     "sort_key": false,
+    "reverse": true,
     "hide_unreleased": true
   },
   "watched": {
@@ -36,12 +37,12 @@
     }
   },
   "new": {
-    "sort_key": false
+    "sort_key": false,
+    "reverse": true
   },
   "soon": {
     "sort_key": "release_date",
-    "only_unreleased": true,
-    "reverse": true
+    "only_unreleased": true
   },
   "anime": {
     "filter": {
@@ -63,7 +64,7 @@
   "recently": {
     "sort_key": "release_date",
     "hide_unreleased": true,
-    "reverse": false
+    "reverse": true
   },
   "latest": {
     "filter": {
@@ -72,14 +73,16 @@
       }
     },
     "sort_key": false,
-    "hide_unreleased": true
+    "hide_unreleased": true,
+    "reverse": true
   },
   "notifications": {
     "filter": {
       "state": -1
     },
     "sort_key": "release_date",
-    "hide_unreleased": true
+    "hide_unreleased": true,
+    "reverse": true
   },
   "top-rated": {
     "filter": {
@@ -88,7 +91,18 @@
       }
     },
     "sort_key": "ratings.tmdb.vote_average",
-    "hide_unreleased": true
+    "hide_unreleased": true,
+    "reverse": true
+  },
+  "bottom-rated": {
+    "filter": {
+      "ratings.tmdb.vote_count": {
+        "$gte": 200
+      }
+    },
+    "sort_key": "ratings.tmdb.vote_average",
+    "hide_unreleased": true,
+    "reverse": false
   },
   "popular": {
     "filter": {
@@ -96,13 +110,13 @@
         "$ne": null
       }
     },
-    "sort_key": "popularity"
+    "sort_key": "popularity",
+    "reverse": true
   },
   "none": {},
   "entries": {},
   "unfiltered": {
-    "sort_key": false,
-    "reverse": true
+    "sort_key": false
   },
   "temp": {
     "filter": {

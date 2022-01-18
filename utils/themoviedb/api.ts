@@ -177,6 +177,7 @@ export class Client {
       trailers: en.videos ? this.getTrailers(en.videos) : null,
       ratings: this.ratings({ external_ids, vote_average: en.vote_average, vote_count: en.vote_count }),
       popularity: en.popularity,
+      v: 0,
     };
   }
 
@@ -291,6 +292,7 @@ export class Client {
     return {
       ...adapted,
       state,
+      v: 0,
     };
   }
 

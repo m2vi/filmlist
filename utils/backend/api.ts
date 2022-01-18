@@ -104,14 +104,10 @@ export class Api {
         includeCredits: config?.includeCredits || includeCredits,
         sort: {
           key:
-            typeof config?.sort_key === 'boolean'
-              ? undefined
-              : typeof config?.sort_key === 'undefined'
-              ? `name.${locale}`
-              : config?.sort_key,
-          order: typeof config?.sort_key === 'undefined' ? (config?.reverse ? 1 : -1) : config?.reverse ? -1 : 1,
+            typeof config?.sort_key === 'boolean' ? 'index' : typeof config?.sort_key === 'undefined' ? `name.${locale}` : config?.sort_key,
+          order: config?.reverse ? 1 : -1,
         },
-        slice: [start ? start : 0, end ? end : start + 75],
+        slice: [start ? start : 0, end ? end : 75],
       }
     );
 
@@ -121,8 +117,8 @@ export class Api {
       name: tab,
       route: `/${tab}`,
       length: items.length,
-      items: items.slice(start, end),
-      // items: items,
+      //  items: items.slice(start, end),
+      items: items,
       extra: extra ? extra : null,
       query: removeEmpty({
         tab,
@@ -229,14 +225,13 @@ export class Api {
     return mapped;
   }
 
-  getSort(sort: SortProps | undefined, overwrite: any = {}) {
+  getSort(sort: SortProps | undefined, invert: boolean = false) {
     if (!sort || !sort.key) return null;
 
     const order = sort.order ? sort.order : 1;
 
     return {
-      [sort.key]: order,
-      ...overwrite,
+      [sort.key]: invert ? (order === 1 ? -1 : 1) : order,
     };
   }
 
@@ -250,8 +245,9 @@ export class Api {
     items = await itemSchema.aggregate<ItemProps>([
       { $unset: includeCredits ? 'random_key' : 'credits' },
       { $match: Object.freeze({ ...filter }) },
-      /*   { $skip: slice![0] },
-      { $limit: slice![1] - slice![0] }, */
+      { ...(this.getSort(sort) ? { $sort: this.getSort(sort, true) } : { $skip: 0 }) },
+      { $skip: slice?.[0] ? slice[0] : 0 },
+      { $limit: slice?.[1] ? slice[1] - (slice?.[0] ? slice[0] : 0) : Number.MAX_SAFE_INTEGER },
       { ...(this.getSort(sort) ? { $sort: this.getSort(sort) } : { $skip: 0 }) },
     ]);
 
