@@ -229,6 +229,7 @@ export interface LogProps {
 export interface FindOptions {
   includeCredits?: boolean;
   sort?: SortProps;
+  slice?: [number, number];
 }
 
 export interface SortProps {

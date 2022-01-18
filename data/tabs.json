@@ -105,7 +105,11 @@
     "reverse": true
   },
   "temp": {
-    "sort_key": "id_db",
-    "reverse": true
+    "filter": {
+      "type": 0,
+      "state": -1
+    },
+    "sort_key": "release_date",
+    "hide_unreleased": true
   }
 }

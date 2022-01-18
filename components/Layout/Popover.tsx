@@ -10,6 +10,7 @@ import Link from 'next/link';
 
 const PopoverEl = () => {
   const [data, setData] = useState<NotificationItemProps[]>([]);
+  const [fetched, setFetched] = useState(false);
   const { locale } = useRouter();
 
   const fetchData = () => {
@@ -17,7 +18,10 @@ const PopoverEl = () => {
 
     api
       .getNotifications(locale)
-      .then((items) => setData(items))
+      .then((items) => {
+        setData(items);
+        setFetched(true);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -25,7 +29,7 @@ const PopoverEl = () => {
     <div className=' flex justify-end'>
       <Menu as='div' className='relative h-full'>
         {({ open }) => {
-          if (!(typeof window === 'undefined')) fetchData();
+          if (!(typeof window === 'undefined') && !fetched) fetchData();
 
           return (
             <>

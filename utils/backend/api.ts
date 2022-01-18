@@ -109,14 +109,12 @@ export class Api {
               : typeof config?.sort_key === 'undefined'
               ? `name.${locale}`
               : config?.sort_key,
-          order: typeof config?.sort_key === 'undefined' ? -1 : 1,
+          order: typeof config?.sort_key === 'undefined' ? (config?.reverse ? 1 : -1) : config?.reverse ? -1 : 1,
         },
+        slice: [start ? start : 0, end ? end : start + 75],
       }
     );
 
-    items = config?.sort_key === 'shuffle' ? _.shuffle(items) : items;
-
-    items = config?.reverse ? items.reverse() : items;
     items = dontFrontend ? items : this.prepareForFrontend(items, locale);
 
     return {
@@ -124,6 +122,7 @@ export class Api {
       route: `/${tab}`,
       length: items.length,
       items: items.slice(start, end),
+      // items: items,
       extra: extra ? extra : null,
       query: removeEmpty({
         tab,
@@ -230,27 +229,31 @@ export class Api {
     return mapped;
   }
 
-  getSort(sort: SortProps | undefined) {
-    if (!sort || !sort.key) return {};
+  getSort(sort: SortProps | undefined, overwrite: any = {}) {
+    if (!sort || !sort.key) return null;
+
+    const order = sort.order ? sort.order : 1;
 
     return {
-      [sort.key]: sort.order ? sort.order : 1,
+      [sort.key]: order,
+      ...overwrite,
     };
   }
 
-  async find(filter: FilterQuery<ItemProps>, { includeCredits, sort }: FindOptions = { includeCredits: false }): Promise<ItemProps[]> {
+  async find(
+    filter: FilterQuery<ItemProps>,
+    { includeCredits, sort, slice }: FindOptions = { includeCredits: false }
+  ): Promise<ItemProps[]> {
     await this.init();
     let items = [];
 
-    if (includeCredits) {
-      items = await itemSchema.find(Object.freeze({ ...filter })).lean<any>();
-    } else {
-      items = await itemSchema
-        .find(Object.freeze({ ...filter }))
-        .select('-credits')
-        .sort(this.getSort(sort))
-        .lean<any>();
-    }
+    items = await itemSchema.aggregate<ItemProps>([
+      { $unset: includeCredits ? 'random_key' : 'credits' },
+      { $match: Object.freeze({ ...filter }) },
+      /*   { $skip: slice![0] },
+      { $limit: slice![1] - slice![0] }, */
+      { ...(this.getSort(sort) ? { $sort: this.getSort(sort) } : { $skip: 0 }) },
+    ]);
 
     return items;
   }
@@ -454,27 +457,38 @@ export class Api {
     const rng = seedRandom(seed);
     const { browseIds } = genres;
     const id = shuffle.shuffle(browseIds, rng())[index];
-    const tab = await this.getTab({
-      tab: '',
-      locale,
-      start: 0,
-      end: 20,
-      purpose: 'browse',
-      custom_config: {
-        hide_unreleased: true,
-        filter: {
+
+    const objectIds = shuffle
+      .shuffle(
+        await this.getIDs({
           genre_ids: id,
-        },
-        sort_key: 'shuffle',
-      },
-    });
+          ...this.getReleaseConfig({
+            hide_unreleased: true,
+          }),
+        }),
+        rng()
+      )
+      .slice(0, 20);
+
+    const tab = this.prepareForFrontend(await itemSchema.find({ _id: { $in: objectIds } }).lean(), locale);
 
     return {
       length: tab.length,
       name: genres.getName(id),
       route: `/genre/${id}`,
-      items: tab.items,
+      items: tab,
     };
+  }
+
+  async getIDs(filter: FilterQuery<ItemProps>) {
+    const data = await itemSchema
+      .find(filter ? filter : {})
+      .select('_id')
+      .lean();
+
+    const arr = data.map(({ _id }) => _id);
+
+    return arr;
   }
 
   async getPersons(locale: string, start: number, end: number, default_items?: ItemProps[]) {
