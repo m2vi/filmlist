@@ -150,12 +150,6 @@ export class Api {
 
     return data;
   }
-
-  async getTrends() {
-    const data = await basicFetch(`/api/manage/trends`);
-
-    return data;
-  }
 }
 
 export const api = new Api();

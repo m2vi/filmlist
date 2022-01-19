@@ -14,20 +14,10 @@ const Home = ({ ...props }) => {
       <div className='w-full items-center py-11 px-120 max-w-screen-2xl'>
         <CarouselAsync name='my list' func={async () => await frontend.getTab({ tab: 'my list', locale: locale!, start: 0, end: 20 })} />
         <CarouselAsync name='latest' func={async () => await frontend.getTab({ tab: 'latest', locale: locale!, start: 0, end: 20 })} />
-        {!Math.floor(props?.seed * 3) ? (
-          <CarouselAsync
-            href='/tv/popular'
-            name='popular'
-            func={async () => await frontend.getTMDBTab({ tab: 'popular', type: 'tv', locale: locale!, page: 1 })}
-          />
-        ) : (
-          <CarouselAsync
-            href='/movie/popular'
-            name='popular'
-            func={async () => await frontend.getTMDBTab({ tab: 'popular', type: 'movie', locale: locale!, page: 1 })}
-          />
-        )}
-
+        <CarouselAsync
+          name='trending'
+          func={async () => await frontend.getTMDBTab({ tab: 'trending', type: 'all', locale: locale!, page: 0 })}
+        />
         <CarouselAsync name='soon' func={async () => await frontend.getTab({ tab: 'soon', locale: locale!, start: 0, end: 20 })} />
 
         {Array.from({ length: 5 }).map((v, i) => {

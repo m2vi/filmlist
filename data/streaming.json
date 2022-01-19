@@ -4,6 +4,41 @@
       "name": "netflix",
       "homepage": "https://netflix.com/",
       "logo": "/9A1JSVmSxsyaBK4SUFsYVqbAYfW.jpg"
+    },
+    {
+      "name": "soap2Day",
+      "homepage": "https://s2dfree.de/",
+      "logo": null
+    },
+    {
+      "name": "nima4K",
+      "homepage": "https://nima4k.org/",
+      "logo": null
+    },
+    {
+      "name": "burning Series",
+      "homepage": "http://bs.to/",
+      "logo": null
+    },
+    {
+      "name": "filmpalast.to",
+      "homepage": "https://filmpalast.to/",
+      "logo": null
+    },
+    {
+      "name": "streamKiste.tv",
+      "homepage": "https://streamkiste.tv/",
+      "logo": null
+    },
+    {
+      "name": "movieking.cc",
+      "homepage": "https://movieking.cc/",
+      "logo": null
+    },
+    {
+      "name": "kinox.to",
+      "homepage": "https://kinox.to/",
+      "logo": null
     }
   ],
   "important": ["amazon video", "apple itunes", "amazon prime video", "crunchyroll", "disney plus", "apple tv plus"]

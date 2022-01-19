@@ -27,11 +27,13 @@
         "watched": "Watched",
         "temp": "Temporary Tab",
         "top-rated": "Top rated",
+        "bottom-rated": "Bottom rated",
         "popular": "Popular",
 
         "none": "Unedited",
         "search": "Search",
         "trends": "Trends",
+        "trending": "Trends",
 
         "action": "Action",
         "action & adventure": "Action & Adventure",

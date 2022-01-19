@@ -123,6 +123,10 @@ export class Client {
     return (MovieDbTypeEnum[type] as any) === MovieDbTypeEnum.movie || type.toString() === '1';
   }
 
+  isTV(type: any) {
+    return (MovieDbTypeEnum[type] as any) === MovieDbTypeEnum.tv || type.toString() === '0';
+  }
+
   async getBase(id: number, type: MovieDbTypeEnum) {
     const params = {
       id,
@@ -410,11 +414,14 @@ export class Client {
 
   async getTrends({ locale, type }: Partial<GetTMDBTabProps>) {
     const isMovie = this.isMovie(type);
-    const data = (await api.trending({ language: locale, time_window: 'day', media_type: isMovie ? 'movie' : 'tv' })).results;
+    const isTV = this.isTV(type);
+
+    const data = (await api.trending({ language: locale, time_window: 'day', media_type: isMovie ? 'movie' : isTV ? 'tv' : 'all' }))
+      .results;
     const items = backend.prepareForFrontend(await this.adaptTabs(this.getTabeBase(data, data))).reverse();
     return {
       name: 'trending',
-      route: `/${isMovie ? 'movie' : 'tv'}/trending`,
+      route: isMovie || isTV ? `/${isMovie ? 'movie' : 'tv'}/trending` : null,
       length: items?.length,
       items: items ? items : [],
       purpose: 'tmdb-tab',
