@@ -5,6 +5,7 @@ import {
   FrontendItemProps,
   GetBrowseGenreProps,
   GetTabProps,
+  GetTMDBTabProps,
   ItemProps,
   NotificationItemProps,
   ProviderEntryProps,
@@ -57,7 +58,7 @@ export class Api {
     return data;
   }
 
-  async getTMDBTab({ ...props }: GetTabProps) {
+  async getTMDBTab({ ...props }: GetTMDBTabProps) {
     const params = qs.stringify({ ...props });
     const data = await basicFetch(`/api/manage/tmdb_tab?${params}`);
 
