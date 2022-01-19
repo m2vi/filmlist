@@ -1,17 +1,21 @@
 import backend from '@utils/backend/api';
-import { CreditProps, ItemProps, MovieDbTypeEnum, ProviderEntryProps, ProviderProps } from '@utils/types';
-import { validateEnv } from '@utils/utils';
+import { CreditProps, GetTMDBTabProps, ItemProps, MovieDbTypeEnum, ProviderEntryProps, ProviderProps } from '@utils/types';
+import { removeEmpty, validateEnv } from '@utils/utils';
 import { MovieDb } from 'moviedb-promise';
 import companies from '@data/companies.json';
 import _, { shuffle } from 'underscore';
 import {
   CreditsResponse,
+  DiscoverMovieRequest,
+  DiscoverTvRequest,
   IdRequestParams,
   MovieImagesResponse,
   MovieResponse,
+  MovieResult,
   MovieTranslationsResponse,
   ShowResponse,
   TvImagesResponse,
+  TvResult,
   TvTranslationsResponse,
   VideosResponse,
 } from 'moviedb-promise/dist/request-types';
@@ -113,6 +117,10 @@ export class Client {
     };
 
     return result;
+  }
+
+  isMovie(type: any) {
+    return (MovieDbTypeEnum[type] as any) === MovieDbTypeEnum.movie || type.toString() === '1';
   }
 
   async getBase(id: number, type: MovieDbTypeEnum) {
@@ -292,7 +300,6 @@ export class Client {
     return {
       ...adapted,
       state,
-      v: 0,
     };
   }
 
@@ -413,6 +420,41 @@ export class Client {
     const avg = sum / filtered.length || 0;
 
     return avg;
+  }
+
+  async getTMDBTab({ tab, type, locale, page, purpose }: GetTMDBTabProps) {
+    const isMovie = this.isMovie(type);
+    let params = { language: locale, page } as DiscoverMovieRequest | DiscoverTvRequest;
+    let items = [] as TvResult[] | MovieResult[] | undefined;
+
+    switch (tab) {
+      case 'top-rated':
+        params = { language: locale, 'vote_count.gte': 500, sort_by: 'vote_average.desc', page };
+        break;
+      case 'popular':
+        params = { language: locale, sort_by: 'popularity.desc', page };
+        break;
+    }
+
+    items = (await (isMovie ? api.discoverMovie(params as any) : api.discoverTv(params as any))).results;
+
+    items = await this.adaptTabs(this.getTabeBase(items, items));
+
+    const frontend = backend.prepareForFrontend(items as any, locale).reverse();
+    return {
+      name: tab,
+      route: `/${isMovie ? 'movie' : 'tv'}/${tab}`,
+      length: items?.length,
+      items: frontend ? frontend : [],
+      purpose: purpose ? purpose : 'tmdb-tab',
+      query: removeEmpty({
+        tab,
+        type,
+        locale,
+        page,
+        purpose,
+      }),
+    };
   }
 }
 

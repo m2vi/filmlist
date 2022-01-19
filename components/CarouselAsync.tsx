@@ -12,9 +12,10 @@ export interface CarouselAsyncProps {
     length: number;
     items: FrontendItemProps[];
   }>;
+  href?: string;
 }
 
-const CarouselAsync = ({ func, name }: CarouselAsyncProps) => {
+const CarouselAsync = ({ func, name, href }: CarouselAsyncProps) => {
   const [section, setSection] = useState<BrowseSectionProps>({
     items: placeholderCards(20) as CardProps[],
     length: 20,
@@ -30,7 +31,7 @@ const CarouselAsync = ({ func, name }: CarouselAsyncProps) => {
 
   if (section.items.length === 0) return null;
 
-  return <Carousel section={section} />;
+  return <Carousel section={section} href={href} />;
 };
 
 export default CarouselAsync;

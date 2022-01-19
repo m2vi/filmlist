@@ -1,4 +1,4 @@
-import { Connection, FilterQuery, UpdateQuery } from 'mongoose';
+import { Connection, FilterQuery, PipelineStage, UpdateQuery } from 'mongoose';
 import { connectToDatabase } from '../database';
 import { removeDuplicates, sortByKey } from '../array';
 import tabs from '@data/tabs.json';
@@ -107,7 +107,7 @@ export class Api {
             typeof config?.sort_key === 'boolean' ? 'index' : typeof config?.sort_key === 'undefined' ? `name.${locale}` : config?.sort_key,
           order: config?.reverse ? 1 : -1,
         },
-        slice: [start ? start : 0, end ? end : 75],
+        slice: [start ? start : 0, end ? end : 50],
       }
     );
 
@@ -117,7 +117,6 @@ export class Api {
       name: tab,
       route: `/${tab}`,
       length: items.length,
-      //  items: items.slice(start, end),
       items: items,
       extra: extra ? extra : null,
       query: removeEmpty({
@@ -225,13 +224,18 @@ export class Api {
     return mapped;
   }
 
-  getSort(sort: SortProps | undefined, invert: boolean = false) {
-    if (!sort || !sort.key) return null;
+  getSort(sort: SortProps | undefined, invert: boolean = false): PipelineStage {
+    if (!sort || !sort.key)
+      return {
+        $skip: 0,
+      };
 
     const order = sort.order ? sort.order : 1;
 
     return {
-      [sort.key]: invert ? (order === 1 ? -1 : 1) : order,
+      $sort: {
+        [sort.key]: invert ? (order === 1 ? -1 : 1) : order,
+      },
     };
   }
 
@@ -244,11 +248,11 @@ export class Api {
 
     items = await itemSchema.aggregate<ItemProps>([
       { $unset: includeCredits ? 'random_key' : 'credits' },
-      { $match: Object.freeze({ ...filter }) },
-      { ...(this.getSort(sort) ? { $sort: this.getSort(sort, true) } : { $skip: 0 }) },
+      { $match: { index: { $ne: null }, ...Object.freeze({ ...filter }) } },
+      this.getSort(sort, true),
       { $skip: slice?.[0] ? slice[0] : 0 },
       { $limit: slice?.[1] ? slice[1] - (slice?.[0] ? slice[0] : 0) : Number.MAX_SAFE_INTEGER },
-      { ...(this.getSort(sort) ? { $sort: this.getSort(sort) } : { $skip: 0 }) },
+      this.getSort(sort),
     ]);
 
     return items;
@@ -272,7 +276,10 @@ export class Api {
 
   async findCollection(id_db: number, locale: string) {
     const { id, name, poster_path, backdrop_path, overview, parts } = await client.api.collectionInfo({ id: id_db, language: locale });
-    const local = await this.find({ 'collection.id': id_db });
+    const local = await this.find(
+      { 'collection.id': id_db },
+      { slice: [0, Number.MAX_SAFE_INTEGER], sort: { key: 'release_date', order: -1 } }
+    );
     const items = sortByKey(
       this.prepareForFrontend(await client.adaptTabs(client.getTabeBase(parts, parts)), locale),
       'release_date'
@@ -454,19 +461,24 @@ export class Api {
     const { browseIds } = genres;
     const id = shuffle.shuffle(browseIds, rng())[index];
 
-    const objectIds = shuffle
-      .shuffle(
-        await this.getIDs({
-          genre_ids: id,
-          ...this.getReleaseConfig({
-            hide_unreleased: true,
-          }),
-        }),
-        rng()
-      )
-      .slice(0, 20);
+    const ids = await this.getIDs({
+      genre_ids: id,
+      ...this.getReleaseConfig({
+        hide_unreleased: true,
+      }),
+    });
+    const objectIds = shuffle.shuffle(ids, rng()).slice(0, 20);
 
-    const tab = this.prepareForFrontend(await itemSchema.find({ _id: { $in: objectIds } }).lean(), locale);
+    const tab = shuffle.shuffle(
+      this.prepareForFrontend(
+        await itemSchema
+          .find({ _id: { $in: objectIds } })
+          .select('-credits')
+          .lean(),
+        locale
+      ),
+      rng()
+    );
 
     return {
       length: tab.length,
@@ -482,7 +494,7 @@ export class Api {
       .select('_id')
       .lean();
 
-    const arr = data.map(({ _id }) => _id);
+    const arr = data.map(({ _id }) => _id?.toString()).filter((id) => id);
 
     return arr;
   }

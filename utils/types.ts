@@ -30,6 +30,14 @@ export interface GetTabProps {
   purpose?: string;
 }
 
+export interface GetTMDBTabProps {
+  tab: string;
+  type: any;
+  locale: string;
+  page: number;
+  purpose?: string;
+}
+
 export interface CastProps {
   character: string;
   gender: number | null;

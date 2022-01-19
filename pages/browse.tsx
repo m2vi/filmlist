@@ -24,6 +24,7 @@ const Home = ({ ...props }) => {
               func={async () => {
                 return await frontend.getBrowseGenre({ locale: locale!, index: i, seed: props.seed });
               }}
+              href='/genre/[id]'
               key={i}
             />
           );
@@ -41,7 +42,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       ...(await serverSideTranslations(context.locale!, ['common', 'footer'])),
-      seed: new Date().getTime(),
+      seed: context?.query?.seed ? context?.query?.seed : new Date().getTime(),
     },
   };
 };

@@ -57,6 +57,13 @@ export class Api {
     return data;
   }
 
+  async getTMDBTab({ ...props }: GetTabProps) {
+    const params = qs.stringify({ ...props });
+    const data = await basicFetch(`/api/manage/tmdb_tab?${params}`);
+
+    return data;
+  }
+
   streamableOnProvider(name: string, providers: ProviderEntryProps | null): boolean {
     if (!providers) return false;
     const results = _.find(providers?.providers!, { name });
@@ -65,8 +72,13 @@ export class Api {
 
   async fetchMoreData(data: any, items: any[]) {
     try {
-      const res = await this.getTab({ ...(data.query ? data.query : {}), start: items.length, end: items.length + 75 });
-      return res.items ? res.items : [];
+      if (data?.purpose === 'tmdb-tab') {
+        const res = await this.getTMDBTab({ ...(data.query ? data.query : {}), page: items?.length / 20 + 1 });
+        return res?.items ? res?.items : [];
+      } else {
+        const res = await this.getTab({ ...(data.query ? data.query : {}), start: items.length, end: items.length + 70 });
+        return res?.items ? res?.items : [];
+      }
     } catch (error) {
       return [];
     }
@@ -101,8 +113,9 @@ export class Api {
     return director;
   }
 
-  getMainCrew({ credits }: ItemProps) {
-    if (!credits) return null;
+  getMainCrew(item: ItemProps) {
+    if (!item?.credits) return null;
+    const { credits } = item;
 
     const find = (job: string) => _.filter(credits.crew, { job });
 

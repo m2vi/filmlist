@@ -5,7 +5,7 @@ const withPWA = require('next-pwa');
 module.exports = {
   onDemandEntries: {
     maxInactiveAge: 86400 * 1000,
-    pagesBufferLength: 115,
+    pagesBufferLength: 200,
   },
   i18n,
   images: {

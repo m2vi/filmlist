@@ -16,12 +16,21 @@ export const searchArray = (array: any[], key: string, value: any) => {
   }
 };
 
-export const shuffle = (array: any[]) => {
-  return _.shuffle(array);
-};
-
 export const removeArray = (array: any[], toRemove: any[]) => {
   return array.filter((v) => {
     return !toRemove.includes(v);
   });
 };
+
+export const shuffle = (inArr: any[], seed: any, unshuffle = false) => {
+    let outArr = Array.from(inArr),
+      len = inArr.length;
+
+    let swap = (a: any, b: any) => ([outArr[a], outArr[b]] = [outArr[b], outArr[a]]);
+
+    for (var i = unshuffle ? len - 1 : 0; (unshuffle && i >= 0) || (!unshuffle && i < len); i += unshuffle ? -1 : 1)
+      swap(seed[i % seed.length] % len, i);
+
+    return outArr;
+  },
+  unshuffle = (inArr: any[], seed: any) => shuffle(inArr, seed, true);

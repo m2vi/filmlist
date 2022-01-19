@@ -32,7 +32,7 @@ type AppPropsWithLayout = AppProps & {
 
 const SeoWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
-    <>
+    <div className='w-full h-full'>
       <ToastContainer
         position='top-right'
         autoClose={5000}
@@ -48,7 +48,7 @@ const SeoWrapper = ({ children }: { children: React.ReactNode }) => {
       {/*  <Manage /> */}
       <NextSeo defaultTitle='Filmlist' />
       {children}
-    </>
+    </div>
   );
 };
 

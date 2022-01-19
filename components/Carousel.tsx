@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import Card from './Card';
 import config from '@data/config.json';
 
-const Carousel = ({ section: { items, length, name, route } }: { section: BrowseSectionProps }) => {
+const Carousel = ({ section: { items, length, name, route }, href }: { section: BrowseSectionProps; href?: string }) => {
   const { t } = useTranslation();
 
   return (
@@ -13,7 +13,7 @@ const Carousel = ({ section: { items, length, name, route } }: { section: Browse
       {name ? (
         <>
           {route ? (
-            <Link as={route} href={'/[tab]'} prefetch={false}>
+            <Link as={route} href={href ? href : '/[tab]'} prefetch={false}>
               <a className='carousel-title hover:text-primary-200'>
                 {t(`pages.filmlist.menu.${name.toLowerCase()}`, { defaultValue: name })}
               </a>
