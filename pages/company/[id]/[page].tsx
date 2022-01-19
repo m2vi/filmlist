@@ -1,6 +1,6 @@
 import Scroll from '@components/Scroll';
 import api from '@utils/backend/api';
-import client from '@utils/themoviedb/api';
+import client from '@utils/tmdb/api';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useEffect } from 'react';

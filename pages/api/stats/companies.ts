@@ -1,4 +1,4 @@
-import { api } from '@utils/themoviedb/api';
+import { api } from '@utils/tmdb/api';
 import companies from '@data/companies.json';
 import type { NextApiRequest, NextApiResponse } from 'next';
 

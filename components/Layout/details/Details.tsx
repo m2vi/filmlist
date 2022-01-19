@@ -3,7 +3,7 @@ import Rating from '@components/Rating';
 import Title from '@components/Title';
 import { useTranslation } from 'next-i18next';
 import moment from 'moment';
-import genres from '@utils/themoviedb/genres';
+import genres from '@utils/tmdb/genres';
 import Link from 'next/link';
 import frontend from '@utils/frontend/api';
 import { useRouter } from 'next/router';

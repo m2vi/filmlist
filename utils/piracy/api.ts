@@ -1,6 +1,6 @@
 import { basicFetch } from '@utils/fetch';
 import { ItemProps } from '@utils/types';
-import tmdb from '@utils/themoviedb/api';
+import tmdb from '@utils/tmdb/api';
 import querystring from 'qs';
 
 export class Api {

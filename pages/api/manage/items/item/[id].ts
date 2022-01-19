@@ -1,4 +1,4 @@
-import client from '@utils/themoviedb/api';
+import client from '@utils/tmdb/api';
 import { stringToBoolean } from '@utils/utils';
 import type { NextApiRequest, NextApiResponse } from 'next';
 

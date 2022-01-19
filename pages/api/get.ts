@@ -1,4 +1,4 @@
-import { client } from '@utils/themoviedb/api';
+import { client } from '@utils/tmdb/api';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

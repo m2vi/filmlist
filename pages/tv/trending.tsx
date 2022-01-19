@@ -18,7 +18,7 @@ export const getServerSideProps: GetServerSideProps = async ({ locale, query }: 
   return {
     props: {
       ...(await serverSideTranslations(locale!, ['common', 'footer'])),
-      data: await api.getTMDBTab({ tab: 'popular', locale, page: 1, type: 'tv' }),
+      data: await api.getTMDBTab({ tab: 'trending', locale, page: 0, type: 'tv' }),
     },
   };
 };

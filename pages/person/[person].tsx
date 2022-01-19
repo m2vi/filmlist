@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import client from '@utils/themoviedb/api';
+import client from '@utils/tmdb/api';
 import Person from '@components/Layout/details/Person';
 
 const Handler = ({ ...props }) => <Person {...props} />;

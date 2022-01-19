@@ -1,6 +1,6 @@
 import itemSchema from '@models/itemSchema';
 import api from '@utils/backend/api';
-import client from '@utils/themoviedb/api';
+import client from '@utils/tmdb/api';
 import { LogProps } from '@utils/types';
 import moment from 'moment';
 import type { NextApiRequest, NextApiResponse } from 'next';

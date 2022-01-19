@@ -2,7 +2,7 @@ import { ItemProps, MovieDbTypeEnum } from '@utils/types';
 import Fuse from 'fuse.js';
 import { matchSorter } from 'match-sorter';
 import backend from './api';
-import client, { api } from '../themoviedb/api';
+import client, { api } from '../tmdb/api';
 
 interface SearchOptions {
   items?: ItemProps[];

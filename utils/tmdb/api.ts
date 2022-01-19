@@ -329,20 +329,6 @@ export class Client {
     );
   }
 
-  async getTrends(locale: string) {
-    //! CHECK
-    const trending = (await api.trending({ language: locale, time_window: 'day', media_type: 'all' })).results;
-    const base = this.getTabeBase(trending, trending);
-    const adapted = await this.adaptTabs(base);
-
-    return {
-      length: adapted.length,
-      name: 'trends',
-      route: '/trends',
-      items: adapted,
-    };
-  }
-
   async getCompany(id: number) {
     const jr = _.find(companies.data, { id })!;
     if (!jr) return null;
@@ -422,8 +408,43 @@ export class Client {
     return avg;
   }
 
+  async getTrends({ locale, type }: Partial<GetTMDBTabProps>) {
+    const isMovie = this.isMovie(type);
+    const data = (await api.trending({ language: locale, time_window: 'day', media_type: isMovie ? 'movie' : 'tv' })).results;
+    const items = backend.prepareForFrontend(await this.adaptTabs(this.getTabeBase(data, data))).reverse();
+    return {
+      name: 'trending',
+      route: `/${isMovie ? 'movie' : 'tv'}/trending`,
+      length: items?.length,
+      items: items ? items : [],
+      purpose: 'tmdb-tab',
+      query: removeEmpty({
+        tab: 'trending',
+        type,
+        locale,
+        page: 0,
+      }),
+    };
+  }
+
   async getTMDBTab({ tab, type, locale, page, purpose }: GetTMDBTabProps) {
     const isMovie = this.isMovie(type);
+    if (tab === 'trending' && page === 2)
+      return {
+        name: tab,
+        route: `/${isMovie ? 'movie' : 'tv'}/${tab}`,
+        length: 0,
+        items: [],
+        purpose: purpose ? purpose : 'tmdb-tab',
+        query: removeEmpty({
+          tab,
+          type,
+          locale,
+          page,
+          purpose,
+        }),
+      };
+
     let params = { language: locale, page } as DiscoverMovieRequest | DiscoverTvRequest;
     let items = [] as TvResult[] | MovieResult[] | undefined;
 
@@ -434,6 +455,8 @@ export class Client {
       case 'popular':
         params = { language: locale, sort_by: 'popularity.desc', page };
         break;
+      case 'trending':
+        return await this.getTrends({ locale, type });
     }
 
     items = (await (isMovie ? api.discoverMovie(params as any) : api.discoverTv(params as any))).results;

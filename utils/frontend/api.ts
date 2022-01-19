@@ -16,7 +16,7 @@ import _ from 'underscore';
 import momentDurationFormatSetup from 'moment-duration-format';
 import qs from 'qs';
 import { i18n } from 'next-i18next';
-import genres from '@utils/themoviedb/genres';
+import genres from '@utils/tmdb/genres';
 
 momentDurationFormatSetup(moment as any);
 

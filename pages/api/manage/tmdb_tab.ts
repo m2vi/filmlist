@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import api from '@utils/themoviedb/api';
+import api from '@utils/tmdb/api';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { ...props } = Object.freeze(req.query) as any;

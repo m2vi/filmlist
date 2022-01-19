@@ -19,8 +19,8 @@ import {
 } from '../types';
 import jwt from 'jsonwebtoken';
 import cookies from 'js-cookie';
-import client from '@utils/themoviedb/api';
-import genres from '@utils/themoviedb/genres';
+import client from '@utils/tmdb/api';
+import genres from '@utils/tmdb/genres';
 import { removeEmpty } from '@utils/utils';
 import { performance } from 'perf_hooks';
 import shuffle from 'shuffle-seed';

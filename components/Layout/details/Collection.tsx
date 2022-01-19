@@ -6,7 +6,7 @@ import { useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
 import Carousel from '@components/Carousel';
 import Link from 'next/link';
-import genres from '@utils/themoviedb/genres';
+import genres from '@utils/tmdb/genres';
 
 const Collection = ({ data }: any) => {
   const { t } = useTranslation();

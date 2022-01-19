@@ -1,6 +1,6 @@
 import { basicFetch } from '@utils/fetch';
 import { stringToBoolean } from '@utils/utils';
-import client from '@utils/themoviedb/api';
+import client from '@utils/tmdb/api';
 
 export class Api {
   constructor(private baseUrl = 'https://www.omdbapi.com/') {}

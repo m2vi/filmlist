@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { api } from '@utils/themoviedb/api';
+import { api } from '@utils/tmdb/api';
 import { removeDuplicates, sortByKey } from '@utils/array';
 import _ from 'underscore';
 
