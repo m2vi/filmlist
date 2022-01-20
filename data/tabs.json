@@ -29,6 +29,26 @@
     "reverse": true,
     "hide_unreleased": true
   },
+  "wfs": {
+    "filter": {
+      "state": -2
+    },
+    "sort_key": false,
+    "reverse": true,
+    "hide_unreleased": true
+  },
+  "default": {
+    "filter": {
+      "state": 0
+    },
+    "sort_key": false,
+    "reverse": true
+  },
+  "too young": {
+    "filter": {
+      "state": 18
+    }
+  },
   "watched": {
     "filter": {
       "state": {
@@ -120,10 +140,11 @@
   },
   "temp": {
     "filter": {
-      "type": 0,
-      "state": -1
+      "state": -1,
+      "watchProviders.providers": null
     },
     "sort_key": "release_date",
+    "reverse": true,
     "hide_unreleased": true
   }
 }

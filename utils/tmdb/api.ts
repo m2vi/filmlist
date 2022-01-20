@@ -377,12 +377,13 @@ export class Client {
 
   async getPersonItems(id: number, locale: string) {
     return await backend.getTab({
-      tab: 'none',
+      tab: '',
       custom_config: {
         filter: {
           $or: [{ 'credits.cast.id': id }, { 'credits.crew.id': id }],
         },
         sort_key: 'ratings.tmdb.vote_count',
+        reverse: true,
       },
       locale,
       start: 0,

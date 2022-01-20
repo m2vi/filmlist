@@ -29,6 +29,8 @@
         "top-rated": "Bestbewertet",
         "bottom-rated": "Schlecht bewertet",
         "popular": "Beliebt",
+        "wfs": "Warten auf Stream",
+        "default": "Normale Einträge",
 
         "none": "Unbearbeitet",
         "search": "Suche",

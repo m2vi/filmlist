@@ -198,7 +198,7 @@ export class Api {
 
     const item = await this.findOne(filter, true);
     await itemSchema.deleteOne(item);
-    const doc = new itemSchema(item);
+    const doc = new itemSchema({ ...item, index: null });
     return await doc.save();
   }
 
@@ -245,10 +245,9 @@ export class Api {
   ): Promise<ItemProps[]> {
     await this.init();
     let items = [];
-
     items = await itemSchema.aggregate<ItemProps>([
-      { $unset: includeCredits ? 'random_key' : 'credits' },
       { $match: { index: { $ne: null }, ...Object.freeze({ ...filter }) } },
+      { $unset: includeCredits ? 'random_key' : 'credits' },
       this.getSort(sort, true),
       { $skip: slice?.[0] ? slice[0] : 0 },
       { $limit: slice?.[1] ? slice[1] - (slice?.[0] ? slice[0] : 0) : Number.MAX_SAFE_INTEGER },

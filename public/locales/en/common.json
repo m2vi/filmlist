@@ -29,6 +29,8 @@
         "top-rated": "Top rated",
         "bottom-rated": "Bottom rated",
         "popular": "Popular",
+        "wfs": "Waiting for stream",
+        "default": "Default entries",
 
         "none": "Unedited",
         "search": "Search",
