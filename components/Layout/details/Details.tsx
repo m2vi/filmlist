@@ -5,7 +5,7 @@ import { useTranslation } from 'next-i18next';
 import moment from 'moment';
 import genres from '@utils/tmdb/genres';
 import Link from 'next/link';
-import frontend from '@utils/frontend/api';
+import frontend, { api } from '@utils/frontend/api';
 import { useRouter } from 'next/router';
 import CarouselAsync from '../../CarouselAsync';
 import { basicFetch } from '@utils/fetch';
@@ -168,10 +168,15 @@ const Details = ({ data }: any) => {
               <div className='flex flex-col mt-5'>
                 <span className='text-base text-primary-300 mb-1 l-1'>{t('details.subscribedProviders')}</span>
                 <span className='text-xl text-primary-200'>
-                  {data?.subscribedProvider?.map(({ name, url }: any, i: number) => {
+                  {data?.subscribedProvider?.map(({ name, qs }: any, i: number) => {
                     return (
                       <span key={i}>
-                        <a href={url} target='_blank' rel='noopener noreferrer' className='text-xl text-primary-200 hover:text-accent'>
+                        <a
+                          href={api.justwatch(qs)}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='text-xl text-primary-200 hover:text-accent'
+                        >
                           {name}
                         </a>
 
@@ -185,11 +190,11 @@ const Details = ({ data }: any) => {
               <div className='flex flex-col mt-5'>
                 <span className='text-base text-primary-300 mb-1 l-1'>{t('details.providers')}</span>
                 <span className='text-xl text-primary-200'>
-                  {data?.importantProviders?.map(({ name, url }: any, i: number) => {
+                  {data?.importantProviders?.map(({ name, qs }: any, i: number) => {
                     return (
                       <span key={i}>
                         <a
-                          href={url}
+                          href={api.justwatch(qs)}
                           target='_blank'
                           rel='noopener noreferrer'
                           className='text-xl text-primary-200 hover:text-accent cursor-pointer'

@@ -71,6 +71,10 @@ export class Api {
     return Boolean(results);
   }
 
+  justwatch(qs: string) {
+    return `/api/watch/redirect?${qs}`;
+  }
+
   async fetchMoreData(data: any, items: any[]) {
     try {
       if (data?.purpose === 'tmdb-tab') {

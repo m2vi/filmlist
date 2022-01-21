@@ -1,4 +1,4 @@
-import { Connection, FilterQuery, PipelineStage, UpdateQuery } from 'mongoose';
+import { Connection, FilterQuery, Model, PipelineStage, UpdateQuery } from 'mongoose';
 import { connectToDatabase } from '../database';
 import { removeDuplicates, sortByKey } from '../array';
 import tabs from '@data/tabs.json';
@@ -38,10 +38,12 @@ export class Api {
   genres: GenreProps[];
   tabs: Tabs;
   jwt: Jwt;
+  schema: Model<ItemProps, {}, {}, {}>;
   constructor() {
     this.genres = genres.array;
     this.tabs = tabs;
     this.jwt = new Jwt();
+    this.schema = itemSchema;
   }
 
   private async init(): Promise<Connection | undefined> {
@@ -197,8 +199,8 @@ export class Api {
     if (!(_.has(filter, 'type') || _.has(filter, 'id_db'))) return this.error('Filter sucks');
 
     const item = await this.findOne(filter, true);
-    await itemSchema.deleteOne(item);
-    const doc = new itemSchema({ ...item, index: null });
+    await this.schema.deleteOne(item);
+    const doc = new this.schema({ ...item, index: null });
     return await doc.save();
   }
 
@@ -208,14 +210,14 @@ export class Api {
 
     if (!(await this.exists(filter))) return this.error('Item does not exist');
 
-    return await itemSchema.deleteOne(filter);
+    return await this.schema.deleteOne(filter);
   }
 
   async deleteMany(filter: FilterQuery<ItemProps>) {
     await this.init();
     if (!(_.has(filter, 'type') || _.has(filter, 'id_db'))) return this.error('Filter sucks');
 
-    return await itemSchema.deleteMany(filter);
+    return await this.schema.deleteMany(filter);
   }
 
   prepareForFrontend(items: ItemProps[] = [], locale: string = 'en'): FrontendItemProps[] {
@@ -245,7 +247,7 @@ export class Api {
   ): Promise<ItemProps[]> {
     await this.init();
     let items = [];
-    items = await itemSchema.aggregate<ItemProps>([
+    items = await this.schema.aggregate<ItemProps>([
       { $match: { index: { $ne: null }, ...Object.freeze({ ...filter }) } },
       { $unset: includeCredits ? 'random_key' : 'credits' },
       this.getSort(sort, true),
@@ -262,9 +264,9 @@ export class Api {
     let item = [];
 
     if (includeCredits) {
-      item = await itemSchema.findOne(Object.freeze({ ...filter })).lean<any>();
+      item = await this.schema.findOne(Object.freeze({ ...filter })).lean<any>();
     } else {
-      item = await itemSchema
+      item = await this.schema
         .findOne(Object.freeze({ ...filter }))
         .select('-credits')
         .lean<any>();
@@ -346,7 +348,7 @@ export class Api {
       if (exists) return this.error('Already exists');
 
       const data = await client.get(id_db, type, { state });
-      const doc = new itemSchema(data);
+      const doc = new this.schema(data);
 
       return await doc.save();
     } catch (error: any) {
@@ -425,7 +427,7 @@ export class Api {
   async update(id: number, type: MovieDbTypeEnum) {
     const newData: any = await client.dataForUpdate(id, type);
 
-    const result = await itemSchema.updateOne({ id_db: id, type }, { ...newData });
+    const result = await this.schema.updateOne({ id_db: id, type }, { ...newData });
 
     return result;
   }
@@ -433,7 +435,7 @@ export class Api {
   async updateMany(filter: FilterQuery<ItemProps>, data: UpdateQuery<ItemProps>) {
     await this.init();
 
-    const result = await itemSchema.updateMany(filter, data);
+    const result = await this.schema.updateMany(filter, data);
 
     return result;
   }
@@ -470,7 +472,7 @@ export class Api {
 
     const tab = shuffle.shuffle(
       this.prepareForFrontend(
-        await itemSchema
+        await this.schema
           .find({ _id: { $in: objectIds } })
           .select('-credits')
           .lean(),
@@ -488,7 +490,7 @@ export class Api {
   }
 
   async getIDs(filter: FilterQuery<ItemProps>) {
-    const data = await itemSchema
+    const data = await this.schema
       .find(filter ? filter : {})
       .select('_id')
       .lean();
@@ -548,7 +550,7 @@ export class Api {
   async backup() {
     await this.init();
 
-    return await itemSchema.find();
+    return await this.schema.find();
   }
 
   toJSON({ _id, ...props }: any): ItemProps {

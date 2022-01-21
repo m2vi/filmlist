@@ -140,17 +140,8 @@
   },
   "temp": {
     "filter": {
-      "state": -1,
-      "type": 1,
-      "genre_ids": {
-        "$nin": [16, 80, 27, 10749, 878, 12, 10752]
-      },
-      "ratings.tmdb.vote_average": {
-        "$gte": 7.5
-      },
-      "credits.cast.id": {
-        "$ne": 16483
-      }
+      "state": 2,
+      "type": 1
     },
     "sort_key": "ratings.tmdb.vote_average",
     "reverse": true,

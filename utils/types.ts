@@ -153,6 +153,11 @@ export type State = -1 | 1 | 2 | 3;
 // 2 - favoured
 // 3 - highlighted
 
+export interface BaseProps {
+  id: number;
+  type: number;
+}
+
 export interface InsertProps {
   id_db: number;
   type: MovieDbTypeEnum;

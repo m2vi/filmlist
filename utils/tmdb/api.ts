@@ -20,6 +20,7 @@ import {
   VideosResponse,
 } from 'moviedb-promise/dist/request-types';
 import streaming from '@data/streaming.json';
+import querystring from 'qs';
 
 export const api = new MovieDb(validateEnv('MOVIE_TOKEN'));
 
@@ -31,8 +32,9 @@ export class Client {
 
   async watchProviders(providers: any, isMovie: boolean, params: IdRequestParams): Promise<ProviderEntryProps | null> {
     try {
-      let AT = providers.results.AT;
+      let AT = providers?.results?.AT;
       if (!AT) AT = (await (isMovie ? api.movieWatchProviders(params) : api.tvWatchProviders(params))).results!.AT;
+
       if (!AT)
         return {
           url: null,
@@ -60,7 +62,7 @@ export class Client {
     }
   }
 
-  importantProviders({ watchProviders }: Partial<ItemProps>) {
+  importantProviders({ watchProviders, id_db, type }: Partial<ItemProps>) {
     if (!watchProviders?.providers) return [];
     const config = streaming;
 
@@ -69,7 +71,7 @@ export class Client {
         if (!config.important.includes(item.name!.toLowerCase())) return null;
         return {
           ...item,
-          url: watchProviders.url,
+          qs: querystring.stringify({ id: id_db, type, provider: item.name }),
         };
       })
       .filter((item) => item);
@@ -81,7 +83,7 @@ export class Client {
     const results = base?.release_dates?.results;
   }
 
-  subscribedProvider({ watchProviders }: Partial<ItemProps>) {
+  subscribedProvider({ watchProviders, type, id_db }: Partial<ItemProps>) {
     if (!watchProviders?.providers) return [];
     const config = streaming;
 
@@ -94,7 +96,7 @@ export class Client {
         if (!subbed) return null;
         return {
           ...item,
-          url: watchProviders.url,
+          qs: querystring.stringify({ id: id_db, type, provider: item.name }),
         };
       })
       .filter((item) => item);

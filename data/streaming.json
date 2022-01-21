@@ -39,6 +39,21 @@
       "name": "kinox.to",
       "homepage": "https://kinox.to/",
       "logo": null
+    },
+    {
+      "name": "the Pirate Bay",
+      "homepage": "https://thepiratebay.org/",
+      "logo": null
+    },
+    {
+      "name": "rARBG",
+      "homepage": "https://rarbg.to/",
+      "logo": null
+    },
+    {
+      "name": "hDEncode",
+      "homepage": "https://hdencode.org/",
+      "logo": null
     }
   ],
   "important": ["amazon video", "apple itunes", "amazon prime video", "crunchyroll", "disney plus", "apple tv plus"]
