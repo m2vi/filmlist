@@ -12,9 +12,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       },
       {
-        $push: {
-          genre_ids: 7424,
-        },
+        // $pull: { genre_ids: 7424 },
+        $push: { genre_ids: { $each: [7424], $position: 0 } },
       }
     )
   );

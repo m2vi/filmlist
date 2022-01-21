@@ -50,10 +50,13 @@ export class Client {
 
       return {
         url: AT.link,
-        providers: flatrate,
+        providers: flatrate ? flatrate : null,
       };
     } catch (error) {
-      return null;
+      return {
+        url: null,
+        providers: null,
+      };
     }
   }
 

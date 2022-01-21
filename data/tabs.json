@@ -141,9 +141,18 @@
   "temp": {
     "filter": {
       "state": -1,
-      "watchProviders.providers": null
+      "type": 1,
+      "genre_ids": {
+        "$nin": [16, 80, 27, 10749, 878, 12, 10752]
+      },
+      "ratings.tmdb.vote_average": {
+        "$gte": 7.5
+      },
+      "credits.cast.id": {
+        "$ne": 16483
+      }
     },
-    "sort_key": "release_date",
+    "sort_key": "ratings.tmdb.vote_average",
     "reverse": true,
     "hide_unreleased": true
   }
