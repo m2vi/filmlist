@@ -220,10 +220,10 @@ export interface MovieDbOptions {
 }
 
 export interface ProviderProps {
-  id?: number;
+  key?: string;
   name?: string;
   logo?: string;
-  type?: string;
+  url?: string;
 }
 
 export interface LogProps {
@@ -249,4 +249,14 @@ export interface FindOptions {
 export interface SortProps {
   key?: string;
   order?: 1 | -1;
+}
+
+export interface GetUrlFromBaseProps {
+  params: {
+    id: number;
+    type: number;
+    provider: string;
+  };
+  all_providers: ProviderProps[];
+  url: string;
 }

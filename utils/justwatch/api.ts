@@ -1,60 +1,64 @@
 import { NextApiRequest } from 'next';
 import tmdb from '@utils/tmdb/api';
-import backend from '@utils/backend/api';
 import cherrio from 'cheerio';
 import { baseUrl } from '@utils/fetch';
 import { getUniqueListBy } from '@utils/utils';
-import { sortByKey } from '@utils/array';
 import _ from 'underscore';
 import { lowerCase } from 'lodash';
+import { config } from '@utils/backend/config';
+import { GetUrlFromBaseProps, ProviderProps } from '@utils/types';
+import QueryString from 'qs';
+import { cachedFetch } from '@utils/backend/fetch';
 
 export class Api {
   constructor(private fallbackUrl = '/error') {}
 
   public async getUrl(req: NextApiRequest) {
     const base = baseUrl(req);
+    if (!_.has(req.query, 'id') || !_.has(req.query, 'type') || !_.has(req.query, 'provider'))
+      return `${base}${this.fallbackUrl}?${QueryString.stringify({ error: 'Missing query params' })}`;
+    const { id, type, provider } = Object.freeze(req.query) as any;
+
     try {
-      if (!_.has(req.query, 'id') || !_.has(req.query, 'type') || !_.has(req.query, 'provider')) return `${base}${this.fallbackUrl}`;
-      const { id, type, provider } = Object.freeze(req.query) as any;
-
       const params = { id: parseInt(id), type: tmdb.isMovie(type) ? 1 : 0, provider: lowerCase(provider) };
+      const all_providers = config.getProvidersSync();
 
-      const all_providers = await this.getProvider();
-      const curr_providers = await tmdb.watchProviders(null, Boolean(params.type), { id: params.id, language: 'en' });
+      let res = null;
 
-      const scraped = await this.scrap(curr_providers?.url!, all_providers);
+      res = await this.getUrlFromBase({
+        all_providers,
+        params,
+        url: `https://www.themoviedb.org/${type ? 'movie' : 'tv'}/${id}/watch?locale=AT`,
+      });
 
-      const s = _.find(scraped, { key: params.provider })?.url;
+      if (!res) throw new Error('Unkown error');
 
-      return `${s ? s : `${base}${this.fallbackUrl}`}`;
-    } catch (error) {
-      console.log(error);
-      return `${base}${this.fallbackUrl}`;
+      return res;
+    } catch (error: any) {
+      const qs = QueryString.stringify({ error: 'The provider most likely does not exist', details: error?.message });
+
+      return `${base}/${type}/${id}?${qs}`;
     }
+  }
+
+  private async getUrlFromBase({ all_providers, params, url }: GetUrlFromBaseProps) {
+    if (!url) return null;
+
+    const scraped = await this.scrap(url, all_providers);
+    return _.find(scraped, { key: params.provider })?.url;
   }
 
   private async getPage(url: string) {
     try {
-      const res = await fetch(url);
-      const html = await res.text();
+      const res = await cachedFetch(url, 'text');
 
-      return html;
+      return res;
     } catch (error) {
       return null;
     }
   }
 
-  private async getProvider(): Promise<Array<{ name: string; logo: string }>> {
-    const data = await backend.schema.find().select({ 'watchProviders.providers.logo': 1, 'watchProviders.providers.name': 1 }).lean();
-
-    const arr = data.reduce((prev, curr, index) => {
-      return prev.concat((curr?.watchProviders?.providers ? curr?.watchProviders?.providers : []) as any);
-    }, []);
-
-    return sortByKey(getUniqueListBy(arr, 'logo'), 'name');
-  }
-
-  public async scrap(url: string, providers: Array<{ name: string; logo: string }>): Promise<Array<string> | any> {
+  public async scrap(url: string, providers: ProviderProps[]): Promise<ProviderProps[]> {
     const html = await this.getPage(url);
     if (!html) return [];
     const $ = cherrio.load(html);
@@ -74,6 +78,8 @@ export class Api {
         .get()
         .map(({ url, imageUrl }) => {
           const name = _.find(providers, { logo: imageUrl })?.name;
+
+          if (!name) throw new Error(`the provider (${imageUrl}) does not exist`);
 
           return {
             key: lowerCase(name),
