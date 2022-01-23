@@ -29,7 +29,7 @@ const Search = ({ results, log }: any) => {
         />
       </div>
       <main className='w-full flex flex-col'>
-        <div className='w-full overflow-y-scroll dD5d-items max-w-screen-2xl px-11' id='scrollableDiv' style={{ overflowX: 'hidden' }}>
+        <div className='w-full overflow-y-scroll dD5d-item max-w-screen-2xl px-120 mt-11 pb-11' style={{ overflowX: 'hidden' }}>
           <div
             className='w-full p-0 grid gap-2 auto-rows-auto place-items-center !overflow-x-hidden '
             style={{
@@ -65,7 +65,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       log: {
         query: query ? query : '',
         locale: context.locale ? context.locale : null,
-        time: performance.now() - start,
+        time: `${(performance.now() - start).toFixed(2)}ms`,
         results: {
           count: props.results.length,
           items: props.results,
