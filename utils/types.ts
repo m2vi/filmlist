@@ -220,10 +220,12 @@ export interface MovieDbOptions {
 }
 
 export interface ProviderProps {
+  id?: number;
   key?: string;
   name?: string;
   logo?: string;
   url?: string;
+  type?: string;
 }
 
 export interface LogProps {
