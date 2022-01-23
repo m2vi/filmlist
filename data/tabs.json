@@ -29,7 +29,7 @@
     "reverse": true,
     "hide_unreleased": true
   },
-  "wfs": {
+  "ltv": {
     "filter": {
       "state": -2
     },
@@ -37,22 +37,23 @@
     "reverse": true,
     "hide_unreleased": true
   },
-  "default": {
+  "wfs": {
     "filter": {
-      "state": 0
+      "state": -3
     },
     "sort_key": false,
-    "reverse": true
+    "reverse": true,
+    "hide_unreleased": true
   },
-  "too young": {
+  "wait": {
     "filter": {
-      "state": 18
+      "state": -4
     }
   },
   "watched": {
     "filter": {
       "state": {
-        "$in": [1, 2, 3]
+        "$gt": 0
       }
     }
   },
@@ -89,7 +90,7 @@
   "latest": {
     "filter": {
       "state": {
-        "$ne": -1
+        "$gt": 0
       }
     },
     "sort_key": false,
@@ -98,7 +99,9 @@
   },
   "notifications": {
     "filter": {
-      "state": -1
+      "state": {
+        "$lt": 0
+      }
     },
     "sort_key": "release_date",
     "hide_unreleased": true,
@@ -138,13 +141,5 @@
   "unfiltered": {
     "sort_key": false
   },
-  "temp": {
-    "filter": {
-      "state": 2,
-      "type": 1
-    },
-    "sort_key": "ratings.tmdb.vote_average",
-    "reverse": true,
-    "hide_unreleased": true
-  }
+  "temp": {}
 }

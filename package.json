@@ -46,6 +46,7 @@
     "seed-random": "^2.2.0",
     "shuffle-seed": "^1.1.6",
     "swiper": "^7.4.1",
+    "systeminformation": "^5.10.7",
     "tailwindcss-important": "^1.0.0",
     "underscore": "^1.13.2",
     "validator": "^13.7.0"
