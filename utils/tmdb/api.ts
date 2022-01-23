@@ -21,6 +21,7 @@ import {
 } from 'moviedb-promise/dist/request-types';
 import streaming from '@data/streaming.json';
 import querystring from 'qs';
+import { lowerCase } from 'lodash';
 
 export const api = new MovieDb(validateEnv('MOVIE_TOKEN'));
 
@@ -44,9 +45,9 @@ export class Client {
       const flatrate = AT.flatrate?.map(
         ({ logo_path, provider_id, provider_name }: any): ProviderProps => ({
           id: provider_id,
+          key: lowerCase(provider_name),
           name: provider_name,
           logo: logo_path,
-          type: 'flatrate',
         })
       );
 
