@@ -587,6 +587,23 @@ export class Api {
   }
 
   async manage() {}
+
+  async cachedItems(destroy: boolean = false): Promise<{ items: ItemProps[]; createdAt: number }> {
+    if (destroy) cache.clear();
+    const cachedResponse = cache.get('cachedItems');
+    if (cachedResponse && !destroy) {
+      return cachedResponse;
+    } else {
+      const items = await this.find({}, {});
+      const data = {
+        items,
+        createdAt: Date.now(),
+      };
+
+      cache.put('cachedItems', data, 6 * 1000 * 60 * 60);
+      return data;
+    }
+  }
 }
 
 export const api = new Api();

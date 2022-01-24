@@ -52,11 +52,21 @@ class Search {
     }
   }
 
+<<<<<<< HEAD
   async getDB(pattern: string, { locale }: SearchOptions) {
     const items = await backend.find({});
     // const fused = this.fuse(items, pattern);
     const matched = this.matchSorter(items, pattern);
     const prepared = this.prepare(matched, { locale, start: 0, end: 20 });
+=======
+  async db(pattern: string = '', { locale = 'en', end }: SearchOptions) {
+    const cached = await backend.cachedItems();
+    const items = cached.items;
+
+    const results = await this.matchSorter(items, pattern);
+
+    const data = backend.prepareForFrontend(await client.adaptTabs(client.getTabeBase(results, results)), locale).reverse();
+>>>>>>> parent of c0c0014 (speed. i am speed)
 
     return prepared;
   }
