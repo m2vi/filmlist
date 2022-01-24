@@ -17,3 +17,4 @@
 - [x] tmdb tabs hinzufügen (trends, top-rated,popular)
 - [x] popular tab ändern
 - [x] fix reverse
+- [ ] hab ein paar commits gelöscht

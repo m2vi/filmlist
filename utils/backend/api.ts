@@ -595,7 +595,8 @@ export class Api {
     if (cachedResponse && !destroy) {
       return cachedResponse;
     } else {
-      const items = await this.find({}, {});
+      const db = await this.init();
+      const items = await itemSchema.find().select('-credits').lean<ItemProps[]>();
       const data = {
         items,
         createdAt: Date.now(),
