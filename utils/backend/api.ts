@@ -25,7 +25,6 @@ import { removeEmpty } from '@utils/utils';
 import { performance } from 'perf_hooks';
 import shuffle from 'shuffle-seed';
 import seedRandom from 'seed-random';
-import cache from 'memory-cache';
 
 class Jwt {
   decode() {
@@ -588,23 +587,6 @@ export class Api {
   }
 
   async manage() {}
-
-  async cachedItems(destroy: boolean = false) {
-    if (destroy) cache.clear();
-    const cachedResponse = cache.get('cachedItems');
-    if (cachedResponse && !destroy) {
-      return cachedResponse;
-    } else {
-      const items = await this.find({}, {});
-      const data = {
-        items,
-        createdAt: Date.now(),
-      };
-
-      cache.put('cachedItems', data, 6 * 1000 * 60 * 60);
-      return data;
-    }
-  }
 }
 
 export const api = new Api();

@@ -1,4 +1,7 @@
-@import url('/api/cache/css');
+@import url('https://dev.core.fluxi.ml/styles/colors.css');
+@import url('https://dev.core.fluxi.ml/styles/globals.css');
+@import url('https://dev.core.fluxi.ml/styles/components.css');
+@import url('https://dev.core.fluxi.ml/styles/animations.css');
 
 html,
 body,

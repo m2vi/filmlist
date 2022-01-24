@@ -1,7 +1,8 @@
 import { ItemProps, MovieDbTypeEnum } from '@utils/types';
+import Fuse from 'fuse.js';
+import { matchSorter } from 'match-sorter';
 import backend from './api';
 import client, { api } from '../tmdb/api';
-import { matchSorter } from 'match-sorter';
 
 interface SearchOptions {
   items?: ItemProps[];
@@ -11,6 +12,24 @@ interface SearchOptions {
 }
 
 class Search {
+  fuse(list: ItemProps[] = [], pattern: string = '') {
+    const fuse = new Fuse(list, {
+      minMatchCharLength: 0,
+
+      keys: ['name.de', 'name.en', 'original_name'],
+    });
+
+    const results = fuse.search(pattern).map(({ item }) => item);
+
+    return results.length === 0 ? list : results;
+  }
+
+  matchSorter(list: ItemProps[] = [], pattern: string = '') {
+    return matchSorter(list, pattern, {
+      keys: ['name.de', 'name.en', 'original_name', 'id_db'],
+    });
+  }
+
   prepare(items: ItemProps[], { locale, start, end }: SearchOptions) {
     const mapped = items.map((item, index) => {
       try {
@@ -25,9 +44,7 @@ class Search {
 
   async get(pattern: string = '', { locale = 'en' }: SearchOptions) {
     try {
-      return await this.db(pattern, { locale });
-
-      const tmdb_results = await this.tmdb(pattern, { locale });
+      const tmdb_results = await this.getTMDB(pattern, { locale });
 
       return tmdb_results;
     } catch (error) {
@@ -35,24 +52,16 @@ class Search {
     }
   }
 
-  async db(pattern: string = '', { locale = 'en' }: SearchOptions) {
-    const cached = await backend.cachedItems();
-    const items = cached.items;
+  async getDB(pattern: string, { locale }: SearchOptions) {
+    const items = await backend.find({});
+    // const fused = this.fuse(items, pattern);
+    const matched = this.matchSorter(items, pattern);
+    const prepared = this.prepare(matched, { locale, start: 0, end: 20 });
 
-    const results = await this.matchSorter(items, pattern);
-
-    const data = backend.prepareForFrontend(await client.adaptTabs(client.getTabeBase(results, results)), locale).reverse();
-
-    return data.slice(0, 50);
+    return prepared;
   }
 
-  async matchSorter(items: ItemProps[], pattern: string = '') {
-    const result = matchSorter(items, pattern, { keys: ['name.de', 'name.en', 'id_db', 'original_name'] });
-
-    return result;
-  }
-
-  async tmdb(pattern: string, { locale }: SearchOptions) {
+  async getTMDB(pattern: string, { locale }: SearchOptions) {
     const results = (await api.searchMulti({ query: pattern, language: locale })).results?.filter(
       ({ media_type }: any) => media_type === 'tv' || media_type === 'movie'
     );
