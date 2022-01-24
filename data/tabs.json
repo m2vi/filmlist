@@ -26,7 +26,6 @@
       "state": -1
     },
     "sort_key": false,
-    "reverse": true,
     "hide_unreleased": true
   },
   "ltv": {
@@ -94,8 +93,7 @@
       }
     },
     "sort_key": false,
-    "hide_unreleased": true,
-    "reverse": true
+    "hide_unreleased": true
   },
   "notifications": {
     "filter": {
