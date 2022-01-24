@@ -25,6 +25,7 @@ import { removeEmpty } from '@utils/utils';
 import { performance } from 'perf_hooks';
 import shuffle from 'shuffle-seed';
 import seedRandom from 'seed-random';
+import cache from 'memory-cache';
 
 class Jwt {
   decode() {
