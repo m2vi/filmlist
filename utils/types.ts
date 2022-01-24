@@ -28,6 +28,7 @@ export interface GetTabProps {
   release_year?: string;
   custom_config?: TabFilterOptions | null;
   purpose?: string;
+  useCache?: boolean;
 }
 
 export interface GetTMDBTabProps {
@@ -243,7 +244,7 @@ export interface LogProps {
 }
 
 export interface FindOptions {
-  includeCredits?: boolean;
+  useCache?: boolean;
   sort?: SortProps;
   slice?: [number, number];
 }

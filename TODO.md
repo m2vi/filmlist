@@ -18,3 +18,5 @@
 - [x] popular tab ändern
 - [x] fix reverse
 - [ ] hab ein paar commits gelöscht
+- [ ] search nochmal machen
+- [ ] fehler die ich vorher gefixt habe wieder fixen (fml)

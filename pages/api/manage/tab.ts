@@ -15,7 +15,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       custom_config: props.custom_config && JSON.parse(props.custom_config),
       dontFrontend: props.dontFrontend && stringToBoolean(props.dontFrontend),
       purpose: props.purpose,
-      includeCredits: props.includeCredits && stringToBoolean(props.includeCredits),
     })
   );
 }

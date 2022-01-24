@@ -45,7 +45,7 @@ class Search {
 
     const results = this.matchSorter(items, pattern);
 
-    const data = backend.prepareForFrontend(await client.adaptTabs(client.getTabeBase(results, results)), locale).reverse();
+    const data = backend.prepareForFrontend(results, locale).reverse();
 
     return data;
   }
@@ -70,7 +70,7 @@ class Search {
       })
     );
 
-    const prepared = this.prepare(adapted, { locale, start: 0, end: Number.MAX_SAFE_INTEGER });
+    const prepared = this.prepare(adapted, { locale, start: 0, end: 50 });
 
     return prepared;
   }

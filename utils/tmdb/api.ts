@@ -394,6 +394,7 @@ export class Client {
       locale,
       start: 0,
       end: 75,
+      useCache: false,
     });
   }
 

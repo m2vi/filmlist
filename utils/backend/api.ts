@@ -1,4 +1,4 @@
-import { Connection, FilterQuery, Model, PipelineStage, UpdateQuery } from 'mongoose';
+import { Connection, FilterQuery, Model, UpdateQuery } from 'mongoose';
 import { connectToDatabase } from '../database';
 import { removeDuplicates, sortByKey } from '../array';
 import tabs from '@data/tabs.json';
@@ -13,7 +13,6 @@ import {
   InsertProps,
   ItemProps,
   MovieDbTypeEnum,
-  SortProps,
   TabFilterOptions,
   Tabs,
 } from '../types';
@@ -26,6 +25,7 @@ import { performance } from 'perf_hooks';
 import shuffle from 'shuffle-seed';
 import seedRandom from 'seed-random';
 import cache from 'memory-cache';
+import sift from 'sift';
 
 class Jwt {
   decode() {
@@ -90,7 +90,7 @@ export class Api {
     return {};
   }
 
-  async getTab({ tab, locale, start, end, includeCredits, dontFrontend, release_year, custom_config, purpose = 'tab' }: GetTabProps) {
+  async getTab({ tab, locale, start, end, dontFrontend, release_year, custom_config, purpose = 'tab', useCache = true }: GetTabProps) {
     let items = [];
     let extra = null;
     const config = (custom_config ? custom_config : this.getTabConfig(tab) ? this.getTabConfig(tab) : {})!;
@@ -104,13 +104,13 @@ export class Api {
         }),
       },
       {
-        includeCredits: config?.includeCredits || includeCredits,
         sort: {
           key:
             typeof config?.sort_key === 'boolean' ? 'index' : typeof config?.sort_key === 'undefined' ? `name.${locale}` : config?.sort_key,
           order: config?.reverse ? 1 : -1,
         },
         slice: [start ? start : 0, end ? end : 50],
+        useCache,
       }
     );
 
@@ -127,7 +127,6 @@ export class Api {
         locale,
         start,
         end,
-        includeCredits,
         dontFrontend,
         release_year,
         custom_config,
@@ -199,7 +198,7 @@ export class Api {
   async moveItemToStart(filter: FilterQuery<ItemProps>) {
     if (!(_.has(filter, 'type') || _.has(filter, 'id_db'))) return this.error('Filter sucks');
 
-    const item = await this.findOne(filter, true);
+    const item = await this.findOne(filter, { useCache: false });
     await this.schema.deleteOne(item);
     const doc = new this.schema({ ...item, index: null });
     return await doc.save();
@@ -227,53 +226,34 @@ export class Api {
     return mapped;
   }
 
-  getSort(sort: SortProps | undefined, invert: boolean = false): PipelineStage {
-    if (!sort || !sort.key)
-      return {
-        $skip: 0,
-      };
-
-    const order = sort.order ? sort.order : 1;
-
-    return {
-      $sort: {
-        [sort.key]: invert ? (order === 1 ? -1 : 1) : order,
-      },
-    };
-  }
-
-  async find(
-    filter: FilterQuery<ItemProps>,
-    { includeCredits, sort, slice }: FindOptions = { includeCredits: false }
-  ): Promise<ItemProps[]> {
-    await this.init();
+  async find(filter: FilterQuery<ItemProps>, { sort, slice, useCache }: FindOptions = { useCache: true }): Promise<ItemProps[]> {
     let items = [];
-    items = await this.schema.aggregate<ItemProps>([
-      { $match: { index: { $ne: null }, ...Object.freeze({ ...filter }) } },
-      { $unset: includeCredits ? 'random_key' : 'credits' },
-      this.getSort(sort, true),
-      { $skip: slice?.[0] ? slice[0] : 0 },
-      { $limit: slice?.[1] ? slice[1] - (slice?.[0] ? slice[0] : 0) : Number.MAX_SAFE_INTEGER },
-      this.getSort(sort),
-    ]);
+    filter = { index: { $ne: null }, ...Object.freeze({ ...filter }) };
 
-    return items;
-  }
-
-  async findOne(filter: FilterQuery<ItemProps>, includeCredits: boolean = false): Promise<ItemProps> {
-    await this.init();
-    let item = [];
-
-    if (includeCredits) {
-      item = await this.schema.findOne(Object.freeze({ ...filter })).lean<any>();
+    if (useCache) {
+      items = (await this.cachedItems()).items;
     } else {
-      item = await this.schema
-        .findOne(Object.freeze({ ...filter }))
-        .select('-credits')
-        .lean<any>();
+      await this.init();
+      items = await this.schema.find(filter).lean();
     }
 
-    return item;
+    items = items.filter(sift(filter));
+
+    items = sort?.key ? sortByKey(items, sort?.key) : items;
+    items = sort?.order === 1 ? items.reverse() : items;
+
+    return items.slice(slice?.[0], slice?.[1]).reverse();
+  }
+
+  async findOne(filter: FilterQuery<ItemProps>, { useCache }: { useCache: boolean } = { useCache: true }): Promise<ItemProps> {
+    filter = Object.freeze(filter);
+
+    if (useCache) {
+      return (await this.cachedItems()).items.filter(sift(filter))?.[0];
+    } else {
+      await this.init();
+      return await this.schema.findOne(filter).lean<ItemProps>();
+    }
   }
 
   async findCollection(id_db: number, locale: string) {
@@ -301,7 +281,7 @@ export class Api {
     };
   }
 
-  async collections(includeCredits: boolean = false) {
+  async collections() {
     await this.init();
     const items = await this.find(
       {
@@ -309,7 +289,7 @@ export class Api {
           $ne: null,
         },
       },
-      { includeCredits }
+      { useCache: true }
     );
     let collections = {} as any;
 
@@ -568,7 +548,9 @@ export class Api {
       error: 'Unkown error',
     };
     try {
-      res = this.toJSON(await this.findOne({ type: MovieDbTypeEnum[type as any] as any, id_db: parseInt(id as string) }, true));
+      res = this.toJSON(
+        await this.findOne({ type: MovieDbTypeEnum[type as any] as any, id_db: parseInt(id as string) }, { useCache: false })
+      );
     } catch (error) {
       try {
         res = this.toJSON(await client.get(parseInt(id as any), MovieDbTypeEnum[type as any] as any, { state: 0 }));
@@ -595,7 +577,7 @@ export class Api {
     if (cachedResponse && !destroy) {
       return cachedResponse;
     } else {
-      const db = await this.init();
+      await this.init();
       const items = await itemSchema.find().select('-credits').lean<ItemProps[]>();
       const data = {
         items,
