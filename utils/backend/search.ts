@@ -1,5 +1,4 @@
 import { ItemProps, MovieDbTypeEnum } from '@utils/types';
-import Fuse from 'fuse.js';
 import { matchSorter } from 'match-sorter';
 import backend from './api';
 import client, { api } from '../tmdb/api';
@@ -12,18 +11,6 @@ interface SearchOptions {
 }
 
 class Search {
-  fuse(list: ItemProps[] = [], pattern: string = '') {
-    const fuse = new Fuse(list, {
-      minMatchCharLength: 0,
-
-      keys: ['name.de', 'name.en', 'original_name'],
-    });
-
-    const results = fuse.search(pattern).map(({ item }) => item);
-
-    return results.length === 0 ? list : results;
-  }
-
   matchSorter(list: ItemProps[] = [], pattern: string = '') {
     return matchSorter(list, pattern, {
       keys: ['name.de', 'name.en', 'original_name', 'id_db'],
@@ -52,23 +39,15 @@ class Search {
     }
   }
 
-<<<<<<< HEAD
-  async getDB(pattern: string, { locale }: SearchOptions) {
-    const items = await backend.find({});
-    // const fused = this.fuse(items, pattern);
-    const matched = this.matchSorter(items, pattern);
-    const prepared = this.prepare(matched, { locale, start: 0, end: 20 });
-=======
   async db(pattern: string = '', { locale = 'en', end }: SearchOptions) {
     const cached = await backend.cachedItems();
     const items = cached.items;
 
-    const results = await this.matchSorter(items, pattern);
+    const results = this.matchSorter(items, pattern);
 
     const data = backend.prepareForFrontend(await client.adaptTabs(client.getTabeBase(results, results)), locale).reverse();
->>>>>>> parent of c0c0014 (speed. i am speed)
 
-    return prepared;
+    return data;
   }
 
   async getTMDB(pattern: string, { locale }: SearchOptions) {
