@@ -8,6 +8,7 @@ interface SearchOptions {
   locale: string;
   start?: number;
   end?: number;
+  tmdb?: boolean;
 }
 
 class Search {
@@ -29,11 +30,13 @@ class Search {
     return mapped.filter((item) => item).slice(start, end);
   }
 
-  async get(pattern: string = '', { locale = 'en' }: SearchOptions) {
+  async get(pattern: string = '', { locale = 'en', tmdb = false }: SearchOptions) {
     try {
-      const tmdb_results = await this.getTMDB(pattern, { locale });
-
-      return tmdb_results;
+      if (tmdb) {
+        return await this.tmdb(pattern, { locale, end: 50 });
+      } else {
+        return await this.db(pattern, { locale, end: 50 });
+      }
     } catch (error) {
       return [];
     }
@@ -45,12 +48,12 @@ class Search {
 
     const results = this.matchSorter(items, pattern);
 
-    const data = backend.prepareForFrontend(results, locale).reverse();
+    const data = this.prepare(results, { locale, end });
 
     return data;
   }
 
-  async getTMDB(pattern: string, { locale }: SearchOptions) {
+  async tmdb(pattern: string, { locale, end }: SearchOptions) {
     const results = (await api.searchMulti({ query: pattern, language: locale })).results?.filter(
       ({ media_type }: any) => media_type === 'tv' || media_type === 'movie'
     );
@@ -70,7 +73,7 @@ class Search {
       })
     );
 
-    const prepared = this.prepare(adapted, { locale, start: 0, end: 50 });
+    const prepared = this.prepare(adapted, { locale, end });
 
     return prepared;
   }

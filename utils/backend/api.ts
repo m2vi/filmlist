@@ -94,7 +94,6 @@ export class Api {
     let items = [];
     let extra = null;
     const config = (custom_config ? custom_config : this.getTabConfig(tab) ? this.getTabConfig(tab) : {})!;
-    await this.init();
     items = await this.find(
       {
         ...config.filter,

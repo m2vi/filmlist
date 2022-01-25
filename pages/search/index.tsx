@@ -20,14 +20,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const query = context.query.q?.toString();
   const props = {
     ...(await serverSideTranslations(context.locale!, ['common', 'footer'])),
-    results: query ? await search.get(query, { locale: context.locale!, tmdb: true }) : [],
+    results: query ? await search.get(query, { locale: context.locale! }) : [],
   };
 
   return {
     props: {
       ...props,
       log: {
-        query: query ? query : '',
+        query: query ? query : null,
         locale: context.locale ? context.locale : null,
         time: performance.now() - start,
         results: {

@@ -23,7 +23,7 @@ const Home = ({ ...props }) => {
         {Array.from({ length: 5 }).map((v, i) => {
           return (
             <CarouselAsync
-              name='...'
+              name={undefined}
               func={async () => {
                 return await frontend.getBrowseGenre({ locale: locale!, index: i, seed: props.seed });
               }}
