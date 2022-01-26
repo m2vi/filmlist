@@ -1,6 +1,7 @@
 import { basicFetch } from '@utils/fetch';
 import { stringToBoolean } from '@utils/utils';
 import client from '@utils/tmdb/api';
+import QueryString from 'qs';
 
 export class Api {
   constructor(private baseUrl = 'https://www.omdbapi.com/') {}
@@ -20,6 +21,17 @@ export class Api {
     } catch (error) {
       return null;
     }
+  }
+
+  async getIMDB(title: string, type: number) {
+    const qs = QueryString.stringify({ apikey: 'daf5c972', t: title, type: type ? 'movie' : 'series' });
+
+    const data = await basicFetch(`${this.baseUrl}?${qs}`);
+
+    return {
+      vote_average: data?.imdbRating ? parseFloat(data?.imdbRating) : null,
+      vote_count: data?.imdbVotes ? parseFloat(data?.imdbVotes?.replace(/,/g, '')) : null,
+    };
   }
 
   async ratings(type: string, id_db: string, raw: string) {

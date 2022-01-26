@@ -4,6 +4,7 @@ import { removeEmpty, validateEnv } from '@utils/utils';
 import { MovieDb } from 'moviedb-promise';
 import companies from '@data/companies.json';
 import _, { shuffle } from 'underscore';
+import omdb from '../omdb/api';
 import {
   CreditsResponse,
   DiscoverMovieRequest,
@@ -193,18 +194,24 @@ export class Client {
       watchProviders,
       collection: isMovie ? (en.belongs_to_collection ? en.belongs_to_collection : null) : null,
       trailers: en.videos ? this.getTrailers(en.videos) : null,
-      ratings: this.ratings({ external_ids, vote_average: en.vote_average, vote_count: en.vote_count }),
+      ratings: await this.ratings({
+        vote_average: en.vote_average,
+        vote_count: en.vote_count,
+        title: en.title ? en.title : en.name,
+        type: isMovie ? 1 : 0,
+      }),
       popularity: en.popularity,
       v: 0,
     };
   }
 
-  ratings(item: Partial<any>) {
+  async ratings(item: Partial<any>) {
     return {
       tmdb: {
         vote_average: item.vote_average ? item.vote_average : null,
         vote_count: item.vote_count ? item.vote_count : null,
       },
+      imdb: await omdb.getIMDB(item.title, item.type),
     };
   }
 
@@ -299,7 +306,12 @@ export class Client {
       watchProviders,
       collection: isMovie ? (en.belongs_to_collection ? en.belongs_to_collection : null) : null,
       trailers: en.videos ? this.getTrailers(en.videos) : null,
-      ratings: this.ratings({ external_ids, vote_average: en.vote_average, vote_count: en.vote_count }),
+      ratings: await this.ratings({
+        vote_average: en.vote_average,
+        vote_count: en.vote_count,
+        title: en.title ? en.title : en.name,
+        type: isMovie ? 1 : 0,
+      }),
       popularity: en.popularity ? en.popularity : null,
     };
   }

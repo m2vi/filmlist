@@ -1,5 +1,5 @@
 import { CardProps } from '@components/Card';
-import colors from 'colors';
+import colors from '@titanium/colors';
 
 colors;
 

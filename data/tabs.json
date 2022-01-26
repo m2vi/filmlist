@@ -141,5 +141,16 @@
   "unfiltered": {
     "sort_key": false
   },
+  "imdb-top-rated": {
+    "filter": {
+      "ratings.imdb.vote_count": {
+        "$gte": 200,
+        "$ne": null
+      }
+    },
+    "sort_key": "ratings.imdb.vote_average",
+    "hide_unreleased": true,
+    "reverse": true
+  },
   "temp": {}
 }

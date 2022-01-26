@@ -51,7 +51,6 @@ export class Api {
   }
 
   async getTab({ custom_config, ...props }: GetTabProps) {
-    console.log(custom_config && JSON.stringify(custom_config));
     const params = qs.stringify({ custom_config: custom_config && JSON.stringify(custom_config), ...props });
     const data = await basicFetch(`/api/manage/tab?${params}`);
 
