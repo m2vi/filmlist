@@ -314,7 +314,7 @@ export class Api {
 
   async exists(filter: FilterQuery<ItemProps>): Promise<boolean> {
     try {
-      const item = await this.findOne(filter);
+      const item = await this.findOne(filter, { useCache: false });
 
       return item ? true : false;
     } catch (error) {
