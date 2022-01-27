@@ -49,8 +49,7 @@ const Card = ({ _id, name, poster_path, release_date, id_db, ratings, type, stat
             <img
               src={`https://image.tmdb.org/t/p/w${config.posterWidth}${poster_path}`}
               alt={_id ? _id : ''}
-              style={{ aspectRatio: '2 / 3', width: '100%' }}
-              className='no-drag select-none w-full overflow-hidden relative'
+              className='no-drag select-none w-full overflow-hidden relative card-image'
             />
           </>
         ) : (

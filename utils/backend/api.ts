@@ -587,6 +587,10 @@ export class Api {
       return data;
     }
   }
+
+  async updateCache() {
+    return await this.cachedItems(true);
+  }
 }
 
 export const api = new Api();

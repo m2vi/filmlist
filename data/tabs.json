@@ -107,6 +107,24 @@
     "hide_unreleased": true,
     "reverse": true
   },
+  "all-time-popular": {
+    "filter": {
+      "ratings.imdb.vote_count": {
+        "$gt": 0
+      }
+    },
+    "sort_key": "ratings.tmdb.vote_count",
+    "reverse": true
+  },
+  "all-time-popular-imdb": {
+    "filter": {
+      "ratings.imdb.vote_count": {
+        "$gt": 0
+      }
+    },
+    "sort_key": "ratings.imdb.vote_count",
+    "reverse": true
+  },
   "top-rated": {
     "filter": {
       "ratings.tmdb.vote_count": {
@@ -141,11 +159,10 @@
   "unfiltered": {
     "sort_key": false
   },
-  "imdb-top-rated": {
+  "top-rated-imdb": {
     "filter": {
       "ratings.imdb.vote_count": {
-        "$gte": 200,
-        "$ne": null
+        "$gte": 200
       }
     },
     "sort_key": "ratings.imdb.vote_average",
