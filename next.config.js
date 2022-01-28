@@ -1,12 +1,16 @@
-/** @type {import('next').NextConfig} */
+// @ts-check
 const { i18n } = require('./next-i18next.config');
 const withPWA = require('next-pwa');
 
-module.exports = {
+/**
+ * @type {import('next').NextConfig}
+ **/
+const nextConfig = {
   onDemandEntries: {
     maxInactiveAge: 86400 * 1000,
     pagesBufferLength: 100,
   },
+  // @ts-ignore
   i18n,
   images: {
     domains: ['cdn.discordapp.com', 'image.tmdb.org'],
@@ -39,3 +43,5 @@ module.exports = {
     return config;
   },
 };
+
+module.exports = nextConfig;
