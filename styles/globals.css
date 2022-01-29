@@ -1,7 +1,4 @@
-@import url('https://dev.core.fluxi.ml/styles/colors.css');
-@import url('https://dev.core.fluxi.ml/styles/globals.css');
-@import url('https://dev.core.fluxi.ml/styles/components.css');
-@import url('https://dev.core.fluxi.ml/styles/animations.css');
+@import url('/api/cache/css');
 
 html,
 body,
@@ -145,6 +142,10 @@ p {
 
 .rotten {
   stroke: #fa320a;
+}
+
+.metacritic {
+  stroke: #ffcc34;
 }
 
 .card-image {

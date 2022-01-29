@@ -169,5 +169,25 @@
     "hide_unreleased": true,
     "reverse": true
   },
+  "top-rated-rottentomatoes": {
+    "filter": {
+      "ratings.rottentomatoes.vote_average": {
+        "$ne": null
+      }
+    },
+    "sort_key": "ratings.rottentomatoes.vote_average",
+    "hide_unreleased": true,
+    "reverse": true
+  },
+  "top-rated-metacritic": {
+    "filter": {
+      "ratings.metacritic.vote_average": {
+        "$ne": null
+      }
+    },
+    "sort_key": "ratings.imdb.vote_average",
+    "hide_unreleased": true,
+    "reverse": true
+  },
   "temp": {}
 }

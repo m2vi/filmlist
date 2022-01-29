@@ -1,7 +1,7 @@
 import itemSchema from '@models/itemSchema';
 import api from '@utils/backend/api';
 import client from '@utils/tmdb/api';
-import { LogProps } from '@utils/types';
+import { ItemProps, LogProps } from '@utils/types';
 import moment from 'moment';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { performance } from 'perf_hooks';
@@ -38,7 +38,7 @@ export const logUpdate = ({
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const docs = await api.find({});
+  const docs = await api.schema.find().lean<ItemProps[]>();
   const length = docs.length;
   const total_start = performance.now();
   let modified = 0;

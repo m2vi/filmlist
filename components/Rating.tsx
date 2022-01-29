@@ -1,5 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { FrontendItemProps, RatingsProps, VoteProps } from '@utils/types';
+import { isDefined } from '@utils/utils';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { Fragment, HTMLAttributes, useEffect, useState } from 'react';
@@ -73,7 +74,7 @@ const Rating = ({ ratings, state, notchild, className, type, id_db, ...props }: 
                   <div className={`absolute inset-0 w-full h-full grid place-items-center ${!data ? 'visible' : 'invisible'}`}>
                     <Spinner size='6' />
                   </div>
-                  <div className={`grid grid-cols-2 justify-between gap-2 w-full ${data ? 'visible' : 'invisible'}`}>
+                  <div className={`grid grid-cols-2 auto-rows-auto justify-between gap-2 w-full ${data ? 'visible' : 'invisible'}`}>
                     <div className='grid grid-flow-col justify-start'>
                       <RatingCircle provider={data?.tmdb} colorClassName='tmdb' />
                       <div className='flex flex-col justify-center ml-2'>
@@ -83,7 +84,7 @@ const Rating = ({ ratings, state, notchild, className, type, id_db, ...props }: 
                         </span>
                       </div>
                     </div>
-                    <div className='grid grid-flow-col justify-end'>
+                    <div className='grid grid-flow-col justify-start'>
                       <RatingCircle provider={data?.imdb} colorClassName='imdb' />
                       <div className='flex flex-col justify-center ml-2'>
                         <span className='leading-5 text-primary-200'>IMDb</span>
@@ -92,6 +93,15 @@ const Rating = ({ ratings, state, notchild, className, type, id_db, ...props }: 
                         </span>
                       </div>
                     </div>
+                    {isDefined(data?.rottentomatoes?.vote_average) ? (
+                      <div className='grid grid-flow-col justify-start mt-2'>
+                        <RatingCircle provider={data?.rottentomatoes} colorClassName='rotten' />
+                        <div className='flex flex-col justify-center ml-2'>
+                          <span className='leading-5 text-primary-200'>Tomatometer</span>
+                          <span className='l-1 text-primary-300 text-sm'>- {t('details.votes')}</span>
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               </Transition.Child>

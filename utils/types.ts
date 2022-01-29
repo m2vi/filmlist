@@ -65,6 +65,7 @@ export interface CreditProps {
 }
 
 export interface ItemProps {
+  rated: string | null;
   _id: Types.ObjectId | string | null;
   genre_ids: number[];
   id_db: number;

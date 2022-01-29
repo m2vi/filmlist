@@ -91,3 +91,9 @@ export const removeEmpty = (obj: ObjProps) => {
 export function getUniqueListBy(arr: any[], key: string) {
   return [...(new Map(arr.map((item) => [item[key], item])).values() as any)];
 }
+
+export const isDefined = (v: any): boolean => {
+  const undefinedValues = [null, undefined];
+
+  return !undefinedValues.includes(v);
+};
