@@ -19,10 +19,14 @@ import {
   TvResult,
   TvTranslationsResponse,
   VideosResponse,
+  MovieReleaseDatesResponse,
+  ShowContentRatingResponse,
+  ReleaseDate,
 } from 'moviedb-promise/dist/request-types';
 import streaming from '@data/streaming.json';
 import querystring from 'qs';
 import { lowerCase } from 'lodash';
+import { sortByKey } from '@utils/array';
 
 export const api = new MovieDb(validateEnv('MOVIE_TOKEN'));
 
@@ -81,10 +85,6 @@ export class Client {
     return important;
   }
 
-  certifications(base: any) {
-    const results = base?.release_dates?.results;
-  }
-
   subscribedProvider({ watchProviders, type, id_db }: Partial<ItemProps>) {
     if (!watchProviders?.providers) return [];
     const config = streaming;
@@ -139,7 +139,7 @@ export class Client {
       id,
       language: 'en-GB',
       include_image_language: 'en,de,null',
-      append_to_response: 'credits,watch/providers,external_ids,videos,images,translations,release_dates',
+      append_to_response: 'credits,watch/providers,external_ids,videos,images,translations,release_dates,content_ratings',
     };
     const isMovie = (MovieDbTypeEnum[type] as any) === MovieDbTypeEnum.movie || type.toString() === '1';
     const en = (await (isMovie ? api.movieInfo(params) : api.tvInfo(params))) as any;
@@ -147,6 +147,7 @@ export class Client {
 
     const de = this.getTranslationsFromBase(en, en?.translations, en?.images);
     const omdb_base = await omdb.getBase(en?.title ? en?.title : en?.name, type);
+
     return {
       isMovie,
       de,
@@ -164,11 +165,38 @@ export class Client {
     };
   }
 
+  private tvCertificate(data: ShowContentRatingResponse) {
+    const DE = _.find(data?.results!, { iso_3166_1: 'DE' });
+    if (!DE) return null;
+
+    return DE?.rating ? DE?.rating : null;
+  }
+
+  private movieCertificate(data: MovieReleaseDatesResponse) {
+    const DE = _.find(data?.results!, { iso_3166_1: 'DE' });
+    if (!DE) return null;
+
+    const release_dates = DE?.release_dates!;
+
+    const important: ReleaseDate[] = sortByKey(
+      release_dates?.filter(({ certification }) => certification !== ''),
+      'type'
+    ).reverse();
+
+    return important?.[0]?.certification ? important?.[0]?.certification : null;
+  }
+
+  certifcate(en: any, isMovie: boolean) {
+    if (isMovie) return this.movieCertificate(en?.release_dates);
+    if (!isMovie) return this.tvCertificate(en?.content_ratings);
+    return null;
+  }
+
   async dataForUpdate(id: number, type: MovieDbTypeEnum): Promise<Partial<ItemProps>> {
     const { isMovie, de, en, credits, external_ids, watchProviders, omdb_base } = await this.getBase(id, type);
 
     return {
-      rated: omdb_base?.Rated ? omdb_base?.Rated : null,
+      rated: this.certifcate(en, isMovie),
       external_ids,
       overview: {
         en: en.overview ? en.overview : '',
@@ -279,7 +307,7 @@ export class Client {
     const { isMovie, de, en, credits, external_ids, watchProviders, omdb_base } = base ? base : await this.getBase(id, type);
 
     return {
-      rated: omdb_base?.Rated ? omdb_base?.Rated : null,
+      rated: this.certifcate(en, isMovie),
       external_ids,
       overview: {
         en: en.overview ? en.overview : '',
