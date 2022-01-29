@@ -69,6 +69,7 @@ class Search {
           external_ids: null,
           isMovie: item.media_type === 'movie',
           watchProviders: null,
+          omdb_base: null,
         });
       })
     );
