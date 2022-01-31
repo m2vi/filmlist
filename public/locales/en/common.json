@@ -112,7 +112,10 @@
     "stars": "Stars",
     "votes": "Votes",
     "subscribedProviders": "Subscribed providers",
-    "providers": "Providers"
+    "providers": "Providers",
+    "rated": "Age restriction",
+    "number_of_episodes": "Number of episodes",
+    "number_of_seasons": "Number of seasons"
   },
   "collection": {
     "count": "Count",

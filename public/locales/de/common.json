@@ -112,7 +112,10 @@
     "stars": "Stars",
     "votes": "Votes",
     "subscribedProviders": "Abonnierte Anbieter",
-    "providers": "Anbieter"
+    "providers": "Anbieter",
+    "rated": "Altersbeschränkung",
+    "number_of_episodes": "Anzahl der Episoden",
+    "number_of_seasons": "Anzahl der Staffeln"
   },
   "collection": {
     "count": "Anzahl",

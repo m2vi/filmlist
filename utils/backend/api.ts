@@ -591,6 +591,29 @@ export class Api {
   async updateCache() {
     return await this.cachedItems(true);
   }
+
+  async allPersons() {
+    console.time();
+    await this.init();
+    const items = await itemSchema.find().select('credits').lean<ItemProps[]>();
+    console.timeEnd();
+
+    const persons = items
+      .map(({ credits }) => {
+        return {
+          cast: credits?.cast.map(({ character, gender, known_for_department, ...props }) => ({ ...props })) as any,
+          crew: credits?.crew.map(({ gender, department, job, known_for_department, ...props }) => ({ ...props })) as any,
+        };
+      })
+      .slice(0, 100);
+
+    return removeDuplicates(
+      persons.reduce((prev, curr, index, arr) => {
+        const credits = curr.cast?.concat(curr.crew);
+        return prev.concat(credits);
+      }, [])
+    );
+  }
 }
 
 export const api = new Api();

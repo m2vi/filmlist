@@ -233,6 +233,8 @@ export class Client {
         },
         omdb_base
       ),
+      number_of_episodes: en?.number_of_episodes ? en?.number_of_episodes : null,
+      number_of_seasons: en?.number_of_seasons ? en?.number_of_seasons : null,
       popularity: en.popularity,
       v: 0,
     };
@@ -349,6 +351,8 @@ export class Client {
         },
         omdb_base
       ),
+      number_of_episodes: en?.number_of_episodes ? en?.number_of_episodes : null,
+      number_of_seasons: en?.number_of_seasons ? en?.number_of_seasons : null,
       popularity: en.popularity ? en.popularity : null,
     };
   }

@@ -98,6 +98,8 @@ export interface ItemProps {
   } | null;
   trailers: Video[] | null;
   ratings: RatingsProps | null;
+  number_of_episodes: number | null;
+  number_of_seasons: number | null;
   popularity: number | null;
   v: number;
 }

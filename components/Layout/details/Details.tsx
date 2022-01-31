@@ -116,6 +116,30 @@ const Details = ({ data }: any) => {
                   </Link>
                 </div>
               ) : null}
+              <div className='flex flex-col'>
+                <span className='text-base text-primary-300 mb-1 l-1'>{t('details.rated')}</span>
+                <Link href='/certificate/[rated]' as={`/certificate/${data.raw.rated}`} prefetch={false}>
+                  <a className='text-xl text-primary-200 hover:text-accent'>{data.raw.rated ? data.raw.rated : 'null'}</a>
+                </Link>
+              </div>
+              {!data.raw.type ? (
+                <>
+                  <div className='flex flex-col'>
+                    <span className='text-base text-primary-300 mb-1 l-1'>{t('details.number_of_episodes')}</span>
+
+                    <span className='text-xl text-primary-200' title={data.raw.number_of_episodes}>
+                      {data.raw.number_of_episodes}
+                    </span>
+                  </div>
+                  <div className='flex flex-col'>
+                    <span className='text-base text-primary-300 mb-1 l-1'>{t('details.number_of_seasons')}</span>
+
+                    <span className='text-xl text-primary-200' title={data.raw.number_of_seasons}>
+                      {data.raw.number_of_seasons}
+                    </span>
+                  </div>
+                </>
+              ) : null}
               {mainCrew ? (
                 <div className='flex flex-col'>
                   <span className='text-base text-primary-300 mb-1 l-1'>{mainCrew?.job}</span>
