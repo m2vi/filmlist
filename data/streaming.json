@@ -54,6 +54,11 @@
       "name": "hDEncode",
       "homepage": "https://hdencode.org/",
       "logo": null
+    },
+    {
+      "name": "AniMixPlay",
+      "homepage": "https://animixplay.to/",
+      "logo": null
     }
   ],
   "important": ["amazon video", "apple itunes", "amazon prime video", "crunchyroll", "disney plus", "apple tv plus"]
