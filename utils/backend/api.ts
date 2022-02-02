@@ -601,7 +601,9 @@ export class Api {
     const persons = items
       .map(({ credits }) => {
         return {
+          // deepcode ignore PureMethodReturnValueIgnored: <nonsense>
           cast: credits?.cast.map(({ character, gender, known_for_department, ...props }) => ({ ...props })) as any,
+          // deepcode ignore PureMethodReturnValueIgnored: <nonsense>
           crew: credits?.crew.map(({ gender, department, job, known_for_department, ...props }) => ({ ...props })) as any,
         };
       })

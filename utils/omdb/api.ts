@@ -28,7 +28,7 @@ export class Api {
         vote_count: null,
       },
       metacritic: {
-        vote_average: isNaN(metascore as any) ? null : metascore,
+        vote_average: Number.isNaN(metascore as any) ? null : metascore,
         vote_count: null,
       },
     };

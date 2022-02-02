@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { position, filter } = req.query;
+    const { position, filter } = Object.freeze(req.query);
 
     res.status(200).json(await api.moveItemToStart(JSON.parse(filter.toString())));
   } catch ({ message }: any) {

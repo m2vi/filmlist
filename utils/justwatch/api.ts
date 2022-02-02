@@ -64,6 +64,7 @@ export class Api {
     const $ = cherrio.load(html);
 
     return getUniqueListBy(
+      // file deepcode ignore UseArrowFunction: <cheerio needs normal function>
       $('.ott_provider')
         .filter(function () {
           return $(this).find('h3').text() === 'Stream';
