@@ -26,7 +26,15 @@
         "unfiltered": "Unfiltered",
         "watched": "Watched",
         "temp": "Temporary Tab",
-        "top-rated": "Top rated",
+
+        "top-rated-imdb": "Top rated (IMDb)",
+        "top-rated-tmdb": "Top rated (TMDB)",
+        "top-rated-rottentomatoes": "Top rated (Rotten Tomatoes)",
+        "top-rated-metacritic": "Top rated (Metacritic)",
+
+        "wait": "Wait",
+        "ltv": "Lange ungeschaute Serien",
+
         "bottom-rated": "Bottom rated",
         "popular": "Popular",
         "wfs": "Waiting for stream",
