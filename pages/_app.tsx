@@ -7,15 +7,15 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import type { AppProps } from 'next/app';
 import { appWithTranslation } from 'next-i18next';
 import { NextSeo } from 'next-seo';
-import { Router } from 'next/dist/client/router';
 import nProgress from 'nprogress';
 import { NextPage } from 'next';
-import React from 'react';
+import { ReactNode } from 'react';
 import Layout from '@components/Layout/Layout';
 import Null from '@components/Null';
 import 'moment/locale/en-gb';
 import 'moment/locale/de';
 import { ToastContainer } from 'react-toastify';
+import Router from 'next/router';
 // import Manage from '@components/Manage';
 
 Router.events.on('routeChangeStart', () => nProgress.start());
@@ -30,7 +30,7 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
-const SeoWrapper = ({ children }: { children: React.ReactNode }) => {
+const SeoWrapper = ({ children }: { children: ReactNode }) => {
   return (
     <div className='w-full h-full'>
       <ToastContainer

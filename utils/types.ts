@@ -101,7 +101,8 @@ export interface ItemProps {
   number_of_episodes: number | null;
   number_of_seasons: number | null;
   popularity: number | null;
-  v: number;
+  updated_at: number | null;
+  status: string | null;
 }
 
 export interface VoteProps {

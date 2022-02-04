@@ -152,6 +152,10 @@ const Details = ({ data }: any) => {
                   })}
                 </div>
               ) : null}
+              <div className='flex flex-col'>
+                <span className='text-base text-primary-300 mb-1 l-1'>{t('details.status')}</span>
+                <span className='text-xl text-primary-200'>{data.raw.status}</span>
+              </div>
             </div>
             <div className='flex flex-col mt-5'>
               <span className='text-base text-primary-300 mb-1 l-1'>{t('details.genres')}</span>

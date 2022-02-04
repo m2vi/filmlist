@@ -196,6 +196,7 @@ export class Client {
     const { isMovie, de, en, credits, external_ids, watchProviders, omdb_base } = await this.getBase(id, type);
 
     return {
+      status: en?.status ? en?.status : null,
       rated: this.certifcate(en, isMovie),
       external_ids,
       overview: {
@@ -236,7 +237,7 @@ export class Client {
       number_of_episodes: en?.number_of_episodes ? en?.number_of_episodes : null,
       number_of_seasons: en?.number_of_seasons ? en?.number_of_seasons : null,
       popularity: en.popularity,
-      v: 0,
+      updated_at: Date.now(),
     };
   }
 
@@ -309,6 +310,7 @@ export class Client {
     const { isMovie, de, en, credits, external_ids, watchProviders, omdb_base } = base ? base : await this.getBase(id, type);
 
     return {
+      status: en?.status ? en?.status : null,
       rated: this.certifcate(en, isMovie),
       external_ids,
       overview: {
@@ -354,6 +356,7 @@ export class Client {
       number_of_episodes: en?.number_of_episodes ? en?.number_of_episodes : null,
       number_of_seasons: en?.number_of_seasons ? en?.number_of_seasons : null,
       popularity: en.popularity ? en.popularity : null,
+      updated_at: null,
     };
   }
 

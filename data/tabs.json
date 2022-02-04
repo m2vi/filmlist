@@ -184,5 +184,25 @@
   "unfiltered": {
     "sort_key": false
   },
-  "temp": {}
+  "temp": {
+    "filter": {
+      "ratings.tmdb.vote_average": {
+        "$ne": null
+      },
+      "ratings.tmdb.vote_count": {
+        "$gte": 300
+      },
+      "genre_ids": {
+        "$eq": 16,
+        "$nin": [10752]
+      },
+      "state": {
+        "$lt": 0
+      },
+      "type": 1
+    },
+    "sort_key": "ratings.rottentomatoes.vote_average",
+    "hide_unreleased": true,
+    "reverse": true
+  }
 }
