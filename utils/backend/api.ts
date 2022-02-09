@@ -344,6 +344,14 @@ export class Api {
     return (filter: Partial<ItemProps>) => _.where(items, filter);
   }
 
+  async widget() {
+    const collection = await this.find({ state: -1 });
+
+    return {
+      'my list': collection.length,
+    };
+  }
+
   async stats(small?: boolean) {
     const start = performance.now();
     const db = await this.init();
