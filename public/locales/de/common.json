@@ -123,7 +123,8 @@
     "providers": "Anbieter",
     "rated": "Altersbeschränkung",
     "number_of_episodes": "Anzahl der Episoden",
-    "number_of_seasons": "Anzahl der Staffeln"
+    "number_of_seasons": "Anzahl der Staffeln",
+    "status": "Status"
   },
   "collection": {
     "count": "Anzahl",

@@ -186,22 +186,18 @@
   },
   "temp": {
     "filter": {
-      "ratings.tmdb.vote_average": {
-        "$ne": null
+      "ratings.imdb.vote_count": {
+        "$gte": 200
       },
-      "ratings.tmdb.vote_count": {
-        "$gte": 300
-      },
-      "genre_ids": {
-        "$eq": 16,
-        "$nin": [10752]
+      "ratings.imdb.vote_average": {
+        "$gte": 8
       },
       "state": {
         "$lt": 0
       },
       "type": 1
     },
-    "sort_key": "ratings.rottentomatoes.vote_average",
+    "sort_key": "ratings.imdb.vote_average",
     "hide_unreleased": true,
     "reverse": true
   }
