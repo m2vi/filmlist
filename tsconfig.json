@@ -23,7 +23,8 @@
       "@styles/*": ["styles/*"],
       "@utils/*": ["utils/*"],
       "@models/*": ["models/*"],
-      "@data/*": ["data/*"]
+      "@data/*": ["data/*"],
+      "@Types/*": ["types/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
