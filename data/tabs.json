@@ -194,19 +194,12 @@
   },
   "temp": {
     "filter": {
-      "ratings.imdb.vote_count": {
-        "$gte": 200
-      },
-      "ratings.imdb.vote_average": {
-        "$gte": 8
-      },
+      "genre_ids": 7424,
       "state": {
         "$lt": 0
-      },
-      "type": 1
+      }
     },
-    "sort_key": "ratings.imdb.vote_average",
-    "hide_unreleased": true,
+    "sort_key": false,
     "reverse": true
   }
 }
