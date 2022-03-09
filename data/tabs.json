@@ -43,6 +43,14 @@
       "genre_ids": 7424
     }
   },
+  "animation": {
+    "filter": {
+      "genre_ids": {
+        "$eq": 16,
+        "$ne": 7424
+      }
+    }
+  },
   "kids": {
     "filter": {
       "$or": [

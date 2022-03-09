@@ -32,13 +32,13 @@ const Dropdown = () => {
                 <Menu.Item>
                   {({ active }) => (
                     <Link href='/dashboard' passHref prefetch={false}>
-                      <div
+                      <a
                         className={`${
                           active ? ' text-primary-200 opacity-80' : 'text-primary-100'
                         } group flex rounded-md items-center w-full px-2 py-1 text-sm cursor-pointer hover:bg-primary-900`}
                       >
                         Dashboard
-                      </div>
+                      </a>
                     </Link>
                   )}
                 </Menu.Item>
@@ -61,7 +61,7 @@ const Dropdown = () => {
               <div className='px-3 py-1'>
                 <Menu.Item>
                   {({ active }) => (
-                    <Link href='/logout' passHref prefetch={false}>
+                    <Link href='/logout' prefetch={false}>
                       <a
                         className={`${
                           active ? ' text-primary-200 opacity-80' : 'text-primary-100'

@@ -56,8 +56,8 @@ const PopoverEl = () => {
                       {data.length > 0 ? (
                         <>
                           {data.map(({ name, backdrop_path, release_date, url }) => (
-                            <Link href={url} passHref key={url} prefetch={false}>
-                              <div className='p-3 hover:bg-primary-900 cursor-pointer'>
+                            <Link href={url} key={url} prefetch={false}>
+                              <a className='flex p-3 hover:bg-primary-900 cursor-pointer'>
                                 <Menu.Item>
                                   <div className='flex'>
                                     <img
@@ -71,7 +71,7 @@ const PopoverEl = () => {
                                     </div>
                                   </div>
                                 </Menu.Item>
-                              </div>
+                              </a>
                             </Link>
                           ))}
                         </>
@@ -83,8 +83,8 @@ const PopoverEl = () => {
                     </Menu.Items>
                   </div>
                   <div className='w-full'>
-                    <Link as='/notifications' passHref href='/[tab]' prefetch={false}>
-                      <div
+                    <Link as='/notifications' href='/[tab]' prefetch={false}>
+                      <a
                         className='w-full flex justify-center px-3 rounded-b-8 py-3 border border-transparent border-t-primary-700 hover:bg-primary-900 cursor-pointer'
                         title='View more'
                       >
@@ -97,7 +97,7 @@ const PopoverEl = () => {
                         >
                           <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 9l-7 7-7-7' />
                         </svg>
-                      </div>
+                      </a>
                     </Link>
                   </div>
                 </div>

@@ -8,9 +8,8 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent) {
   const [result, error] = await api.verify(req, true);
 
   if (!result) {
-    return NextResponse.redirect(`/oauth?e=${encodeURIComponent(error)}`);
+    return NextResponse.redirect(`${req.nextUrl.origin}/oauth?e=${encodeURIComponent(error)}`);
   }
 
   return NextResponse.next();
-  //  .cookie("geo", JSON.stringify({}))
 }
