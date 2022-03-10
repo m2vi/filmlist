@@ -43,6 +43,22 @@
       "genre_ids": 7424
     }
   },
+  "anime-watched": {
+    "filter": {
+      "genre_ids": 7424,
+      "state": {
+        "$gt": 0
+      }
+    }
+  },
+  "anime-list": {
+    "filter": {
+      "genre_ids": 7424,
+      "state": {
+        "$lt": 0
+      }
+    }
+  },
   "animation": {
     "filter": {
       "genre_ids": {
