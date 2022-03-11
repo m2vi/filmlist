@@ -1,6 +1,5 @@
 // @ts-check
 const { i18n } = require('./next-i18next.config');
-const withPWA = require('next-pwa');
 
 /**
  * @type {import('next').NextConfig}
@@ -15,12 +14,6 @@ const nextConfig = {
   images: {
     domains: ['cdn.discordapp.com', 'image.tmdb.org'],
     formats: ['image/avif', 'image/webp'],
-  },
-  pwa: {
-    dest: 'public',
-    register: true,
-    skipWaiting: true,
-    disable: process.env.NODE_ENV === 'development',
   },
   async redirects() {
     return [
