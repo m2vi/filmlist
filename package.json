@@ -13,7 +13,6 @@
     "@headlessui/react": "^1.5.0",
     "@heroicons/react": "^1.0.6",
     "@next/bundle-analyzer": "^12.1.0",
-    "@next/swc-darwin-arm64": "^12.1.0",
     "@svgr/webpack": "^6.2.1",
     "@titanium/colors": "^2.0.40",
     "@tsndr/cloudflare-worker-jwt": "^1.1.6",
