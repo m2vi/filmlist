@@ -133,7 +133,7 @@ p {
 }
 
 .tmdb {
-  stroke: var(--color-accent);
+  stroke: #805be7;
 }
 
 .imdb {

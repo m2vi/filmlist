@@ -26,6 +26,7 @@ import shuffle from 'shuffle-seed';
 import seedRandom from 'seed-random';
 import cache from 'memory-cache';
 import sift from 'sift';
+import tmdb from '../tmdb/api';
 
 class Jwt {
   decode() {
@@ -91,6 +92,16 @@ export class Api {
   }
 
   async getTab({ tab, locale, start, end, dontFrontend, release_year, custom_config, purpose = 'tab', useCache = true }: GetTabProps) {
+    if (tab.split('tmdb-')[1]) {
+      const tmdb_tab = tab.split('tmdb-')[1];
+
+      return await tmdb.getTMDBTab({
+        tab: tmdb_tab.split('-')[0],
+        type: tmdb_tab.split('-')[1],
+        locale,
+        page: parseInt(tmdb_tab.split('-')[2]),
+      });
+    }
     let items = [];
     let extra = null;
     const config = (custom_config ? custom_config : this.getTabConfig(tab) ? this.getTabConfig(tab) : {})!;

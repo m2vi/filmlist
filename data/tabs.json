@@ -83,16 +83,16 @@
       ]
     }
   },
-  "all-time-popular": {
+  "all-time-popular-tmdb": {
     "filter": {
-      "ratings.imdb.vote_count": {
+      "ratings.tmdb.vote_count": {
         "$gt": 0
       }
     },
     "sort_key": "ratings.tmdb.vote_count",
     "reverse": true
   },
-  "all-time-popular-imdb": {
+  "all-time-popular": {
     "filter": {
       "ratings.imdb.vote_count": {
         "$gt": 0
@@ -173,30 +173,10 @@
     "hide_unreleased": true,
     "reverse": true
   },
-  "top-rated-imdb": {
+  "top-rated": {
     "filter": {
       "ratings.imdb.vote_count": {
         "$gte": 200
-      }
-    },
-    "sort_key": "ratings.imdb.vote_average",
-    "hide_unreleased": true,
-    "reverse": true
-  },
-  "top-rated-rottentomatoes": {
-    "filter": {
-      "ratings.rottentomatoes.vote_average": {
-        "$ne": null
-      }
-    },
-    "sort_key": "ratings.rottentomatoes.vote_average",
-    "hide_unreleased": true,
-    "reverse": true
-  },
-  "top-rated-metacritic": {
-    "filter": {
-      "ratings.metacritic.vote_average": {
-        "$ne": null
       }
     },
     "sort_key": "ratings.imdb.vote_average",
@@ -209,13 +189,6 @@
     "sort_key": false
   },
   "temp": {
-    "filter": {
-      "genre_ids": 7424,
-      "state": {
-        "$lt": 0
-      }
-    },
-    "sort_key": false,
-    "reverse": true
+    "sort_key": "updated_at"
   }
 }

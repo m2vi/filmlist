@@ -143,7 +143,7 @@ const Details = ({ data }: any) => {
               {mainCrew ? (
                 <div className='flex flex-col'>
                   <span className='text-base text-primary-300 mb-1 l-1'>{mainCrew?.job}</span>
-                  {mainCrew.crew.map(({ id, original_name }, i) => {
+                  {mainCrew.crew.map(({ id, original_name }: any, i: number) => {
                     return (
                       <Link href='/person/[person]' as={`/person/${id}`} key={i} prefetch={false}>
                         <a className='text-xl text-primary-200 hover:text-accent'>{original_name}</a>

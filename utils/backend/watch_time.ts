@@ -1,3 +1,4 @@
+import { sortByKey } from '@utils/array';
 import { ItemProps } from '@utils/types';
 import moment from 'moment';
 import { FilterQuery } from 'mongoose';
@@ -5,7 +6,9 @@ import sift from 'sift';
 import api from './api';
 
 class WatchTime {
-  constructor(private attributes: string[] = ['runtime', 'number_of_episodes', 'number_of_seasons', 'type', 'ratings', 'state']) {}
+  constructor(
+    private attributes: string[] = ['runtime', 'number_of_episodes', 'number_of_seasons', 'type', 'ratings', 'state', 'original_name']
+  ) {}
 
   private filter(items: any[], siftQuery: FilterQuery<ItemProps>) {
     return items.filter(sift(siftQuery));

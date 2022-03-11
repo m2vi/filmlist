@@ -69,8 +69,6 @@ export const placeholderCards = (n: number): Partial<CardProps>[] => {
   );
 };
 
-export const rr = () => window.location.replace('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
-
 export const capitalizeFirstLetter = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 
 interface ObjProps {
@@ -96,4 +94,12 @@ export const isDefined = (v: any): boolean => {
   const undefinedValues = [null, undefined];
 
   return !undefinedValues.includes(v);
+};
+
+export const ex = <T, K>(variable: T, defaultValue: K): T | K => {
+  if (typeof variable === 'undefined') {
+    return defaultValue;
+  }
+
+  return variable;
 };

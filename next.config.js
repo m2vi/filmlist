@@ -14,6 +14,7 @@ const nextConfig = {
   i18n,
   images: {
     domains: ['cdn.discordapp.com', 'image.tmdb.org'],
+    formats: ['image/avif', 'image/webp'],
   },
   pwa: {
     dest: 'public',
@@ -37,7 +38,7 @@ const nextConfig = {
     });
     config.plugins.push(
       new webpack.DefinePlugin({
-        'process.env.BUILD_ID': JSON.stringify(buildId),
+        BUILD_ID: JSON.stringify(buildId),
       })
     );
     return config;

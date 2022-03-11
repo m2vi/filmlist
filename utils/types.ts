@@ -1,5 +1,5 @@
 import { FilterQuery, Types } from 'mongoose';
-import { MovieExternalIdsResponse, Video, VideosResponse } from 'moviedb-promise/dist/request-types';
+import { MovieExternalIdsResponse, Video } from 'moviedb-promise/dist/request-types';
 
 export enum ItemTypeEnum {
   'tv' = 0,
@@ -266,4 +266,15 @@ export interface GetUrlFromBaseProps {
   };
   all_providers: ProviderProps[];
   url: string;
+}
+
+export interface RatingsOptions {
+  tmdb: {
+    name: string;
+    vote_average: any;
+    vote_count: any;
+    release_date: any;
+    isMovie: boolean;
+  };
+  imdb_id: string;
 }

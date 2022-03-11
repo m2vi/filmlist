@@ -1,10 +1,9 @@
 import backend from '@utils/backend/api';
-import { CreditProps, GetTMDBTabProps, ItemProps, MovieDbTypeEnum, ProviderEntryProps, ProviderProps } from '@utils/types';
+import { CreditProps, GetTMDBTabProps, ItemProps, MovieDbTypeEnum, ProviderEntryProps, ProviderProps, RatingsOptions } from '@utils/types';
 import { removeEmpty, validateEnv } from '@utils/utils';
 import { MovieDb } from 'moviedb-promise';
 import companies from '@data/companies.json';
 import _, { shuffle } from 'underscore';
-import omdb from '../omdb/api';
 import {
   CreditsResponse,
   DiscoverMovieRequest,
@@ -27,6 +26,8 @@ import streaming from '@data/streaming.json';
 import querystring from 'qs';
 import { lowerCase } from 'lodash';
 import { sortByKey } from '@utils/array';
+import Vimdb from 'vimdb';
+import { RTScraper } from '@gabegabegabe/rtscraper';
 
 export const api = new MovieDb(validateEnv('MOVIE_TOKEN'));
 
@@ -146,7 +147,6 @@ export class Client {
     const watchProviders = await this.watchProviders(en['watch/providers'], isMovie, { id, language: 'en' });
 
     const de = this.getTranslationsFromBase(en, en?.translations, en?.images);
-    const omdb_base = await omdb.getBase(en?.title ? en?.title : en?.name, type);
 
     return {
       isMovie,
@@ -161,7 +161,6 @@ export class Client {
         : null,
       external_ids: en.external_ids ? en.external_ids : null,
       watchProviders,
-      omdb_base,
     };
   }
 
@@ -193,7 +192,7 @@ export class Client {
   }
 
   async dataForUpdate(id: number, type: MovieDbTypeEnum): Promise<Partial<ItemProps>> {
-    const { isMovie, de, en, credits, external_ids, watchProviders, omdb_base } = await this.getBase(id, type);
+    const { isMovie, de, en, credits, external_ids, watchProviders } = await this.getBase(id, type);
 
     return {
       status: en?.status ? en?.status : null,
@@ -225,15 +224,16 @@ export class Client {
       watchProviders,
       collection: isMovie ? (en.belongs_to_collection ? en.belongs_to_collection : null) : null,
       trailers: en.videos ? this.getTrailers(en.videos) : null,
-      ratings: await this.ratings(
-        {
+      ratings: await this.ratings({
+        tmdb: {
+          name: en.title ? en.title : en.name,
           vote_average: en.vote_average,
           vote_count: en.vote_count,
-          title: en.title ? en.title : en.name,
-          type: isMovie ? 1 : 0,
+          release_date: en.release_date,
+          isMovie: isMovie,
         },
-        omdb_base
-      ),
+        imdb_id: external_ids?.imdb_id,
+      }),
       number_of_episodes: en?.number_of_episodes ? en?.number_of_episodes : null,
       number_of_seasons: en?.number_of_seasons ? en?.number_of_seasons : null,
       popularity: en.popularity,
@@ -241,13 +241,32 @@ export class Client {
     };
   }
 
-  async ratings(item: Partial<any>, base: any) {
+  async ratings({ tmdb: { vote_average, vote_count, release_date, isMovie, name }, imdb_id }: RatingsOptions) {
+    const imdb = new Vimdb('en-GB');
+    const rt = new RTScraper();
+
+    const [imdb_data, rt_results] = await Promise.all([
+      imdb_id ? imdb.getShow(imdb_id).catch((reason) => null) : null,
+      isMovie ? rt.findMovies(name).catch((reason) => []) : rt.findTVSeries(name).catch((reason) => []),
+    ]);
+
+    const nyear = new Date(release_date).getFullYear();
+
+    const rt_result = rt_results.find(({ title }) => title === name);
+
     return {
       tmdb: {
-        vote_average: item.vote_average ? item.vote_average : null,
-        vote_count: item.vote_count ? item.vote_count : null,
+        vote_average: vote_average ? vote_average : null,
+        vote_count: vote_count ? vote_count : null,
       },
-      ...(await omdb.getExternalRatings(item.title, item.type, base)),
+      imdb: {
+        vote_average: imdb_data?.aggregateRating?.ratingValue ? imdb_data?.aggregateRating?.ratingValue : null,
+        vote_count: imdb_data?.aggregateRating?.ratingCount ? imdb_data?.aggregateRating?.ratingCount : null,
+      },
+      rt: {
+        vote_average: rt_result?.score ? rt_result?.score / 10 : null,
+        vote_count: null,
+      },
     };
   }
 
@@ -307,7 +326,7 @@ export class Client {
     type: MovieDbTypeEnum,
     base?: { isMovie: boolean; de: any; en: any; credits: any; external_ids: any; watchProviders: any; omdb_base: any }
   ): Promise<Partial<ItemProps>> {
-    const { isMovie, de, en, credits, external_ids, watchProviders, omdb_base } = base ? base : await this.getBase(id, type);
+    const { isMovie, de, en, credits, external_ids, watchProviders } = base ? base : await this.getBase(id, type);
 
     return {
       status: en?.status ? en?.status : null,
@@ -344,15 +363,16 @@ export class Client {
       watchProviders,
       collection: isMovie ? (en.belongs_to_collection ? en.belongs_to_collection : null) : null,
       trailers: en.videos ? this.getTrailers(en.videos) : null,
-      ratings: await this.ratings(
-        {
+      ratings: await this.ratings({
+        tmdb: {
+          name: en.title ? en.title : en.name,
           vote_average: en.vote_average,
           vote_count: en.vote_count,
-          title: en.title ? en.title : en.name,
-          type: isMovie ? 1 : 0,
+          release_date: en.release_date,
+          isMovie: isMovie,
         },
-        omdb_base
-      ),
+        imdb_id: external_ids?.imdb_id,
+      }),
       number_of_episodes: en?.number_of_episodes ? en?.number_of_episodes : null,
       number_of_seasons: en?.number_of_seasons ? en?.number_of_seasons : null,
       popularity: en.popularity ? en.popularity : null,

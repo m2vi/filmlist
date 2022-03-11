@@ -32,7 +32,9 @@ export const logUpdate = ({
   console.log('elapsed time:', `${elapsed_time}`.blue);
   console.log('remaining time:', `${remaining_time}`.blue);
   console.log('');
-  const b = new cliProgress.SingleBar({ format: '{bar}'.blue + ' {percentage}%' });
+  const b = new cliProgress.SingleBar({
+    format: '{bar}'.blue + ' {percentage}%',
+  });
   b.start(100, progress);
   console.log('');
 };
@@ -57,7 +59,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   };
 
   for (const index in docs) {
-    const { _id, id_db, type, name } = docs[index];
+    const { _id, id_db, type } = docs[index];
     const start = performance.now();
 
     try {

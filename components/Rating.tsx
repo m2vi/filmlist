@@ -37,11 +37,15 @@ const Rating = ({ ratings, state, notchild, className, type, id_db, ...props }: 
   return (
     <>
       <div
-        className={`${!notchild ? 'absolute top-2 right-2 z-20' : 'w-10'} grid grid-flow-col gap-4 cursor-pointer ${className}`}
+        className={`${!notchild ? 'absolute top-2 right-2 z-20' : 'w-10'} grid grid-flow-col gap-3 cursor-pointer ${className}`}
         onClick={openModal}
         {...props}
       >
-        <RatingCircle provider={ratings?.tmdb} colorClassName='tmdb' />
+        {ratings?.imdb?.vote_count ? (
+          <RatingCircle provider={ratings?.imdb} colorClassName='imdb' />
+        ) : (
+          <RatingCircle provider={ratings?.tmdb} colorClassName='tmdb' />
+        )}
       </div>
       <>
         <Transition appear show={isOpen} as={Fragment}>
@@ -93,9 +97,9 @@ const Rating = ({ ratings, state, notchild, className, type, id_db, ...props }: 
                         </span>
                       </div>
                     </div>
-                    {isDefined(data?.rottentomatoes?.vote_average) ? (
+                    {isDefined(data?.rt?.vote_average) ? (
                       <div className='grid grid-flow-col justify-start mt-2'>
-                        <RatingCircle provider={data?.rottentomatoes} colorClassName='rotten' />
+                        <RatingCircle provider={data?.rt} colorClassName='rotten' />
                         <div className='flex flex-col justify-center ml-2'>
                           <span className='leading-5 text-primary-200'>Tomatometer</span>
                           <span className='l-1 text-primary-300 text-sm'>- {t('details.votes')}</span>

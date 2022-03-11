@@ -1,9 +1,18 @@
 {
-  "extends": "next/core-web-vitals",
+  "extends": ["next/core-web-vitals"],
   "rules": {
     "@next/next/no-server-import-in-page": "off",
-    "unused-imports/no-unused-imports": "error",
     "@next/next/no-img-element": "off"
   },
-  "plugins": ["unused-imports"]
+  "plugins": [
+    "eslint-plugin-new-with-error",
+    "eslint-plugin-no-loops",
+    "eslint-plugin-no-secrets",
+    "eslint-plugin-no-unsanitized",
+    "eslint-plugin-promise",
+    "eslint-plugin-regexp",
+    "eslint-plugin-security",
+    "eslint-plugin-sonarjs",
+    "eslint-plugin-xss"
+  ]
 }
