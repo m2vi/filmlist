@@ -1,7 +1,7 @@
 import { FrontendItemProps } from '@utils/types';
 import copy from 'copy-to-clipboard';
 import moment from 'moment';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import config from '@data/config.json';
 import Rating from './Rating';
 import Link from 'next/link';
