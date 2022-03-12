@@ -27,7 +27,7 @@ import querystring from 'qs';
 import { lowerCase } from 'lodash';
 import { sortByKey } from '@utils/array';
 import Vimdb from 'vimdb';
-import { RTScraper } from '@gabegabegabe/rtscraper';
+import rt from '@utils/rt/scraper';
 
 export const api = new MovieDb(validateEnv('MOVIE_TOKEN'));
 
@@ -245,16 +245,15 @@ export class Client {
     };
   }
 
-  async ratings({ tmdb: { vote_average, vote_count, isMovie, name }, imdb_id }: RatingsOptions) {
+  async ratings({ tmdb: { vote_average, vote_count, isMovie, name, release_date }, imdb_id }: RatingsOptions) {
+    const year = new Date(release_date).getFullYear();
+
     const imdb = new Vimdb('en-GB');
-    const rt = new RTScraper();
 
-    const [imdb_data, rt_results] = await Promise.all([
+    const [imdb_data, rt_result] = await Promise.all([
       imdb_id ? imdb.getShow(imdb_id).catch((reason) => null) : null,
-      isMovie ? rt.findMovies(name).catch((reason) => []) : rt.findTVSeries(name).catch((reason) => []),
+      isMovie ? rt.findMovie({ name, year }).catch((reason) => null) : rt.findTVShow({ title: name }).catch((reason) => null),
     ]);
-
-    const rt_result = rt_results?.find(({ title }) => title === name);
 
     return {
       tmdb: {
@@ -266,7 +265,7 @@ export class Client {
         vote_count: imdb_data?.aggregateRating?.ratingCount ? imdb_data?.aggregateRating?.ratingCount : null,
       },
       rt: {
-        vote_average: rt_result?.score ? rt_result?.score / 10 : null,
+        vote_average: rt_result?.meterScore ? rt_result?.meterScore / 10 : null,
         vote_count: null,
       },
     };
