@@ -22,7 +22,7 @@ export function validateEnv<T extends string = string>(key: keyof NodeJS.Process
   return value;
 }
 
-export const stringToBoolean = (string: string) => {
+export const stringToBoolean = (string: string): boolean => {
   switch (string.toLowerCase().trim()) {
     case 'true':
     case 'yes':

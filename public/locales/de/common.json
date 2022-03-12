@@ -26,10 +26,10 @@
         "watched": "Gesehen",
         "temp": "Temporärer Tab",
 
+        "top-rated": "Bestbewertet (IMDb)",
         "top-rated-imdb": "Bestbewertet (IMDb)",
         "top-rated-tmdb": "Bestbewertet (TMDB)",
-        "top-rated-rottentomatoes": "Bestbewertet (Rotten Tomatoes)",
-        "top-rated-metacritic": "Bestbewertet (Metacritic)",
+        "top-rated-rt": "Bestbewertet (Rotten Tomatoes)",
 
         "wait": "Warten",
         "ltv": "Long unwatched TV Shows",

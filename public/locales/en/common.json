@@ -26,10 +26,10 @@
         "watched": "Watched",
         "temp": "Temporary Tab",
 
+        "top-rated": "Top rated (IMDb)",
         "top-rated-imdb": "Top rated (IMDb)",
         "top-rated-tmdb": "Top rated (TMDB)",
-        "top-rated-rottentomatoes": "Top rated (Rotten Tomatoes)",
-        "top-rated-metacritic": "Top rated (Metacritic)",
+        "top-rated-rt": "Top rated (Rotten Tomatoes)",
 
         "wait": "Wait",
         "ltv": "Lange ungeschaute Serien",

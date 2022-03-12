@@ -191,7 +191,7 @@ export class Client {
     return null;
   }
 
-  async dataForUpdate(id: number, type: MovieDbTypeEnum): Promise<Partial<ItemProps>> {
+  async dataForUpdate(id: number, type: MovieDbTypeEnum, fast: boolean = false): Promise<Partial<ItemProps>> {
     const { isMovie, de, en, credits, external_ids, watchProviders } = await this.getBase(id, type);
 
     return {
@@ -224,16 +224,20 @@ export class Client {
       watchProviders,
       collection: isMovie ? (en.belongs_to_collection ? en.belongs_to_collection : null) : null,
       trailers: en.videos ? this.getTrailers(en.videos) : null,
-      ratings: await this.ratings({
-        tmdb: {
-          name: en.title ? en.title : en.name,
-          vote_average: en.vote_average,
-          vote_count: en.vote_count,
-          release_date: en.release_date,
-          isMovie: isMovie,
-        },
-        imdb_id: external_ids?.imdb_id,
-      }),
+      ...(!fast
+        ? {
+            ratings: await this.ratings({
+              tmdb: {
+                name: en.title ? en.title : en.name,
+                vote_average: en.vote_average,
+                vote_count: en.vote_count,
+                release_date: en.release_date,
+                isMovie: isMovie,
+              },
+              imdb_id: external_ids?.imdb_id,
+            }),
+          }
+        : {}),
       number_of_episodes: en?.number_of_episodes ? en?.number_of_episodes : null,
       number_of_seasons: en?.number_of_seasons ? en?.number_of_seasons : null,
       popularity: en.popularity,
@@ -241,7 +245,7 @@ export class Client {
     };
   }
 
-  async ratings({ tmdb: { vote_average, vote_count, release_date, isMovie, name }, imdb_id }: RatingsOptions) {
+  async ratings({ tmdb: { vote_average, vote_count, isMovie, name }, imdb_id }: RatingsOptions) {
     const imdb = new Vimdb('en-GB');
     const rt = new RTScraper();
 
@@ -250,9 +254,7 @@ export class Client {
       isMovie ? rt.findMovies(name).catch((reason) => []) : rt.findTVSeries(name).catch((reason) => []),
     ]);
 
-    const nyear = new Date(release_date).getFullYear();
-
-    const rt_result = rt_results.find(({ title }) => title === name);
+    const rt_result = rt_results?.find(({ title }) => title === name);
 
     return {
       tmdb: {

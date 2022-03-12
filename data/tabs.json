@@ -183,6 +183,26 @@
     "hide_unreleased": true,
     "reverse": true
   },
+  "top-rated-imdb": {
+    "filter": {
+      "ratings.imdb.vote_count": {
+        "$gte": 200
+      }
+    },
+    "sort_key": "ratings.imdb.vote_average",
+    "hide_unreleased": true,
+    "reverse": true
+  },
+  "top-rated-rt": {
+    "filter": {
+      "ratings.rt.vote_average": {
+        "$gte": 0
+      }
+    },
+    "sort_key": "ratings.rt.vote_average",
+    "hide_unreleased": true,
+    "reverse": true
+  },
   "none": {},
   "entries": {},
   "unfiltered": {

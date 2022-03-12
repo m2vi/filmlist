@@ -6,6 +6,7 @@ import moment from 'moment';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { performance } from 'perf_hooks';
 import cliProgress from 'cli-progress';
+import { stringToBoolean } from '@utils/utils';
 
 export const logUpdate = ({
   errors,
@@ -40,6 +41,7 @@ export const logUpdate = ({
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const fast = stringToBoolean(req.query.fast?.toString());
   const docs = await api.schema.find().lean<ItemProps[]>();
   const length = docs.length;
   const total_start = performance.now();
@@ -63,7 +65,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const start = performance.now();
 
     try {
-      const n: any = await client.dataForUpdate(id_db, type);
+      const n: any = await client.dataForUpdate(id_db, type, fast);
       const result = await itemSchema.updateOne(
         { id_db, type },
         {
