@@ -4,7 +4,6 @@ import api from '@utils/worker/worker';
 
 export async function middleware(req: NextRequest, ev: NextFetchEvent) {
   if (!req.page.name || !config.middleware.restricted.includes(req.page.name)) return;
-  console.log(req.page);
 
   const [result, error] = await api.verify(req, true);
 

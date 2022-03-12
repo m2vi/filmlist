@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     let response = {};
 
     if (c) {
-      response = (await client.getBase(parseInt(id as string), type as any)).en;
+      response = await client.getBase(parseInt(id as string), type as any);
     } else {
       response = await client.get(parseInt(id as string), type as any, {});
     }

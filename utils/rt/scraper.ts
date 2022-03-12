@@ -89,7 +89,10 @@ class Rt {
     const results = (await this.search(name)).movies;
 
     const result = results.find((item) => {
-      return lowerCase(name) === lowerCase(item.name) && (item.year ? this.dumbNumberFunction(year).includes(item.year) : true);
+      return (
+        (lowerCase(item.name).includes(lowerCase(name)) || lowerCase(name).includes(lowerCase(item.name))) &&
+        (item.year ? this.dumbNumberFunction(year).includes(item.year) : true)
+      );
     });
 
     return result ? result : null;

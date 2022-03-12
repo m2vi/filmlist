@@ -136,6 +136,8 @@ export class Client {
   }
 
   async getBase(id: number, type: MovieDbTypeEnum) {
+    const imdb = new Vimdb();
+
     const params = {
       id,
       language: 'en-GB',
@@ -143,7 +145,13 @@ export class Client {
       append_to_response: 'credits,watch/providers,external_ids,videos,images,translations,release_dates,content_ratings',
     };
     const isMovie = (MovieDbTypeEnum[type] as any) === MovieDbTypeEnum.movie || type.toString() === '1';
-    const en = (await (isMovie ? api.movieInfo(params) : api.tvInfo(params))) as any;
+    const [en] = await Promise.all([(isMovie ? api.movieInfo(params) : api.tvInfo(params)) as any]);
+    const [imdb_data, rottentomatoes] = await Promise.all([
+      imdb.getShow(en.external_ids?.imdb_id).catch((reason) => undefined),
+      isMovie
+        ? rt.findMovie({ name: en.title ? en.title : en.name, year: new Date(en.release_date).getFullYear() }).catch((reason) => undefined)
+        : rt.findTVShow({ title: en.title ? en.title : en.name }).catch((reason) => undefined),
+    ]);
     const watchProviders = await this.watchProviders(en['watch/providers'], isMovie, { id, language: 'en' });
 
     const de = this.getTranslationsFromBase(en, en?.translations, en?.images);
@@ -161,6 +169,8 @@ export class Client {
         : null,
       external_ids: en.external_ids ? en.external_ids : null,
       watchProviders,
+      imdb: imdb_data,
+      rt: rottentomatoes,
     };
   }
 
@@ -192,7 +202,7 @@ export class Client {
   }
 
   async dataForUpdate(id: number, type: MovieDbTypeEnum, fast: boolean = false): Promise<Partial<ItemProps>> {
-    const { isMovie, de, en, credits, external_ids, watchProviders } = await this.getBase(id, type);
+    const { isMovie, de, en, credits, external_ids, watchProviders, imdb, rt } = await this.getBase(id, type);
 
     return {
       status: en?.status ? en?.status : null,
@@ -226,16 +236,19 @@ export class Client {
       trailers: en.videos ? this.getTrailers(en.videos) : null,
       ...(!fast
         ? {
-            ratings: await this.ratings({
-              tmdb: {
-                name: en.title ? en.title : en.name,
-                vote_average: en.vote_average,
-                vote_count: en.vote_count,
-                release_date: en.release_date,
-                isMovie: isMovie,
+            ratings: await this.ratings(
+              {
+                tmdb: {
+                  name: en.title ? en.title : en.name,
+                  vote_average: en.vote_average,
+                  vote_count: en.vote_count,
+                  release_date: en.release_date,
+                  isMovie: isMovie,
+                },
+                imdb_id: external_ids?.imdb_id,
               },
-              imdb_id: external_ids?.imdb_id,
-            }),
+              { imdb, rottentomatoes: rt }
+            ),
           }
         : {}),
       number_of_episodes: en?.number_of_episodes ? en?.number_of_episodes : null,
@@ -245,14 +258,21 @@ export class Client {
     };
   }
 
-  async ratings({ tmdb: { vote_average, vote_count, isMovie, name, release_date }, imdb_id }: RatingsOptions) {
+  async ratings(
+    { tmdb: { vote_average, vote_count, isMovie, name, release_date }, imdb_id }: RatingsOptions,
+    base?: { imdb: any; rottentomatoes: any }
+  ) {
     const year = new Date(release_date).getFullYear();
 
     const imdb = new Vimdb('en-GB');
 
     const [imdb_data, rt_result] = await Promise.all([
-      imdb_id ? imdb.getShow(imdb_id).catch((reason) => null) : null,
-      isMovie ? rt.findMovie({ name, year }).catch((reason) => null) : rt.findTVShow({ title: name }).catch((reason) => null),
+      base?.imdb || base?.imdb === null ? base?.imdb : imdb_id ? imdb.getShow(imdb_id).catch((reason) => null) : null,
+      base?.rottentomatoes || base?.rottentomatoes === null
+        ? base?.rottentomatoes
+        : isMovie
+        ? rt.findMovie({ name, year }).catch((reason) => null)
+        : rt.findTVShow({ title: name }).catch((reason) => null),
     ]);
 
     return {
@@ -325,9 +345,9 @@ export class Client {
   async adapt(
     id: number,
     type: MovieDbTypeEnum,
-    base?: { isMovie: boolean; de: any; en: any; credits: any; external_ids: any; watchProviders: any; omdb_base: any }
+    base?: { isMovie: boolean; de: any; en: any; credits: any; external_ids: any; watchProviders: any; imdb: any; rt: any }
   ): Promise<Partial<ItemProps>> {
-    const { isMovie, de, en, credits, external_ids, watchProviders } = base ? base : await this.getBase(id, type);
+    const { isMovie, de, en, credits, external_ids, watchProviders, imdb, rt } = base ? base : await this.getBase(id, type);
 
     return {
       status: en?.status ? en?.status : null,
@@ -364,16 +384,19 @@ export class Client {
       watchProviders,
       collection: isMovie ? (en.belongs_to_collection ? en.belongs_to_collection : null) : null,
       trailers: en.videos ? this.getTrailers(en.videos) : null,
-      ratings: await this.ratings({
-        tmdb: {
-          name: en.title ? en.title : en.name,
-          vote_average: en.vote_average,
-          vote_count: en.vote_count,
-          release_date: en.release_date,
-          isMovie: isMovie,
+      ratings: await this.ratings(
+        {
+          tmdb: {
+            name: en.title ? en.title : en.name,
+            vote_average: en.vote_average,
+            vote_count: en.vote_count,
+            release_date: en.release_date,
+            isMovie: isMovie,
+          },
+          imdb_id: external_ids?.imdb_id,
         },
-        imdb_id: external_ids?.imdb_id,
-      }),
+        { imdb, rottentomatoes: rt }
+      ),
       number_of_episodes: en?.number_of_episodes ? en?.number_of_episodes : null,
       number_of_seasons: en?.number_of_seasons ? en?.number_of_seasons : null,
       popularity: en.popularity ? en.popularity : null,
@@ -409,7 +432,8 @@ export class Client {
           credits: null,
           external_ids: null,
           watchProviders: null,
-          omdb_base: null,
+          imdb: null,
+          rt: null,
         });
 
         return backend.toFrontendItem(adapted as any);
