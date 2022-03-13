@@ -1,9 +1,17 @@
 import backend from '@utils/backend/api';
-import { CreditProps, GetTMDBTabProps, ItemProps, MovieDbTypeEnum, ProviderEntryProps, ProviderProps, RatingsOptions } from '@utils/types';
+import {
+  CreditProps,
+  GetTMDBTabProps,
+  ItemProps,
+  MovieDbTypeEnum,
+  ProviderEntryProps,
+  ProviderProps,
+  RatingsOptions,
+  Streaming,
+} from '@utils/types';
 import { removeEmpty, validateEnv } from '@utils/utils';
 import { MovieDb } from 'moviedb-promise';
-import companies from '@data/companies.json';
-import _, { shuffle } from 'underscore';
+import _ from 'underscore';
 import {
   CreditsResponse,
   DiscoverMovieRequest,
@@ -22,7 +30,6 @@ import {
   ShowContentRatingResponse,
   ReleaseDate,
 } from 'moviedb-promise/dist/request-types';
-import streaming from '@data/streaming.json';
 import querystring from 'qs';
 import { lowerCase } from 'lodash';
 import { sortByKey } from '@utils/array';
@@ -48,7 +55,7 @@ export class Client {
           providers: null,
         };
 
-      const flatrate = AT.flatrate?.map(
+      const res = (AT.flatrate ? AT.flatrate : []).concat(AT?.ads ? AT?.ads : []).map(
         ({ logo_path, provider_id, provider_name }: any): ProviderProps => ({
           id: provider_id,
           key: lowerCase(provider_name),
@@ -59,7 +66,7 @@ export class Client {
 
       return {
         url: AT.link,
-        providers: flatrate ? flatrate : null,
+        providers: res?.length > 0 ? res : null,
       };
     } catch (error) {
       return {
@@ -69,13 +76,13 @@ export class Client {
     }
   }
 
-  importantProviders({ watchProviders, id_db, type }: Partial<ItemProps>) {
+  async importantProviders({ watchProviders, id_db, type }: Partial<ItemProps>) {
     if (!watchProviders?.providers) return [];
-    const config = streaming;
+    const config: Streaming = await backend.streaming();
 
     const important = watchProviders.providers
       .map((item) => {
-        if (!config.important.includes(item.name!.toLowerCase())) return null;
+        if (!config.important.map((str) => lowerCase(str)).includes(lowerCase(item.name))) return null;
         return {
           ...item,
           qs: querystring.stringify({ id: id_db, type, provider: item.name }),
@@ -86,15 +93,33 @@ export class Client {
     return important;
   }
 
-  subscribedProvider({ watchProviders, type, id_db }: Partial<ItemProps>) {
+  async providers({ watchProviders, id_db, type }: Partial<ItemProps>) {
     if (!watchProviders?.providers) return [];
-    const config = streaming;
+
+    const providers = watchProviders.providers
+      .map((item) => {
+        return {
+          ...item,
+          qs: querystring.stringify({ id: id_db, type, provider: item.name }),
+        };
+      })
+      .filter((item) => item);
+
+    return providers;
+  }
+
+  async subscribedProvider({ watchProviders, type, id_db }: Partial<ItemProps>) {
+    if (!watchProviders?.providers) return [];
+    const config: Streaming = await backend.streaming();
 
     const subscribed = watchProviders?.providers
       .map((item) => {
-        const subbed = _.find(config.subscribed, {
-          name: item.name?.toLowerCase(),
-        });
+        const subbed = _.find(
+          config.subscribed.map(({ name, ...props }) => ({ name: lowerCase(name), ...props })),
+          {
+            name: item.name?.toLowerCase(),
+          }
+        );
 
         if (!subbed) return null;
         return {
@@ -441,38 +466,10 @@ export class Client {
     );
   }
 
-  async getCompany(id: number) {
-    const jr = _.find(companies.data, { id })!;
-    if (!jr) return null;
+  async getCompany(id: number, locale: string) {
+    const data = await this.api.companyInfo({ id, language: locale });
 
-    const base = this.getTabeBase(
-      (await api.discoverMovie({ with_companies: id.toString(), language: 'de' })).results,
-      (await api.discoverMovie({ with_companies: id.toString(), language: 'en' })).results
-    );
-    const adapted = await this.adaptTabs(base);
-
-    return {
-      length: adapted.length,
-      name: jr.name,
-      route: jr.homepage,
-      items: adapted,
-    };
-  }
-
-  async getCompanyTabs() {
-    const ids = shuffle(companies.ids).slice(0, 3);
-    let result = {} as any;
-
-    for (const index in ids) {
-      const id = ids[index];
-
-      const entry = await this.getCompany(id);
-      if (entry) {
-        result[id] = entry;
-      }
-    }
-
-    return result;
+    return data;
   }
 
   async getPerson(id: number, locale: string) {

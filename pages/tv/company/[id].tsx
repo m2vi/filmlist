@@ -16,18 +16,21 @@ Company.layout = true;
 export default Company;
 
 export const getServerSideProps: GetServerSideProps = async ({ locale, query }: any) => {
-  const company = await client.getCompany(query.id);
-  const items = await api.getCompanyItems({ id: parseInt(query.id), locale, page: parseInt(query.page) });
+  const company = await client.getCompany(query.id, locale);
+  const items = await api.getCompanyItems({ id: parseInt(query.id), locale, page: 0, type: 'tv' });
 
   return {
     props: {
       ...(await serverSideTranslations(locale!, ['common', 'footer'])),
       data: {
         name: company?.name ? company?.name : null,
-        homepage: company?.route ? company?.route : null,
+        homepage: company?.homepage ? company?.homepage : null,
         items: items,
         length: items.length,
         id: parseInt(query.id),
+        purpose: 'company',
+        locale,
+        type: 'tv',
       },
     },
   };

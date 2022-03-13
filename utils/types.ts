@@ -278,3 +278,15 @@ export interface RatingsOptions {
   };
   imdb_id: string;
 }
+
+export interface Streaming {
+  subscribed: Array<{ name: string; homepage: string; logo: string | null }>;
+  important: Array<string>;
+}
+
+export interface UserInterface {
+  _id: Types.ObjectId;
+  id: string;
+  streaming: Streaming;
+  tabs: TabFilterOptions[];
+}

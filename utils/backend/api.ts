@@ -1,7 +1,6 @@
 import { Connection, FilterQuery, Model, UpdateQuery } from 'mongoose';
 import { connectToDatabase } from '../database';
 import { removeDuplicates, sortByKey } from '../array';
-import tabs from '@data/tabs.json';
 import itemSchema from '@models/itemSchema';
 import _, { sortBy } from 'underscore';
 import {
@@ -27,6 +26,7 @@ import seedRandom from 'seed-random';
 import cache from 'memory-cache';
 import sift from 'sift';
 import tmdb from '../tmdb/api';
+import user from '@utils/user/api';
 
 class Jwt {
   decode() {
@@ -38,12 +38,11 @@ class Jwt {
 
 export class Api {
   genres: GenreProps[];
-  tabs: Tabs;
+
   jwt: Jwt;
   schema: Model<ItemProps, {}, {}, {}>;
   constructor() {
     this.genres = genres.array;
-    this.tabs = tabs;
     this.jwt = new Jwt();
     this.schema = itemSchema;
   }
@@ -52,10 +51,36 @@ export class Api {
     return await connectToDatabase();
   }
 
-  private getTabConfig(name: string) {
-    if (!this.tabs[name]) return null;
+  async streaming(destroy: boolean = false) {
+    if (!destroy && cache.get('streaming')) {
+      return cache.get('streaming');
+    } else {
+      await this.init();
+      const streaming = await user.schema.findOne().select('streaming').lean();
 
-    return this.tabs[name]!;
+      cache.put('streaming', streaming?.streaming, 6 * 1000 * 60 * 60);
+      return streaming?.streaming;
+    }
+  }
+
+  async tabs(destroy: boolean = false) {
+    if (!destroy && cache.get('tabs')) {
+      return cache.get('tabs');
+    } else {
+      await this.init();
+      const tabs = await user.schema.findOne().select('tabs').lean();
+
+      cache.put('tabs', tabs?.tabs, 6 * 1000 * 60 * 60);
+      return tabs?.tabs;
+    }
+  }
+
+  private async getTabConfig(name: string) {
+    const tabs = await this.tabs();
+
+    if (!tabs[name]) return null;
+
+    return tabs[name]!;
   }
 
   getYearNumbers(year: number | string): FilterQuery<ItemProps> {
@@ -104,7 +129,8 @@ export class Api {
     }
     let items = [];
     let extra = null;
-    const config = (custom_config ? custom_config : this.getTabConfig(tab) ? this.getTabConfig(tab) : {})!;
+    const cconfig = await this.getTabConfig(tab);
+    const config = (custom_config ? custom_config : cconfig ? cconfig : {})!;
     items = await this.find(
       {
         ...config.filter,
@@ -145,12 +171,19 @@ export class Api {
     };
   }
 
-  async getCompanyItems({ id, locale, page }: { id: number; locale: string; page: number }) {
+  async getCompanyItems({ id, locale, page, type }: { id: number; locale: string; page: number; type: any }) {
     try {
-      const raw = (await client.api.discoverMovie({ with_companies: id.toString(), language: locale, page: page + 1 }))?.results;
+      const isMovie = tmdb.isMovie(type);
+
+      const params: any = { with_companies: id.toString(), language: locale, page: page + 1, sort_by: 'vote_count.desc' };
+
+      const raw = (isMovie ? await client.api.discoverMovie(params) : await client.api.discoverTv(params))?.results;
+
       if (!raw) return [];
 
-      return this.prepareForFrontend(raw as any, locale);
+      const adapted = await tmdb.adaptTabs(tmdb.getTabeBase(raw, raw));
+
+      return this.prepareForFrontend(adapted, locale).reverse();
     } catch (error: any) {
       return [];
     }
@@ -174,6 +207,7 @@ export class Api {
       genre_ids,
       ratings,
       watchProviders,
+
       ...props
     }: any,
     locale: string = 'en'
@@ -193,7 +227,7 @@ export class Api {
           : backdrop_path,
       release_date: (release_date ? release_date : first_air_date) ? (release_date ? release_date : first_air_date) : new Date().getTime(),
       ratings: ratings ? ratings : null,
-      type,
+      type: typeof type === 'undefined' ? null : type,
       state: state ? state : 0,
       watchProviders: watchProviders ? watchProviders : null,
     };
@@ -582,8 +616,9 @@ export class Api {
     return {
       raw: res,
       frontend: this.toFrontendItem(res, locale),
-      subscribedProvider: client.subscribedProvider(res),
-      importantProviders: client.importantProviders(res),
+      subscribedProvider: await client.subscribedProvider(res),
+      importantProviders: await client.importantProviders(res),
+      providers: await client.providers(res),
     };
   }
 

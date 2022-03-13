@@ -1,5 +1,6 @@
 - [ ] background jobs
-- [ ] 404 hinzufügen
+- [ ] 404 hinzufügen (für tabs usw.)
 - [ ] Error handling erweitern (Benachrichtigungen)
 - [ ] Manage Interface
 - [ ] Responsive
+- [ ] Übersetzungen in Datenbank speichern

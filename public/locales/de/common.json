@@ -31,6 +31,12 @@
         "top-rated-tmdb": "Bestbewertet (TMDB)",
         "top-rated-rt": "Bestbewertet (Rotten Tomatoes)",
 
+        "anime-watched": "Gesehene Animes",
+        "anime-list": "Anime-Watchlist",
+
+        "all-time-popular-tmdb": "Allzeit populär (TMDB)",
+        "all-time-popular": "Allzeit populär (IMDb)",
+
         "wait": "Warten",
         "ltv": "Long unwatched TV Shows",
 

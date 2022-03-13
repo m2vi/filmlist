@@ -99,7 +99,7 @@ const Rating = ({ ratings, state, notchild, className, type, id_db, ...props }: 
                     </div>
                     {isDefined(data?.rt?.vote_average) ? (
                       <div className='grid grid-flow-col justify-start mt-2'>
-                        <RatingCircle provider={data?.rt} colorClassName='rotten' />
+                        <RatingCircle provider={data?.rt} colorClassName='rt' />
                         <div className='flex flex-col justify-center ml-2'>
                           <span className='leading-5 text-primary-200'>Tomatometer</span>
                           <span className='l-1 text-primary-300 text-sm'>- {t('details.votes')}</span>

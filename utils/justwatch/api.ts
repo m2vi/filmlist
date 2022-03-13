@@ -21,7 +21,7 @@ export class Api {
 
     try {
       const params = { id: parseInt(id), type: tmdb.isMovie(type) ? 1 : 0, provider: lowerCase(provider) };
-      const all_providers = config.getProvidersSync();
+      const all_providers = await config.getCachedProviders();
 
       let res = null;
 
@@ -64,10 +64,9 @@ export class Api {
     const $ = cherrio.load(html);
 
     return getUniqueListBy(
-      // file deepcode ignore UseArrowFunction: <cheerio needs normal function>
       $('.ott_provider')
         .filter(function () {
-          return $(this).find('h3').text() === 'Stream';
+          return ['Ads', 'Stream'].includes($(this).find('h3').text());
         })
         .find('.providers li')
         .map(function () {

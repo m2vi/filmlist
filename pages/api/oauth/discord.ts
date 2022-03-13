@@ -4,6 +4,7 @@ import { sign } from 'jsonwebtoken';
 import { DiscordUser } from '../../../utils/types';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { baseUrl } from '@utils/fetch';
+import user from '@utils/user/api';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -22,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { code = null, error = null } = req.query;
 
     if (error) {
-      return res.redirect(`/error/?e=${encodeURIComponent(req.query.error as any)}`);
+      return res.redirect(`/`);
     }
 
     if (!code || typeof code !== 'string') return res.redirect(OAUTH_URI);
@@ -58,9 +59,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.redirect(OAUTH_URI);
     }
 
-    if (!oauth.allowedIDs.includes(me.id)) throw Error('');
+    const client = await user.find(me.id).catch((reason) => console.log(reason));
 
-    const token = sign(me, oauth.jwtSecret, { expiresIn: '48h' });
+    if (!client) {
+      return res.redirect(`/error?status=401`);
+    }
+
+    const token = sign({ ...me }, oauth.jwtSecret, { expiresIn: '48h' });
 
     res.setHeader(
       'Set-Cookie',

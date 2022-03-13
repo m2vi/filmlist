@@ -34,10 +34,12 @@ export class Api {
     this.jwt = new Jwt();
   }
 
-  getTitle(query: any) {
+  getTitle(query: any, data: any) {
     const m = i18n?.t('pages.filmlist.default');
 
-    if (query.tab) {
+    if (data.purpose === 'company') {
+      return `${data.name} – ${m}`;
+    } else if (query.tab) {
       return `${i18n?.t(`pages.filmlist.menu.${query.tab}`)} – ${m}`;
     } else if (query.id) {
       return `${i18n?.t(`pages.filmlist.menu.${genres.getName(parseInt(query.id)).toLowerCase()}`)} – ${m}`;
@@ -76,7 +78,11 @@ export class Api {
 
   async fetchMoreData(data: any, items: any[]) {
     try {
-      if (data?.purpose === 'tmdb-tab') {
+      if (data?.purpose === 'company') {
+        const res = await basicFetch(`/api/manage/items/company/${data?.id}/${items.length / 20}?locale=${data?.locale}`);
+
+        return res?.items ? res?.items : [];
+      } else if (data?.purpose === 'tmdb-tab') {
         const res = await this.getTMDBTab({ ...(data.query ? data.query : {}), page: items?.length / 20 + 1 });
         return res?.items ? res?.items : [];
       } else {

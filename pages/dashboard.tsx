@@ -1,7 +1,5 @@
 import Title from '@components/Title';
 import api from '@utils/backend/api';
-import streaming from '@data/streaming.json';
-import tabs from '@data/tabs.json';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -10,7 +8,7 @@ import { useEffect } from 'react';
 import { capitalizeFirstLetter } from '@utils/utils';
 import { sortByKey } from '@utils/array';
 
-const Dashboard = ({ data }: any) => {
+const Dashboard = ({ data, tabs, streaming }: any) => {
   const { t } = useTranslation();
 
   useEffect(() => console.log(data), [data]);
@@ -73,6 +71,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       data: {
         ...(await api.stats(true)),
       },
+      tabs: await api.tabs(),
+      streaming: await api.streaming(),
     },
   };
 };

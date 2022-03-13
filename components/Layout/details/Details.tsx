@@ -214,7 +214,7 @@ const Details = ({ data }: any) => {
                   })}
                 </span>
               </div>
-            ) : (
+            ) : data?.importantProviders?.length > 0 ? (
               <div className='flex flex-col mt-5'>
                 <span className='text-base text-primary-300 mb-1 l-1'>{t('details.providers')}</span>
                 <span className='text-xl text-primary-200'>
@@ -231,6 +231,28 @@ const Details = ({ data }: any) => {
                         </a>
 
                         <span>{data?.importantProviders?.length > i + 1 ? ', ' : ''}</span>
+                      </span>
+                    );
+                  })}
+                </span>
+              </div>
+            ) : (
+              <div className='flex flex-col mt-5'>
+                <span className='text-base text-primary-300 mb-1 l-1'>{t('details.providers')}</span>
+                <span className='text-xl text-primary-200'>
+                  {data?.providers?.map(({ name, qs }: any, i: number) => {
+                    return (
+                      <span key={i}>
+                        <a
+                          href={api.justwatch(qs)}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='text-xl text-primary-200 hover:text-accent'
+                        >
+                          {name}
+                        </a>
+
+                        <span>{data?.providers?.length > i + 1 ? ', ' : ''}</span>
                       </span>
                     );
                   })}

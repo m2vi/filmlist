@@ -34,7 +34,7 @@ const Scroll = ({ data }: { data: any }) => {
 
   return (
     <Full className='pt-10 flex justify-center'>
-      <Title title={api.getTitle(query)} />
+      <Title title={api.getTitle(query, data)} />
       <main
         className='w-full overflow-y-scroll dD5d-item max-w-screen-2xl px-120 mt-11 pb-11'
         ref={ScrollRef}
