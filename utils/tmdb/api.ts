@@ -9,7 +9,7 @@ import {
   RatingsOptions,
   Streaming,
 } from '@utils/types';
-import { removeEmpty, validateEnv } from '@utils/utils';
+import { removeEmpty } from '@utils/utils';
 import { MovieDb } from 'moviedb-promise';
 import _ from 'underscore';
 import {
