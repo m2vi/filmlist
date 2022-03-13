@@ -1,0 +1,13 @@
+SECURITY.md
+requirements.txt
+README.md
+package-log.json
+LICENSE
+Dockerfile
+node_modules
+docs
+.vscode
+.next
+.github
+.github
+venv
