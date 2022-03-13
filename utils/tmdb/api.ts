@@ -36,7 +36,7 @@ import { sortByKey } from '@utils/array';
 import Vimdb from 'vimdb';
 import rt from '@utils/rt/scraper';
 
-export const api = new MovieDb(validateEnv('MOVIE_TOKEN'));
+export const api = new MovieDb(process.env.MOVIE_TOKEN!);
 
 export class Client {
   api: MovieDb;
