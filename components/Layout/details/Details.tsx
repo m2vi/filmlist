@@ -13,14 +13,14 @@ import InfoBar from '../../InfoBar';
 import { useEffect, useState } from 'react';
 import momentDurationFormatSetup from 'moment-duration-format';
 import Poster from './Poster';
-import { IoPlay } from 'react-icons/io5';
+import { IoRefreshOutline } from 'react-icons/io5';
 
 momentDurationFormatSetup(moment as any);
 
 const Details = ({ data }: any) => {
   const [showBar, setShowBar] = useState(false);
   const { t } = useTranslation();
-  const locale = useRouter().locale!;
+  const { locale, reload } = useRouter();
 
   useEffect(() => setShowBar(!data.raw.state), [data]);
   useEffect(() => console.log(data), [data]);
@@ -37,20 +37,17 @@ const Details = ({ data }: any) => {
             <Poster data={data} />
           </div>
           <div className='w-full' style={{ maxWidth: '480px' }}>
-            {data?.subscribedProvider?.length > 0 ? (
-              <a
-                href={data?.subscribedProvider[0]?.url}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='flex items-center text-3xl font-bold hover:text-accent cursor-pointer'
+            <span className='flex items-center hidden-parent'>
+              <span className='text-3xl font-bold mr-2'>{data.frontend.name}</span>
+              <div
+                className='grid place-items-center p-1 bg-primary-700 rounded-5 cursor-pointer hidden-child'
+                onClick={() => frontend.update(data.frontend.id_db, data.frontend.type, reload)}
               >
-                <span className='mr-2'>{data.frontend.name}</span> <IoPlay className='h-4 w-4' />
-              </a>
-            ) : (
-              <span className='text-3xl font-bold'>{data.frontend.name}</span>
-            )}
+                <IoRefreshOutline className='h-3 w-3' />
+              </div>
+            </span>
 
-            <p className='text-primary-300 mt-5 text-justify'>{data.raw.overview[locale]}</p>
+            <p className='text-primary-300 mt-5 text-justify'>{data.raw.overview[locale!]}</p>
             <Rating
               className='mt-5'
               ratings={data.frontend.ratings}
@@ -79,7 +76,7 @@ const Details = ({ data }: any) => {
                 </span>
                 {data.raw.release_date ? (
                   <span className='text-xl text-primary-200' title={moment(data.raw.release_date).format('YYYY-MM-DD')}>
-                    {moment(data.raw.release_date).locale(locale).format('L')}
+                    {moment(data.raw.release_date).locale(locale!).format('L')}
                   </span>
                 ) : (
                   <span className='text-xl text-primary-200'>-</span>
@@ -101,7 +98,7 @@ const Details = ({ data }: any) => {
                 </span>
                 {data.raw.runtime ? (
                   <span className='text-xl text-primary-200' title={data.raw.runtime}>
-                    {frontend.duration(data.raw.runtime, locale)}
+                    {frontend.duration(data.raw.runtime, locale!)}
                   </span>
                 ) : (
                   <span className='text-xl text-primary-200'>-</span>

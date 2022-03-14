@@ -290,3 +290,9 @@ export interface UserInterface {
   streaming: Streaming;
   tabs: TabFilterOptions[];
 }
+
+export interface TransitionOptions {
+  shallow?: boolean;
+  locale?: string | false;
+  scroll?: boolean;
+}

@@ -9,6 +9,7 @@ import {
   ItemProps,
   NotificationItemProps,
   ProviderEntryProps,
+  TransitionOptions,
 } from '@utils/types';
 import moment from 'moment';
 import { basicFetch } from '@utils/fetch';
@@ -17,6 +18,8 @@ import momentDurationFormatSetup from 'moment-duration-format';
 import qs from 'qs';
 import { i18n } from 'next-i18next';
 import genres from '@utils/tmdb/genres';
+import QueryString from 'qs';
+import { Url } from 'url';
 
 momentDurationFormatSetup(moment as any);
 
@@ -158,6 +161,12 @@ export class Api {
     const data = await basicFetch(`/api/manage/browse_genre?locale=${locale}&seed=${seed}&index=${index}`);
 
     return data;
+  }
+
+  async update(id: any, type: any, router_reload: () => void): Promise<void> {
+    const result = await basicFetch(`/api/db/update?${QueryString.stringify({ id, type })}`);
+
+    router_reload();
   }
 }
 

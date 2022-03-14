@@ -152,3 +152,11 @@ p {
   aspect-ratio: 2 / 3;
   width: 100%;
 }
+
+.hidden-parent .hidden-child {
+  opacity: 0;
+}
+
+.hidden-parent:hover .hidden-child {
+  opacity: 1;
+}
