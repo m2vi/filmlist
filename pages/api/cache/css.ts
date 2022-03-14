@@ -2,7 +2,7 @@ import { cachedFetch } from '@utils/backend/fetch';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const baseUrl = 'https://dev.core.fluxi.ml/styles';
+  const baseUrl = 'https://fluxi.me/styles';
 
   const f = async (name: string) => await cachedFetch(`${baseUrl}/${name}.css`, 'text');
 
