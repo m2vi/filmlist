@@ -88,6 +88,7 @@ export interface ItemProps {
   runtime: number;
   type: MovieDbTypeEnum;
   credits: CreditProps | null;
+  keywords: Array<{ id: number; name: string }>;
   watchProviders: ProviderEntryProps | null;
   state: number | number[];
   collection: {

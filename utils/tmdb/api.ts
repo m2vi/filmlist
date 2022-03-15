@@ -160,23 +160,27 @@ export class Client {
     return (MovieDbTypeEnum[type] as any) === MovieDbTypeEnum.tv || type.toString() === '0';
   }
 
-  async getBase(id: number, type: MovieDbTypeEnum) {
+  async getBase(id: number, type: MovieDbTypeEnum, fast: boolean = false) {
     const imdb = new Vimdb();
 
     const params = {
       id,
       language: 'en-GB',
       include_image_language: 'en,de,null',
-      append_to_response: 'credits,watch/providers,external_ids,videos,images,translations,release_dates,content_ratings',
+      append_to_response: 'credits,watch/providers,external_ids,videos,images,translations,release_dates,content_ratings,keywords',
     };
     const isMovie = (MovieDbTypeEnum[type] as any) === MovieDbTypeEnum.movie || type.toString() === '1';
     const [en] = await Promise.all([(isMovie ? api.movieInfo(params) : api.tvInfo(params)) as any]);
-    const [imdb_data, rottentomatoes] = await Promise.all([
-      imdb.getShow(en.external_ids?.imdb_id).catch((reason) => undefined),
-      isMovie
-        ? rt.findMovie({ name: en.title ? en.title : en.name, year: new Date(en.release_date).getFullYear() }).catch((reason) => undefined)
-        : rt.findTVShow({ title: en.title ? en.title : en.name }).catch((reason) => undefined),
-    ]);
+    const [imdb_data, rottentomatoes] = !fast
+      ? await Promise.all([
+          imdb.getShow(en.external_ids?.imdb_id).catch((reason) => undefined),
+          isMovie
+            ? rt
+                .findMovie({ name: en.title ? en.title : en.name, year: new Date(en.release_date).getFullYear() })
+                .catch((reason) => undefined)
+            : rt.findTVShow({ title: en.title ? en.title : en.name }).catch((reason) => undefined),
+        ])
+      : [null, null];
     const watchProviders = await this.watchProviders(en['watch/providers'], isMovie, { id, language: 'en' });
 
     const de = this.getTranslationsFromBase(en, en?.translations, en?.images);
@@ -227,7 +231,7 @@ export class Client {
   }
 
   async dataForUpdate(id: number, type: MovieDbTypeEnum, fast: boolean = false): Promise<Partial<ItemProps>> {
-    const { isMovie, de, en, credits, external_ids, watchProviders, imdb, rt } = await this.getBase(id, type);
+    const { isMovie, de, en, credits, external_ids, watchProviders, imdb, rt } = await this.getBase(id, type, fast);
 
     return {
       status: en?.status ? en?.status : null,
@@ -257,6 +261,7 @@ export class Client {
         : null,
       credits: credits ? this.adaptCredits(credits) : null,
       watchProviders,
+      keywords: en?.keywords?.keywords ? en?.keywords?.keywords : [],
       collection: isMovie ? (en.belongs_to_collection ? en.belongs_to_collection : null) : null,
       trailers: en.videos ? this.getTrailers(en.videos) : null,
       ...(!fast
@@ -406,6 +411,7 @@ export class Client {
         : null,
       type: isMovie ? 1 : 0,
       credits: credits ? this.adaptCredits(credits) : null,
+      keywords: en?.keywords?.keywords ? en?.keywords?.keywords : [],
       watchProviders,
       collection: isMovie ? (en.belongs_to_collection ? en.belongs_to_collection : null) : null,
       trailers: en.videos ? this.getTrailers(en.videos) : null,

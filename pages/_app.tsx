@@ -4,6 +4,7 @@ import 'tailwindcss/tailwind.css';
 import 'swiper/css';
 import 'swiper/css/lazy';
 import 'react-toastify/dist/ReactToastify.min.css';
+import '@styles/notifications.css';
 import type { AppProps } from 'next/app';
 import { appWithTranslation } from 'next-i18next';
 import { NextSeo } from 'next-seo';
@@ -16,6 +17,7 @@ import 'moment/locale/en-gb';
 import 'moment/locale/de';
 import { ToastContainer } from 'react-toastify';
 import Router from 'next/router';
+import NotificationWrapper from '@components/NotificationWrapper';
 // import Manage from '@components/Manage';
 
 Router.events.on('routeChangeStart', () => nProgress.start());
@@ -35,14 +37,15 @@ const SeoWrapper = ({ children }: { children: ReactNode }) => {
     <div className='w-full h-full'>
       <ToastContainer
         position='top-right'
-        autoClose={5000}
-        hideProgressBar
-        newestOnTop
-        closeOnClick
+        autoClose={3000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick={true}
         rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
+        pauseOnFocusLoss={true}
+        draggable={false}
+        pauseOnHover={true}
+        closeButton={false}
         theme='dark'
       />
       {/*  <Manage /> */}
@@ -58,6 +61,7 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
   return (
     <L>
       <SeoWrapper>
+        <NotificationWrapper />
         <Component {...pageProps} />
       </SeoWrapper>
     </L>

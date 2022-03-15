@@ -12,9 +12,9 @@ const Home = ({ ...props }) => {
   const { locale } = useRouter();
 
   return (
-    <div className='pt-10 w-full flex justify-center'>
+    <div className='pt-10 w-full h-full flex justify-center'>
       <Title title='Browse' />
-      <div className='w-full items-center py-11 px-120 max-w-screen-2xl'>
+      <div className='h-full w-full items-center py-11 px-120 max-w-screen-2xl'>
         {props.init.map((tab: any, index: number) => {
           if (index === 2) {
             return (

@@ -20,6 +20,7 @@ import { i18n } from 'next-i18next';
 import genres from '@utils/tmdb/genres';
 import QueryString from 'qs';
 import { Url } from 'url';
+import notifications from '@utils/notifications/api';
 
 momentDurationFormatSetup(moment as any);
 
@@ -166,7 +167,7 @@ export class Api {
   async update(id: any, type: any, router_reload: () => void): Promise<void> {
     const result = await basicFetch(`/api/db/update?${QueryString.stringify({ id, type })}`);
 
-    router_reload();
+    notifications.info(`Updated ${id}:${type} successfully`);
   }
 }
 
