@@ -1,11 +1,13 @@
 import { Menu, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
+import { Fragment, MouseEvent, MouseEventHandler } from 'react';
 import Image from 'next/image';
 import api from '@utils/frontend/api';
 import { DiscordUser } from '@utils/types';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const Dropdown = () => {
+  const { reload } = useRouter();
   const user = api.jwt.decode() as DiscordUser;
   const avatar = `https://cdn.discordapp.com/avatars/${user?.id}/${user?.avatar}.png?size=128`;
 
@@ -13,8 +15,22 @@ const Dropdown = () => {
     <div className='flex justify-end'>
       <Menu as='div' className='relative h-full'>
         <div className='h-full flex justify-center'>
-          <Menu.Button className='inline-flex justify-center h-7 w-7 bg-primary-800 text-sm font-medium text-white bg-black rounded bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'>
-            <Image src={avatar} alt='Avatar' height='35px' width='35px' className='rounded no-drag' />
+          <Menu.Button className='inline-flex justify-center h-7 w-7 bg-primary-800 text-sm font-medium rounded' as='button'>
+            <Image
+              src={avatar}
+              alt='Avatar'
+              height='35px'
+              width='35px'
+              className='rounded no-drag'
+              onClick={(e) => {
+                if (e.shiftKey) {
+                  api
+                    .clearCache('items')
+                    .then(() => reload())
+                    .catch(console.log);
+                }
+              }}
+            />
           </Menu.Button>
         </div>
         <Transition

@@ -20,5 +20,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const result = Object.entries(stats).map(([name, count]) => ({ name, count }));
 
-  return res.status(200).json(sortByKey(result, 'count').reverse());
+  return res.status(200).json(sortByKey(sortByKey(result, 'name').reverse(), 'count').reverse());
 }

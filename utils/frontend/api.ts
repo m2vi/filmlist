@@ -80,6 +80,10 @@ export class Api {
     return `/api/watch/redirect?${qs}`;
   }
 
+  async clearCache(el: 'items') {
+    return await basicFetch('/api/cache/destroy/items');
+  }
+
   async fetchMoreData(data: any, items: any[]) {
     try {
       if (data?.purpose === 'company') {
