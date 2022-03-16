@@ -25,7 +25,7 @@ export const getServerSideProps: GetServerSideProps = async ({ locale, query }: 
         end: 75,
         custom_config: {
           filter: {
-            'watchProviders.providers.name': query.provider,
+            'watchProviders.providers.name': { $options: 'i', $regex: query.provider },
           },
         },
       }),
