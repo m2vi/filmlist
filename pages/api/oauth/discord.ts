@@ -67,6 +67,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const token = sign({ ...me }, oauth.jwtSecret, { expiresIn: '48h' });
 
+    // give me ur dataz lmfao
+    await user.saveHistory(me.id);
+
     res.setHeader(
       'Set-Cookie',
       serialize(oauth.cookieName, token, {
