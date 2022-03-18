@@ -22,7 +22,7 @@ const Details = ({ data }: any) => {
   const { t } = useTranslation();
   const { locale, reload } = useRouter();
 
-  useEffect(() => setShowBar(!data.raw.state), [data]);
+  useEffect(() => setShowBar(data.raw.state === null), [data]);
   useEffect(() => console.log(data), [data]);
 
   const mainCrew = frontend.getMainCrew(data.raw);

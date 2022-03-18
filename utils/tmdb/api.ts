@@ -435,7 +435,7 @@ export class Client {
     };
   }
 
-  async get(id: number, type: MovieDbTypeEnum, { state = -1 }) {
+  async get(id: number, type: MovieDbTypeEnum, { state = -1 }: { state: number | null }) {
     const adapted = await this.adapt(id, type);
 
     return {

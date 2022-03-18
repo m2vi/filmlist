@@ -90,7 +90,7 @@ export interface ItemProps {
   credits: CreditProps | null;
   keywords: Array<{ id: number; name: string }>;
   watchProviders: ProviderEntryProps | null;
-  state: number | number[];
+  state: number | number[] | null;
   collection: {
     id: number;
     name: string;
