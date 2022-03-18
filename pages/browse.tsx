@@ -67,6 +67,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const tabs = await Promise.all([
     backend.getTab({ ...base_props, tab: 'my list' }),
+    backend.getTab({ ...base_props, tab: 'continue-watching' }),
     backend.getTab({ ...base_props, tab: 'latest' }),
     backend.getTab({ ...base_props, tab: 'soon' }),
   ]);
