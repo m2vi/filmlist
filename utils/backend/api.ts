@@ -181,7 +181,7 @@ export class Api {
 
       if (!raw) return [];
 
-      const adapted = await tmdb.adaptTabs(tmdb.getTabeBase(raw, raw));
+      const adapted = await tmdb.adaptTabs(tmdb.getTabBase(raw, raw));
 
       return this.prepareForFrontend(adapted, locale).reverse();
     } catch (error: any) {
@@ -307,7 +307,7 @@ export class Api {
       { slice: [0, Number.MAX_SAFE_INTEGER], sort: { key: 'release_date', order: -1 } }
     );
     const items = sortByKey(
-      this.prepareForFrontend(await client.adaptTabs(client.getTabeBase(parts, parts)), locale),
+      this.prepareForFrontend(await client.adaptTabs(client.getTabBase(parts, parts)), locale),
       'release_date'
     ).reverse();
 
@@ -597,7 +597,7 @@ export class Api {
 
   async details(type: string, id: number | string, locale: string) {
     let res: any = {
-      error: 'Unkown error',
+      error: 'Unknown error',
     };
     try {
       res = this.toJSON(

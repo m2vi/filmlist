@@ -444,7 +444,7 @@ export class Client {
     };
   }
 
-  getTabeBase(en: any, de: any) {
+  getTabBase(en: any, de: any) {
     const both = en?.map((entry: ItemProps, index: number) => {
       return [entry, (de as any)[index]];
     });
@@ -508,7 +508,7 @@ export class Client {
       const res = (
         await (isMovie ? api.movieRecommendations({ id: id, language: locale }) : api.tvRecommendations({ id, language: locale }))
       ).results;
-      const adapted = await this.adaptTabs(this.getTabeBase(res, res));
+      const adapted = await this.adaptTabs(this.getTabBase(res, res));
 
       return adapted;
     } catch (error) {
@@ -547,7 +547,7 @@ export class Client {
 
     const data = (await api.trending({ language: locale, time_window: 'day', media_type: isMovie ? 'movie' : isTV ? 'tv' : 'all' }))
       .results;
-    const items = backend.prepareForFrontend(await this.adaptTabs(this.getTabeBase(data, data))).reverse();
+    const items = backend.prepareForFrontend(await this.adaptTabs(this.getTabBase(data, data))).reverse();
     return {
       name: 'trending',
       route: isMovie || isTV ? `/${isMovie ? 'movie' : 'tv'}/trending` : null,
@@ -585,7 +585,7 @@ export class Client {
 
     items = (await (isMovie ? api.discoverMovie(params as any) : api.discoverTv(params as any))).results;
 
-    items = await this.adaptTabs(this.getTabeBase(items, items));
+    items = await this.adaptTabs(this.getTabBase(items, items));
 
     const frontend = backend.prepareForFrontend(items as any, locale).reverse();
     return {
