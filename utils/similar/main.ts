@@ -1,10 +1,9 @@
 import { ItemProps, MovieDbTypeEnum } from '@utils/types';
+import api from '@utils/backend/api';
 
-class Similiar {
-  calculateValue(item: ItemProps) {
-    // genre_ids, cast, length,
-  }
-}
+class Similiar {}
 
 export const similiar = new Similiar();
 export default similiar;
+
+// Cosine Similarity Matrix
