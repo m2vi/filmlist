@@ -397,66 +397,6 @@ export class Api {
     };
   }
 
-  async stats(small?: boolean) {
-    const start = performance.now();
-    const db = await this.init();
-    const collection = await this.find({});
-    const find = api.arrayToFind(collection);
-
-    const genreStats = (collection: any[]) => {
-      let genres = {} as any;
-
-      this.genres.forEach(({ id, name }) => {
-        genres[name.toLowerCase()] = collection.filter(({ genre_ids }) => genre_ids.includes(id)).length;
-      });
-
-      return genres;
-    };
-
-    if (!small) {
-      return {
-        general: {
-          entries: collection?.length,
-          movies: find({ type: 1 }).length,
-          tv: find({ type: 0 }).length,
-          'my list': find({ state: -1 }).length,
-        },
-        genres: genreStats(collection),
-        tabs: null,
-        db: await this.dbStats(),
-        genresWithLessThanTwentyItems: await this.getGenresWithLessThanNItems(20),
-        time: `${(performance.now() - start).toFixed(2)}ms`,
-      };
-    }
-    return {
-      general: {
-        entries: collection?.length,
-        movies: find({ type: 1 }).length,
-        tv: find({ type: 0 }).length,
-        'my list': find({ state: -1 }).length,
-      },
-      time: `${(performance.now() - start).toFixed(2)}ms`,
-    };
-  }
-
-  async dbStats() {
-    const start = performance.now();
-    const db = await this.init();
-    const stats = await db?.db.collection('filmlist').stats();
-    if (!stats) return {};
-    const { count, ns, size, avgObjSize, storageSize, freeStorageSize } = stats;
-
-    return {
-      ns,
-      size,
-      count,
-      avgObjSize,
-      storageSize,
-      freeStorageSize,
-      time: `${(performance.now() - start).toFixed()}ms`,
-    };
-  }
-
   async update(id: number, type: MovieDbTypeEnum) {
     const newData: any = await client.dataForUpdate(id, type);
 

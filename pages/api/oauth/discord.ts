@@ -65,10 +65,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.redirect(`/error?status=401`);
     }
 
-    const token = sign({ ...me }, oauth.jwtSecret, { expiresIn: '48h' });
+    const { sessionId } = await user.history.insert(me.id, req);
 
-    // give me ur dataz lmfao
-    await user.saveHistory(me.id);
+    const token = sign({ ...me, sessionId: sessionId }, oauth.jwtSecret, { expiresIn: '48h' });
 
     res.setHeader(
       'Set-Cookie',

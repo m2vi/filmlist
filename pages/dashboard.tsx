@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useEffect } from 'react';
 import { capitalizeFirstLetter } from '@utils/utils';
 import { sortByKey } from '@utils/array';
+import stats from '@utils/backend/statistics';
 
 const Dashboard = ({ data, tabs, streaming }: any) => {
   const { t } = useTranslation();
@@ -69,7 +70,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       ...(await serverSideTranslations(context.locale!, ['common'])),
       data: {
-        ...(await api.stats(true)),
+        ...(await stats.stats(true)),
       },
       tabs: await api.tabs(),
       streaming: await api.streaming(),
