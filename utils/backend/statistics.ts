@@ -1,10 +1,12 @@
 import { sortByKey } from '@m2vi/iva';
+import { ItemProps } from '@utils/types';
 import api from './api';
-import helper from './helper';
+import helper from '../helper/main';
 
 class Stats {
-  async overview() {
-    const { items: collection } = await api.cachedItems();
+  async cast() {
+    await helper.dbInit();
+    const collection = await api.schema.find().select('credits').lean<ItemProps[]>();
 
     const cast = [] as string[];
     let stats = {} as any;
@@ -15,18 +17,20 @@ class Stats {
       });
     });
 
-    cast.forEach((name) => {
-      stats[name] = cast.filter((member) => member === name).length;
+    cast.forEach((actor) => {
+      stats[actor] = cast.filter((name) => name === actor).length;
     });
 
     const array = Object.entries(stats).map(([member, count]) => {
       return {
-        value: member,
-        count: count,
+        value: member as string,
+        count: count as number,
       };
     });
 
-    return sortByKey(array, 'count').reverse();
+    return sortByKey(array, 'count')
+      .reverse()
+      .filter(({ count }) => count > 1);
   }
 
   async keywords() {

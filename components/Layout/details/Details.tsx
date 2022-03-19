@@ -268,6 +268,13 @@ const Details = ({ data }: any) => {
               return result;
             }}
           />
+          <CarouselAsync
+            func={async () => {
+              const result = await basicFetch(`/api/similar/get?id_db=${data.raw.id_db}&type=${data.raw.type}&locale=${locale}`);
+
+              return result;
+            }}
+          />
         </div>
       </main>
     </Full>

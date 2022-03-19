@@ -18,7 +18,6 @@
     "@titanium/colors": "^2.0.42",
     "@tsndr/cloudflare-worker-jwt": "^1.1.6",
     "cheerio": "^1.0.0-rc.10",
-    "clear": "^0.1.0",
     "cli-progress": "^3.10.0",
     "cookie": "^0.4.2",
     "copy-to-clipboard": "^3.3.1",
@@ -31,7 +30,6 @@
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-sonarjs": "^0.12.0",
     "eslint-plugin-xss": "^0.1.11",
-    "faker": "^6.6.6",
     "js-cookie": "^3.0.1",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
@@ -59,7 +57,6 @@
     "shuffle-seed": "^1.1.6",
     "sift": "^16.0.0",
     "swiper": "^8.0.7",
-    "systeminformation": "^5.11.8",
     "tailwindcss-important": "^1.0.0",
     "underscore": "^1.13.2",
     "vimdb": "^4.0.6"

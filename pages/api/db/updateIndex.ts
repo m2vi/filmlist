@@ -1,7 +1,9 @@
 import itemSchema from '@models/itemSchema';
+import helper from '@utils/helper/main';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  await helper.dbInit();
   const docs = await itemSchema.find().select('_id').lean();
 
   for (const index in docs) {

@@ -17,7 +17,7 @@ export default Page;
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
-      data: await stats.overview(),
+      data: await stats.cast(),
     },
   };
 };

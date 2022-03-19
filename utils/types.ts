@@ -65,8 +65,8 @@ export interface CreditProps {
 }
 
 export interface ItemProps {
-  rated: string | null;
-  _id: Types.ObjectId | string | null;
+  rated: string | null | undefined;
+  _id?: Types.ObjectId | string | null;
   genre_ids: number[];
   id_db: number;
   external_ids: MovieExternalIdsResponse;
@@ -312,3 +312,17 @@ export interface HistoryItem {
 }
 
 export interface HistoryInsertResponse {}
+
+export interface SimilarityConfig {
+  weighting?: {
+    keywords?: number;
+    genre_ids?: number;
+    credits?: number;
+    origin?: number;
+    collection?: number;
+  };
+}
+
+export interface SimilarityResultObject {
+  [key: string]: number;
+}

@@ -7,6 +7,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { performance } from 'perf_hooks';
 import cliProgress from 'cli-progress';
 import { stringToBoolean } from '@utils/utils';
+import helper from '@utils/helper/main';
 
 export const logUpdate = ({
   errors,
@@ -41,6 +42,7 @@ export const logUpdate = ({
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  await helper.dbInit();
   const fast = stringToBoolean(req.query.fast?.toString());
   const docs = await api.schema.find().lean<ItemProps[]>();
   const length = docs.length;

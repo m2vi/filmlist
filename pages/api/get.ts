@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (c) {
       response = await client.getBase(parseInt(id as string), type as any);
     } else {
-      response = await client.get(parseInt(id as string), type as any, {});
+      response = await client.get(parseInt(id as string), type as any, { state: null });
     }
 
     res.status(200).json({

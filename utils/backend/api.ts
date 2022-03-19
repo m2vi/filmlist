@@ -240,6 +240,7 @@ export class Api {
   }
 
   async moveItemToStart(filter: FilterQuery<ItemProps>) {
+    await this.init();
     if (!(_.has(filter, 'type') || _.has(filter, 'id_db'))) return this.error('Filter sucks');
 
     const item = await this.findOne(filter, { useCache: false });
@@ -357,11 +358,11 @@ export class Api {
     return Object.entries(collections).map(([name, value]: any) => value);
   }
 
-  async exists(filter: FilterQuery<ItemProps>): Promise<boolean> {
+  async exists(filter: FilterQuery<ItemProps>): Promise<ItemProps | false> {
     try {
       const item = await this.findOne(filter, { useCache: false });
 
-      return item ? true : false;
+      return item ? item : false;
     } catch (error) {
       return false;
     }
@@ -398,6 +399,7 @@ export class Api {
   }
 
   async update(id: number, type: MovieDbTypeEnum) {
+    await this.init();
     const newData: any = await client.dataForUpdate(id, type);
 
     const result = await this.schema.updateOne({ id_db: id, type }, { ...newData });
@@ -571,13 +573,13 @@ export class Api {
       return cachedResponse;
     } else {
       await this.init();
-      const items = await itemSchema.find().select('-credits').lean<ItemProps[]>();
+      const items = await itemSchema.find().lean<ItemProps[]>();
       const data = {
         items,
         createdAt: Date.now(),
       };
 
-      cache.put('cachedItems', data, 6 * 1000 * 60 * 60);
+      cache.put('cachedItems', data, 12 * 1000 * 60 * 60);
       return data;
     }
   }

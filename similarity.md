@@ -1,13 +1,10 @@
 # similarity algorithm
 
-- [ ] two objects
-- [ ] while-loop
-- [ ] similarity between
-  - [ ] keywords
-  - [ ] genres
-  - [ ] credits
-  - [ ] top 3 actors
-  - [ ] regisseur
-  - [ ] novel
-  - [ ] origin
-  - [ ] movie-collection/series
+FIX:
+
+- [ ] Divide by 0
+- [ ] Javascript precision stuff
+- [ ] Slow loops
+- [ ] change weighting
+- [ ] too inaccurate
+- [ ] speed up

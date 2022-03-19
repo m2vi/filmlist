@@ -376,10 +376,11 @@ export class Client {
     id: number,
     type: MovieDbTypeEnum,
     base?: { isMovie: boolean; de: any; en: any; credits: any; external_ids: any; watchProviders: any; imdb: any; rt: any }
-  ): Promise<Partial<ItemProps>> {
+  ): Promise<ItemProps> {
     const { isMovie, de, en, credits, external_ids, watchProviders, imdb, rt } = base ? base : await this.getBase(id, type);
 
     return {
+      state: null,
       status: en?.status ? en?.status : null,
       rated: this.certifcate(en, isMovie),
       external_ids,
@@ -435,7 +436,15 @@ export class Client {
     };
   }
 
-  async get(id: number, type: MovieDbTypeEnum, { state = -1 }: { state: number | null }) {
+  async getFast(id: number, type: MovieDbTypeEnum): Promise<ItemProps> {
+    const exists = await backend.exists({ id_db: id, type: this.isMovie(type) ? 1 : 0 });
+
+    if (exists !== false) return exists;
+
+    return await this.get(id, type, { state: null });
+  }
+
+  async get(id: number, type: MovieDbTypeEnum, { state = -1 }: { state: number | null }): Promise<ItemProps> {
     const adapted = await this.adapt(id, type);
 
     return {

@@ -103,3 +103,7 @@ export const ex = <T, K>(variable: T, defaultValue: K): T | K => {
 
   return variable;
 };
+
+export const boolToNum = (bool: boolean): number => {
+  return bool ? 1 : 0;
+};
