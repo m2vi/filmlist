@@ -1,8 +1,8 @@
 import { connectToDatabase } from '@utils/database';
-import { MovieDbTypeEnum } from '@utils/types';
+import { ItemProps, MovieDbTypeEnum } from '@utils/types';
 import { Connection } from 'mongoose';
 
-class Helper {
+export class Helper {
   async dbInit(): Promise<Connection | undefined> {
     return await connectToDatabase();
   }
@@ -11,8 +11,8 @@ class Helper {
     return (MovieDbTypeEnum[type] as any) === MovieDbTypeEnum.movie || type.toString() === '1';
   }
 
-  sumId(id: number, type: MovieDbTypeEnum) {
-    return `${id}:${this.isMovie(type) ? 1 : 0}`;
+  sumId({ id_db, type }: Partial<ItemProps>) {
+    return `${id_db}:${this.isMovie(type) ? 1 : 0}`;
   }
 }
 

@@ -1,6 +1,6 @@
 import api from '@utils/backend/api';
 import helper from '@utils/helper/main';
-import similarity from '@utils/similarity/main';
+import similarity from '@utils/similarity';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

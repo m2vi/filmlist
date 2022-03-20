@@ -104,6 +104,8 @@ export interface ItemProps {
   popularity: number | null;
   updated_at: number | null;
   status: string | null;
+
+  similarity_score?: number;
 }
 
 export interface VoteProps {
@@ -320,6 +322,7 @@ export interface SimilarityConfig {
     credits?: number;
     origin?: number;
     collection?: number;
+    plot?: number;
   };
 }
 

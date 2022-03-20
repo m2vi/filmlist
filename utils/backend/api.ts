@@ -207,7 +207,7 @@ export class Api {
       genre_ids,
       ratings,
       watchProviders,
-
+      similarity_score,
       ...props
     }: any,
     locale: string = 'en'
@@ -230,6 +230,7 @@ export class Api {
       type: typeof type === 'undefined' ? null : type,
       state: state ? state : 0,
       watchProviders: watchProviders ? watchProviders : null,
+      ...(typeof similarity_score !== 'undefined' ? { similarity_score } : {}),
     };
   }
 
