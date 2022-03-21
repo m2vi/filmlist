@@ -2,6 +2,7 @@ import { ItemProps, MovieDbTypeEnum } from '@utils/types';
 import { matchSorter } from 'match-sorter';
 import backend from './api';
 import client, { api } from '../tmdb/api';
+import { MovieResult, TvResult } from 'moviedb-promise/dist/request-types';
 
 interface SearchOptions {
   items?: ItemProps[];
@@ -40,6 +41,35 @@ class Search {
     } catch (error) {
       return [];
     }
+  }
+
+  async autoComplete(pattern: string = '', { locale = 'en' }: SearchOptions) {
+    const media_types = ['movie', 'tv'];
+    const results = (await api.searchMulti({ query: pattern, language: locale })).results?.filter((item: any) =>
+      media_types.includes(item?.media_type)
+    );
+
+    if (!results) return [];
+
+    const items = results.map(({ media_type, ...data }: any) => {
+      if (media_type === 'movie') {
+        const item = data as MovieResult;
+
+        return {
+          name: item.title,
+          url: `/movie/${item.id}`,
+        };
+      } else if (media_type === 'tv') {
+        const item = data as TvResult;
+
+        return {
+          name: item.name,
+          url: `/tv/${item.id}`,
+        };
+      }
+    });
+
+    return items;
   }
 
   async db(pattern: string = '', { locale = 'en', end }: SearchOptions) {

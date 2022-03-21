@@ -126,6 +126,7 @@
       "tv show": "Serie"
     },
     "release_date": "Erscheinungsdatum",
+    "added_date": "Hinzugefügt am",
     "first_air_date": "Datum der Erstausstrahlung",
     "runtime": "Laufzeit",
     "episode_run_time": "Laufzeit der Episode",

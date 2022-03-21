@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import momentDurationFormatSetup from 'moment-duration-format';
 import Poster from './Poster';
 import { IoRefreshOutline } from 'react-icons/io5';
+import { Types } from 'mongoose';
 
 momentDurationFormatSetup(moment as any);
 
@@ -32,7 +33,7 @@ const Details = ({ data }: any) => {
       {showBar ? <InfoBar name={data.frontend.name} setState={setShowBar} /> : null}
       <Title title={`${data.frontend.name} – ${t(`pages.filmlist.default`)}`} />
       <main className='w-full max-w-screen-2xl px-120 py-11'>
-        <div className='w-full grid grid-cols-2 gap-80 px-80'>
+        <div className='w-full grid grid-cols-1 gap-80 flg:grid-cols-2 px-80'>
           <div className='flex flex-col cursor-pointer relative mb-2 w-full' style={{ maxWidth: '480px' }}>
             <Poster data={data} />
           </div>
@@ -66,6 +67,16 @@ const Details = ({ data }: any) => {
                 <span className='text-xl text-primary-200'>{t(`details.state.${data.raw.state}`)}</span>
               </div>
               <div className='flex flex-col'>
+                <span className='text-base text-primary-300 mb-1 l-1'>{t(`details.added_date`)}</span>
+
+                <span
+                  className='text-xl text-primary-200'
+                  title={moment(new Types.ObjectId(data.raw._id).getTimestamp()).format('YYYY-MM-DD')}
+                >
+                  {moment(new Types.ObjectId(data.raw._id).getTimestamp()).locale(locale!).format('L')}
+                </span>
+              </div>
+              <div className='flex flex-col'>
                 <span className='text-base text-primary-300 mb-1 l-1'>TMDB ID</span>
                 <a
                   href={`https://www.themoviedb.org/${data.raw.type ? 'movie' : 'tv'}/${data.raw.id_db}`}
@@ -95,7 +106,6 @@ const Details = ({ data }: any) => {
                   {data.raw.external_ids.imdb_id}
                 </a>
               </div>
-
               <div className='flex flex-col'>
                 <span className='text-base text-primary-300 mb-1 l-1'>
                   {t(`details.${data.raw.type ? 'runtime' : 'episode_run_time'}`)}
@@ -141,6 +151,10 @@ const Details = ({ data }: any) => {
                   </div>
                 </>
               ) : null}
+              <div className='flex flex-col'>
+                <span className='text-base text-primary-300 mb-1 l-1'>{t('details.status')}</span>
+                <span className='text-xl text-primary-200'>{data.raw.status}</span>
+              </div>
               {mainCrew ? (
                 <div className='flex flex-col'>
                   <span className='text-base text-primary-300 mb-1 l-1'>{mainCrew?.job}</span>
@@ -153,10 +167,6 @@ const Details = ({ data }: any) => {
                   })}
                 </div>
               ) : null}
-              <div className='flex flex-col'>
-                <span className='text-base text-primary-300 mb-1 l-1'>{t('details.status')}</span>
-                <span className='text-xl text-primary-200'>{data.raw.status}</span>
-              </div>
             </div>
             <div className='flex flex-col mt-5'>
               <span className='text-base text-primary-300 mb-1 l-1'>{t('details.genres')}</span>

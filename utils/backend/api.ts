@@ -548,7 +548,7 @@ export class Api {
       );
     } catch (error) {
       try {
-        res = this.toJSON(await client.get(parseInt(id as any), MovieDbTypeEnum[type as any] as any, { state: null }));
+        res = this.toJSON(await client.get(parseInt(id as any), MovieDbTypeEnum[type as any] as any, { state: null, fast: true }));
       } catch (error: any) {
         return {
           error: error.message,

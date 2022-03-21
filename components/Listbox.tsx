@@ -14,7 +14,7 @@ export default function ListboxEl() {
   const [selected, setSelected] = useState(types[0]);
 
   return (
-    <div className='w-full'>
+    <div className='w-full mt-2'>
       <Listbox value={selected} onChange={(value: any) => setSelected(_.find(types, { value })!)}>
         <div className='relative mt-1'>
           <Listbox.Button className='flex justify-between items-center relative w-full py-2 px-4 mb-2  text-left bg-transparent border border-primary-600 placeholder-primary-300 text-primary-100 rounded-8 shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm'>

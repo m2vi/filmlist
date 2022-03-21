@@ -31,7 +31,7 @@ const Manage = () => {
             leaveFrom='opacity-100'
             leaveTo='opacity-0'
           >
-            <Dialog.Overlay className='fixed inset-0 bg-black bg-opacity-0' />
+            <Dialog.Overlay className='fixed inset-0 bg-black bg-opacity-20' />
           </Transition.Child>
           <span className='inline-block h-screen align-middle' aria-hidden='true'>
             &#8203;
@@ -45,7 +45,7 @@ const Manage = () => {
             leaveFrom='opacity-100 scale-100'
             leaveTo='opacity-0 scale-95'
           >
-            <div className='border border-primary-700 inline-block w-full max-w-lg px-8 py-6 my-8 overflow-hidden text-left align-middle bg-primary-900-80 rounded-8 shadow-1 relative'>
+            <div className='border border-primary-700 inline-block w-full max-w-lg px-8 py-6 my-8 overflow-hidden text-left align-middle bg-primary-900-80 rounded-15 shadow-1 relative'>
               <Tab.Group>
                 <Tab.List className='flex text-center border-b border-primary-600 h-8'>
                   {Object.keys(categories).map((category) => (
@@ -73,21 +73,24 @@ const Manage = () => {
                   <Tab.Panel>
                     <Input className='mt-2' placeholder='Id' />
                     <Input className='mt-2' placeholder='Type' />
+
                     <Button className='mt-3'>Submit</Button>
                   </Tab.Panel>
                   <Tab.Panel>
                     <Input className='mt-2' placeholder='Id' />
                     <Input className='mt-2' placeholder='Type' />
                     <Input className='mt-2' placeholder='Position' type='number' />
+
                     <Button className='mt-3'>Submit</Button>
                   </Tab.Panel>
                   <Tab.Panel>
                     <Input className='mt-2' placeholder='Id' />
                     <Input className='mt-2' placeholder='Type' />
+
                     <Button className='mt-3'>Update</Button>
                   </Tab.Panel>
                   <Tab.Panel className='grid place-items-center h-full w-full'>
-                    <a href='/api/action/backup' download={true}>
+                    <a href='/api/db/backup' download={true}>
                       <Button>Export</Button>
                     </a>
                   </Tab.Panel>

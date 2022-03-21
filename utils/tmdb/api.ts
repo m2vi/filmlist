@@ -375,9 +375,10 @@ export class Client {
   async adapt(
     id: number,
     type: MovieDbTypeEnum,
-    base?: { isMovie: boolean; de: any; en: any; credits: any; external_ids: any; watchProviders: any; imdb: any; rt: any }
+    base?: { isMovie: boolean; de: any; en: any; credits: any; external_ids: any; watchProviders: any; imdb: any; rt: any },
+    fast?: boolean
   ): Promise<ItemProps> {
-    const { isMovie, de, en, credits, external_ids, watchProviders, imdb, rt } = base ? base : await this.getBase(id, type);
+    const { isMovie, de, en, credits, external_ids, watchProviders, imdb, rt } = base ? base : await this.getBase(id, type, fast);
 
     return {
       state: null,
@@ -444,8 +445,8 @@ export class Client {
     return await this.get(id, type, { state: null });
   }
 
-  async get(id: number, type: MovieDbTypeEnum, { state = -1 }: { state: number | null }): Promise<ItemProps> {
-    const adapted = await this.adapt(id, type);
+  async get(id: number, type: MovieDbTypeEnum, { state = -1, fast = false }: { state: number | null; fast?: boolean }): Promise<ItemProps> {
+    const adapted = await this.adapt(id, type, undefined, fast);
 
     return {
       ...adapted,

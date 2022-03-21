@@ -125,6 +125,7 @@
       "tv show": "TV Show"
     },
     "release_date": "Release date",
+    "added_date": "Date added",
     "first_air_date": "First air date",
     "runtime": "Runtime",
     "episode_run_time": "Episode run time",

@@ -18,6 +18,7 @@ import 'moment/locale/de';
 import { ToastContainer } from 'react-toastify';
 import Router from 'next/router';
 import NotificationWrapper from '@components/NotificationWrapper';
+import Manage from '@components/Manage';
 // import Manage from '@components/Manage';
 
 Router.events.on('routeChangeStart', () => nProgress.start());
@@ -48,7 +49,7 @@ const SeoWrapper = ({ children }: { children: ReactNode }) => {
         closeButton={false}
         theme='dark'
       />
-      {/*  <Manage /> */}
+      <Manage />
       <NextSeo defaultTitle='Filmlist' />
       {children}
     </div>
