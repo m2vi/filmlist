@@ -14,7 +14,19 @@ export interface CardProps extends FrontendItemProps {
   isLoading?: boolean;
 }
 
-const Card = ({ _id, name, poster_path, release_date, id_db, ratings, type, state, isLoading = false, watchProviders }: CardProps) => {
+const Card = ({
+  _id,
+  name,
+  poster_path,
+  release_date,
+  id_db,
+  ratings,
+  type,
+  state,
+  isLoading = false,
+  watchProviders,
+  similarity_score,
+}: CardProps) => {
   const { t } = useTranslation();
   const { query, route } = useRouter();
 
@@ -68,13 +80,20 @@ const Card = ({ _id, name, poster_path, release_date, id_db, ratings, type, stat
               defaultValue: name,
             })}
           </p>
-          <span className='flex items-center justify-between'>
+          <span className='flex items-center justify-start'>
             <span
               className='font-normal opacity-80 text-base overflow-hidden overflow-ellipsis whitespace-nowrap'
               title={moment(release_date).format('YYYY-MM-DD')}
             >
               {moment(release_date).format('YYYY')}
             </span>
+
+            {similarity_score ? (
+              <>
+                <span className='mx-1 font-bold text-primary-200'>·</span>
+                <div className='green font-semibold'>{(similarity_score * 100).toFixed(0)}%</div>
+              </>
+            ) : null}
           </span>
         </div>
       </div>

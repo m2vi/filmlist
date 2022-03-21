@@ -13,10 +13,10 @@ export class Helper {
     this.main = mainHelper.helper;
     this.defaultConfig = {
       weighting: {
-        keywords: 0.9,
+        keywords: 1,
         genre_ids: 0.8,
         credits: 1,
-        origin: 0.7,
+        origin: 0.75,
         collection: 0.8,
       },
     };

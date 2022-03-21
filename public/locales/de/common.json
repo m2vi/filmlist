@@ -112,6 +112,14 @@
     "age": "Alter"
   },
   "details": {
+    "state": {
+      "default": "Zustand",
+      "null": "Nicht in der Datenbank",
+      "-1": "Ungesehen",
+      "0": "Nicht zu Ende gesehen",
+      "1": "Angesehen",
+      "2": "Favorisiert"
+    },
     "type": {
       "title": "Typ",
       "movie": "Film",

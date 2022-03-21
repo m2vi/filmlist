@@ -148,6 +148,10 @@ p {
   stroke: #ffcc34;
 }
 
+.green {
+  color: #46d369;
+}
+
 .card-image {
   aspect-ratio: 2 / 3;
   width: 100%;

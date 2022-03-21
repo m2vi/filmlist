@@ -8,7 +8,21 @@ class Main {
     return similarity * weight;
   }
 
-  //! FIX
+  adaptWeight(similarity: SimilarityResultObject, parsedConfig: SimilarityConfig) {
+    let configWeighting = [] as any[];
+    const weighted = Object.entries(similarity).map(([key, value]) => {
+      const weight = get(parsedConfig?.weighting!, key) ? get(parsedConfig?.weighting!, key) : parsedConfig?.weighting?.credits;
+
+      configWeighting.push(weight);
+
+      return this.addWeight(1, weight);
+    });
+
+    const adaptedWeights = weighted.reduce((prev, curr) => prev + curr, 0);
+
+    return adaptedWeights;
+  }
+
   weight(similarity: SimilarityResultObject, parsedConfig: SimilarityConfig): number {
     let configWeighting = [] as any[];
     const weighted = Object.entries(similarity).map(([key, value]) => {
@@ -21,9 +35,9 @@ class Main {
 
     const parsedWeights = weighted.reduce((prev, curr) => prev + curr, 0);
 
-    const divideWith = 4.8;
+    const divideWith = this.adaptWeight(similarity, parsedConfig);
 
-    return parseFloat(parsedWeights.toPrecision(12));
+    return parseFloat((parsedWeights / divideWith).toPrecision(12));
   }
 
   getIntersection<T>(array1: T[], array2: T[]): T[] {

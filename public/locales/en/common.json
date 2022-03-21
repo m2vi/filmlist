@@ -111,6 +111,14 @@
     "age": "Age"
   },
   "details": {
+    "state": {
+      "default": "State",
+      "null": "Not in the database",
+      "-1": "Unwatched",
+      "0": "Not finished",
+      "1": "Watched",
+      "2": "Favoured"
+    },
     "type": {
       "title": "Type",
       "movie": "Movie",

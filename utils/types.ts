@@ -130,6 +130,8 @@ export interface FrontendItemProps {
   state: number;
   ratings: RatingsProps | null;
   watchProviders: ProviderEntryProps | null;
+
+  similarity_score?: number;
 }
 
 export interface RatingsProps {
@@ -317,11 +319,11 @@ export interface HistoryInsertResponse {}
 
 export interface SimilarityConfig {
   weighting?: {
-    keywords?: number;
-    genre_ids?: number;
-    credits?: number;
-    origin?: number;
     collection?: number;
+    credits?: number;
+    genre_ids?: number;
+    keywords?: number;
+    origin?: number;
     plot?: number;
   };
 }

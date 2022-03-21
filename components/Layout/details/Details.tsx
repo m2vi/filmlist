@@ -62,6 +62,10 @@ const Details = ({ data }: any) => {
                 <span className='text-xl text-primary-200'>{t(`details.type.${data.raw.type ? 'movie' : 'tv show'}`)}</span>
               </div>
               <div className='flex flex-col'>
+                <span className='text-base text-primary-300 mb-1 l-1'>{t('details.state.default')}</span>
+                <span className='text-xl text-primary-200'>{t(`details.state.${data.raw.state}`)}</span>
+              </div>
+              <div className='flex flex-col'>
                 <span className='text-base text-primary-300 mb-1 l-1'>TMDB ID</span>
                 <a
                   href={`https://www.themoviedb.org/${data.raw.type ? 'movie' : 'tv'}/${data.raw.id_db}`}
