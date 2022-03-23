@@ -4,6 +4,7 @@ import 'tailwindcss/tailwind.css';
 import 'swiper/css';
 import 'swiper/css/lazy';
 import 'react-toastify/dist/ReactToastify.min.css';
+import '@styles/rc-slider.css';
 import '@styles/notifications.css';
 import type { AppProps } from 'next/app';
 import { appWithTranslation } from 'next-i18next';
@@ -19,7 +20,6 @@ import { ToastContainer } from 'react-toastify';
 import Router from 'next/router';
 import NotificationWrapper from '@components/NotificationWrapper';
 import Manage from '@components/Manage';
-// import Manage from '@components/Manage';
 
 Router.events.on('routeChangeStart', () => nProgress.start());
 Router.events.on('routeChangeComplete', () => nProgress.done());

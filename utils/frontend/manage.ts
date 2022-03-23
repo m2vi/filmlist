@@ -1,10 +1,14 @@
 import { basicFetch } from '@utils/fetch';
+import helper from '@utils/helper/main';
+import notifications from '@utils/notifications/api';
 import { ManageInsertProps } from '@utils/types';
+import QueryString from 'qs';
+import api from './api';
 
 class Manage {
-  async fetch(name: string, params: string) {
+  private async fetch(name: string, params: string) {
     try {
-      const result = await basicFetch(`/api/action/${name}${params}`);
+      const result = await basicFetch(`/api/db/${name}${params}`);
       if (result.error) throw Error(result.error);
       return result;
     } catch (error: any) {
@@ -14,7 +18,19 @@ class Manage {
   }
 
   async insert({ id_db, type, state }: ManageInsertProps) {
-    return await this.fetch('insert', `?id=${id_db}&type=${type === '1' || type === 'movie' ? 'movie' : 'tv'}&state=${state}`);
+    if ([id_db, type, state].includes('')) return notifications.error(`Missing arguments`);
+
+    return await this.fetch(
+      'insert',
+      `?${QueryString.stringify({ id: id_db, type: helper.isMovie(type) ? 'movie' : 'tv', state: state })}`
+    );
+  }
+
+  async cache(el: 'items' | 'tabs' | 'ratings') {
+    api
+      .clearCache(el)
+      .then(() => notifications.info(`Refreshed ${el}`))
+      .catch(notifications.error);
   }
 }
 

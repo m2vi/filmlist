@@ -27,6 +27,7 @@ import cache from 'memory-cache';
 import sift from 'sift';
 import tmdb from '../tmdb/api';
 import user from '@utils/user/api';
+import ratings from './ratings';
 
 class Jwt {
   decode() {
@@ -543,9 +544,7 @@ export class Api {
       error: 'Unknown error',
     };
     try {
-      res = this.toJSON(
-        await this.findOne({ type: MovieDbTypeEnum[type as any] as any, id_db: parseInt(id as string) }, { useCache: false })
-      );
+      res = this.toJSON(await this.findOne({ type: MovieDbTypeEnum[type as any] as any, id_db: parseInt(id as string) }));
     } catch (error) {
       try {
         res = this.toJSON(await client.get(parseInt(id as any), MovieDbTypeEnum[type as any] as any, { state: null, fast: true }));
@@ -571,12 +570,12 @@ export class Api {
     if (destroy) cache.clear();
     const cachedResponse = cache.get('cachedItems');
     if (cachedResponse && !destroy) {
-      return cachedResponse;
+      return { items: await ratings.appendRatings(cachedResponse?.items), createdAt: cachedResponse?.createdAt };
     } else {
       await this.init();
       const items = await itemSchema.find().lean<ItemProps[]>();
       const data = {
-        items,
+        items: await ratings.appendRatings(items),
         createdAt: Date.now(),
       };
 

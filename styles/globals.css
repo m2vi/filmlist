@@ -132,6 +132,10 @@ p {
   }
 }
 
+.user {
+  stroke: var(--color-accent);
+}
+
 .tmdb {
   stroke: #805be7;
 }

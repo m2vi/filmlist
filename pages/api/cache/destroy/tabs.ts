@@ -4,5 +4,5 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const result = await api.tabs(true);
 
-  res.status(200).json(result);
+  res.status(200).json({});
 }

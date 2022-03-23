@@ -4,11 +4,11 @@ import { IoCheckmarkOutline } from 'react-icons/io5';
 import { useTranslation } from 'next-i18next';
 import _ from 'underscore';
 
-export default function ListboxEl() {
+export default function ListboxEl({ setValue }: { setValue: (value: string) => void }) {
   const { t } = useTranslation();
   const types = [
-    { name: t('details.type.movie'), value: '1' },
-    { name: t('details.type.tv show'), value: '0' },
+    { name: t('details.type.movie'), value: 'movie' },
+    { name: t('details.type.tv show'), value: 'tv' },
   ];
 
   const [selected, setSelected] = useState(types[0]);

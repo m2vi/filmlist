@@ -3,6 +3,9 @@ import history, { History } from '@utils/backend/history';
 import { connectToDatabase } from '@utils/database';
 import { UserInterface } from '@utils/types';
 import { Connection, Model } from 'mongoose';
+import { NextRequest } from 'next/server';
+import jwt from 'jsonwebtoken';
+import { NextApiRequest } from 'next';
 
 class User {
   schema: Model<UserInterface, {}, {}, {}>;
@@ -25,6 +28,11 @@ class User {
     const item = await this.schema.findOne({ id: id.toString() }).lean();
 
     return item;
+  }
+
+  public id(req: NextApiRequest) {
+    //? ik, don't bully me
+    return '701400631662870609';
   }
 }
 

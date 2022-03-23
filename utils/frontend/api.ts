@@ -80,8 +80,18 @@ export class Api {
     return `/api/watch/redirect?${qs}`;
   }
 
-  async clearCache(el: 'items') {
-    return await basicFetch('/api/cache/destroy/items');
+  async clearCache(el: 'items' | 'tabs' | 'ratings') {
+    switch (el) {
+      case 'items':
+        return await basicFetch('/api/cache/destroy/items');
+      case 'tabs':
+        return await basicFetch('/api/cache/destroy/tabs');
+      case 'ratings':
+        return await basicFetch('/api/cache/destroy/ratings');
+
+      default:
+        return null;
+    }
   }
 
   async fetchMoreData(data: any, items: any[]) {

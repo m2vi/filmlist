@@ -1,10 +1,19 @@
 import { connectToDatabase } from '@utils/database';
 import { ItemProps, MovieDbTypeEnum } from '@utils/types';
+import { toString } from 'lodash';
 import { Connection } from 'mongoose';
 
 export class Helper {
   async dbInit(): Promise<Connection | undefined> {
     return await connectToDatabase();
+  }
+
+  isValidId(value: any) {
+    return toString(value) === toString(parseInt(toString(value)));
+  }
+
+  isValidType(type: any) {
+    return ['movie', 'tv', 1, 0, '1', '0'].includes(type);
   }
 
   isMovie(type: any) {

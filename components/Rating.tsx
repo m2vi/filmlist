@@ -3,6 +3,7 @@ import { FrontendItemProps, RatingsProps, VoteProps } from '@utils/types';
 import { isDefined } from '@utils/utils';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
+import Slider from 'rc-slider';
 import { Fragment, HTMLAttributes, useEffect, useState } from 'react';
 import { Spinner } from './Spinner';
 
@@ -14,6 +15,7 @@ const Rating = ({ ratings, state, notchild, className, type, id_db, ...props }: 
   const Router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<RatingsProps | null>(null);
+  const [userValue, setUserValue] = useState(ratings?.user?.vote_average ? ratings?.user?.vote_average * 10 : 10);
   const { t } = useTranslation();
 
   useEffect(() => setData(null), [id_db, type]);
@@ -41,7 +43,9 @@ const Rating = ({ ratings, state, notchild, className, type, id_db, ...props }: 
         onClick={openModal}
         {...props}
       >
-        {ratings?.imdb?.vote_count ? (
+        {ratings?.user?.vote_count ? (
+          <RatingCircle provider={ratings?.user} colorClassName='user' />
+        ) : ratings?.imdb?.vote_count ? (
           <RatingCircle provider={ratings?.imdb} colorClassName='imdb' />
         ) : (
           <RatingCircle provider={ratings?.tmdb} colorClassName='tmdb' />
@@ -105,7 +109,22 @@ const Rating = ({ ratings, state, notchild, className, type, id_db, ...props }: 
                           <span className='l-1 text-primary-300 text-sm'>- {t('details.votes')}</span>
                         </div>
                       </div>
-                    ) : null}
+                    ) : (
+                      <div></div>
+                    )}
+                    {isDefined(ratings?.user?.vote_average) ? (
+                      <div className='grid grid-flow-col justify-start mt-2'>
+                        <RatingCircle provider={ratings?.user} colorClassName='user' />
+                        <div className='flex flex-col justify-center ml-2'>
+                          <span className='leading-5 text-primary-200'>User rating(s)</span>
+                          <span className='l-1 text-primary-300 text-sm'>
+                            {ratings?.user?.vote_count} {t('details.votes')}
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div></div>
+                    )}
                   </div>
                 </div>
               </Transition.Child>

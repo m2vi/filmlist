@@ -1,9 +1,11 @@
 import { Dialog, Tab, Transition } from '@headlessui/react';
+import manage from '@utils/frontend/manage';
 import { classNames } from '@utils/utils';
 import { Fragment, useState } from 'react';
-import { Button } from './Button';
-import { Input } from './Input';
-import Listbox from './Listbox';
+import { Button } from '../Button';
+import { Input } from '../Input';
+import Listbox from '../Listbox';
+import Insert from './Insert';
 
 const Manage = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -12,7 +14,7 @@ const Manage = () => {
     Delete: {},
     Move: {},
     Update: {},
-    Backup: {},
+    Cache: {},
   };
 
   const openModal = () => setIsOpen(true);
@@ -64,11 +66,7 @@ const Manage = () => {
                 </Tab.List>
                 <Tab.Panels className='mt-4 h-400'>
                   <Tab.Panel>
-                    <Input className='mt-2' placeholder='Id' />
-                    <Input className='mt-2' placeholder='Type' />
-                    <Listbox />
-
-                    <Button className='mt-3'>Submit</Button>
+                    <Insert />
                   </Tab.Panel>
                   <Tab.Panel>
                     <Input className='mt-2' placeholder='Id' />
@@ -89,10 +87,10 @@ const Manage = () => {
 
                     <Button className='mt-3'>Update</Button>
                   </Tab.Panel>
-                  <Tab.Panel className='grid place-items-center h-full w-full'>
-                    <a href='/api/db/backup' download={true}>
-                      <Button>Export</Button>
-                    </a>
+                  <Tab.Panel className='grid grid-cols-2 grid-flow-row gap-4 py-2'>
+                    <Button onClick={() => manage.cache('items')}>Refresh items</Button>
+                    <Button onClick={() => manage.cache('tabs')}>Refresh tabs</Button>
+                    <Button onClick={() => manage.cache('ratings')}>Refresh ratings</Button>
                   </Tab.Panel>
                 </Tab.Panels>
               </Tab.Group>
