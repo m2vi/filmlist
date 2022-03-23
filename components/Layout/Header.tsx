@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Dropdown from './Dropdown';
 import PopoverEl from './Popover';
 import Search from './Search';
+import Manage from '@components/Manage';
 
 const Header = () => {
   const { t } = useTranslation();
@@ -40,6 +41,8 @@ const Header = () => {
           </Link>
 
           <PopoverEl />
+
+          <Manage />
 
           <Dropdown />
         </div>

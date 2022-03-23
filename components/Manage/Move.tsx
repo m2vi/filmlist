@@ -3,26 +3,26 @@ import { Input } from '@components/Input';
 import manage from '@utils/frontend/manage';
 import { createRef, Fragment, useRef } from 'react';
 
-const Insert = () => {
+const Move = () => {
   const IdRef = createRef<HTMLInputElement>();
   const TypeRef = createRef<HTMLInputElement>();
-  const StateRef = createRef<HTMLInputElement>();
+  const PositionRef = createRef<HTMLInputElement>();
 
   const submit = () => {
-    if (!IdRef.current || !TypeRef.current || !StateRef.current) return;
+    if (!IdRef.current || !TypeRef.current || !PositionRef.current) return;
 
     const id = IdRef.current.value;
     const type = TypeRef.current.value;
-    const state = StateRef.current.value;
+    const position = PositionRef.current.value;
 
-    manage.insert({ id_db: id, type, state });
+    manage.move({ id_db: id, type, position });
   };
 
   return (
     <Fragment>
       <Input className='mt-2' placeholder='Id' ref={IdRef} />
       <Input className='mt-2' placeholder='Type' ref={TypeRef} />
-      <Input className='mt-2' placeholder='State' ref={StateRef} />
+      <Input className='mt-2' placeholder='Position' ref={PositionRef} />
 
       <Button className='mt-3' onClick={submit}>
         Submit
@@ -31,4 +31,4 @@ const Insert = () => {
   );
 };
 
-export default Insert;
+export default Move;

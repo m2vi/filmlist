@@ -1,7 +1,7 @@
 import { basicFetch } from '@utils/fetch';
 import helper from '@utils/helper/main';
 import notifications from '@utils/notifications/api';
-import { ManageInsertProps } from '@utils/types';
+import { ManageDeleteProps, ManageInsertProps, ManageMoveProps, ManageUpdateProps } from '@utils/types';
 import QueryString from 'qs';
 import api from './api';
 
@@ -23,6 +23,36 @@ class Manage {
     return await this.fetch(
       'insert',
       `?${QueryString.stringify({ id: id_db, type: helper.isMovie(type) ? 'movie' : 'tv', state: state })}`
+    );
+  }
+
+  async delete({ id_db, type }: ManageDeleteProps) {
+    if ([id_db, type].includes('')) return notifications.error(`Missing arguments`);
+
+    return await this.fetch('delete', `?${QueryString.stringify({ id: id_db, type: helper.isMovie(type) ? 'movie' : 'tv' })}`);
+  }
+
+  async move({ id_db, type, position }: ManageMoveProps) {
+    if ([id_db, type, position].includes('')) return notifications.error(`Missing arguments`);
+
+    return await this.fetch(
+      'move',
+      `?${QueryString.stringify({
+        position: parseInt(position),
+        filter: JSON.stringify({ id: parseInt(id_db), type: helper.isMovie(type) ? 1 : 0 }),
+      })}`
+    );
+  }
+
+  async update({ id_db, type }: ManageUpdateProps) {
+    if ([id_db, type].includes('')) return notifications.error(`Missing arguments`);
+
+    const result = await this.fetch(
+      'update',
+      `?${QueryString.stringify({
+        id: id_db,
+        type: helper.isMovie(type) ? 'movie' : 'tv',
+      })}`
     );
   }
 

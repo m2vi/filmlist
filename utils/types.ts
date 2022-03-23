@@ -180,6 +180,22 @@ export interface ManageInsertProps {
   state: string;
 }
 
+export interface ManageDeleteProps {
+  id_db: string;
+  type: string;
+}
+
+export interface ManageMoveProps {
+  id_db: string;
+  type: string;
+  position: string;
+}
+
+export interface ManageUpdateProps {
+  id_db: string;
+  type: string;
+}
+
 export interface TabFilterOptions {
   filter?: FilterQuery<ItemProps>;
   sort_key?: string | boolean;

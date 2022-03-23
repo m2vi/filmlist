@@ -1,28 +1,25 @@
 import { Button } from '@components/Button';
 import { Input } from '@components/Input';
 import manage from '@utils/frontend/manage';
-import { createRef, Fragment, useRef } from 'react';
+import { createRef, Fragment } from 'react';
 
-const Insert = () => {
+const Delete = () => {
   const IdRef = createRef<HTMLInputElement>();
   const TypeRef = createRef<HTMLInputElement>();
-  const StateRef = createRef<HTMLInputElement>();
 
   const submit = () => {
-    if (!IdRef.current || !TypeRef.current || !StateRef.current) return;
+    if (!IdRef.current || !TypeRef.current) return;
 
     const id = IdRef.current.value;
     const type = TypeRef.current.value;
-    const state = StateRef.current.value;
 
-    manage.insert({ id_db: id, type, state });
+    manage.delete({ id_db: id, type });
   };
 
   return (
     <Fragment>
       <Input className='mt-2' placeholder='Id' ref={IdRef} />
       <Input className='mt-2' placeholder='Type' ref={TypeRef} />
-      <Input className='mt-2' placeholder='State' ref={StateRef} />
 
       <Button className='mt-3' onClick={submit}>
         Submit
@@ -31,4 +28,4 @@ const Insert = () => {
   );
 };
 
-export default Insert;
+export default Delete;

@@ -1,5 +1,5 @@
 import { Menu, Transition } from '@headlessui/react';
-import { Fragment, MouseEvent, MouseEventHandler } from 'react';
+import { Fragment } from 'react';
 import Image from 'next/image';
 import api from '@utils/frontend/api';
 import { DiscordUser } from '@utils/types';
@@ -57,19 +57,6 @@ const Dropdown = () => {
                       </a>
                     </Link>
                   )}
-                </Menu.Item>
-                <Menu.Item>
-                  {({ active }) => {
-                    return (
-                      <div
-                        className={`${
-                          active ? ' text-primary-200 opacity-80' : 'text-primary-100'
-                        } group flex rounded-md items-center w-full px-2 py-1 text-sm cursor-pointer hover:bg-primary-900`}
-                      >
-                        Manage
-                      </div>
-                    );
-                  }}
                 </Menu.Item>
               </div>
             </Menu.Items>
