@@ -1,5 +1,3 @@
-import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
+import { open } from '@utils/middleware/main';
 
-export function middleware(req: NextRequest, ev: NextFetchEvent) {
-  return NextResponse.next();
-}
+export const middleware = open;

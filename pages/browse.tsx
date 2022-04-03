@@ -1,60 +1,31 @@
-import Carousel from '@components/Carousel';
-import CarouselAsync from '@components/CarouselAsync';
-import Title from '@components/Title';
-import backend from '@utils/backend/api';
-import frontend from '@utils/frontend/api';
-import type { GetServerSideProps } from 'next';
+import Header from '@components/Header';
+import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useRouter } from 'next/router';
-import { Fragment } from 'react';
+import filmlist from '@utils/apis/filmlist';
+import user from '@utils/user';
+import Carousel from '@components/Carousel';
+import tmdb from '@utils/apis/tmdb';
+import { MovieDbTypeEnum } from '@Types/items';
+import { useEffect } from 'react';
+import db from '@utils/db/main';
+import { useTranslation } from 'next-i18next';
 
-const Home = ({ ...props }) => {
-  const { locale } = useRouter();
+const Home = (props: any) => {
+  useEffect(() => console.log(props), [props]);
+
+  const { t } = useTranslation();
 
   return (
-    <div className='pt-10 w-full h-full flex justify-center'>
-      <Title title='Browse' />
-      <div className='h-full w-full items-center py-11 px-120 max-w-screen-2xl'>
-        {props.init.map((tab: any, index: number) => {
-          if (index === 2) {
-            return (
-              <Fragment key={index}>
-                <CarouselAsync
-                  name='trending'
-                  func={async () =>
-                    await frontend.getTMDBTab({
-                      tab: 'trending',
-                      type: 'all',
-                      locale: locale!,
-                      page: 0,
-                    })
-                  }
-                />
-                <Carousel section={tab} href={tab.route} />
-              </Fragment>
-            );
-          }
-          return <Carousel section={tab} href={tab.route} key={index} />;
-        })}
+    <>
+      <Head>
+        <title>{`${t('pages.filmlist.menu.browse')} – ${t(`pages.filmlist.default`)}`}</title>
+      </Head>
 
-        {Array.from({ length: 5 }).map((v, i) => {
-          return (
-            <CarouselAsync
-              name={undefined}
-              func={async () => {
-                return await frontend.getBrowseGenre({
-                  locale: locale!,
-                  index: i,
-                  seed: props.seed,
-                });
-              }}
-              href='/genre/[id]'
-              key={i}
-            />
-          );
-        })}
-      </div>
-    </div>
+      {props?.data?.map((section: any, index: number) => {
+        return <Carousel section={section} key={index} />;
+      })}
+    </>
   );
 };
 
@@ -63,20 +34,19 @@ Home.layout = true;
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const base_props = { locale: context.locale!, start: 0, end: 20 };
-
-  const tabs = await Promise.all([
-    backend.getTab({ ...base_props, tab: 'my list' }),
-    backend.getTab({ ...base_props, tab: 'continue-watching' }),
-    backend.getTab({ ...base_props, tab: 'latest' }),
-    backend.getTab({ ...base_props, tab: 'soon' }),
-  ]);
+  const id = user.getIdFromRequest(context.req);
+  await db.init();
 
   return {
     props: {
-      ...(await serverSideTranslations(context.locale!, ['common', 'footer'])),
-      seed: context?.query?.seed ? context?.query?.seed : Math.random(),
-      init: tabs,
+      ...(await serverSideTranslations(context.locale!, ['common'])),
+      data: await Promise.all([
+        filmlist.getTab({ user: id, locale: context.locale!, tab: 'my list', start: 0, end: 20 }),
+        filmlist.getTab({ user: id, locale: context.locale!, tab: 'continue-watching', start: 0, end: 20 }),
+        tmdb.getTab({ user: id, locale: context.locale!, tab: 'trending', page: 1, type: MovieDbTypeEnum.movie }),
+        filmlist.getTab({ user: id, locale: context.locale!, tab: 'latest', start: 0, end: 20 }),
+        filmlist.getTab({ user: id, locale: context.locale!, tab: 'soon', start: 0, end: 20 }),
+      ]),
     },
   };
 };

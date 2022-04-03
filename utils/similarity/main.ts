@@ -1,5 +1,5 @@
-import { ItemProps, SimilarityConfig, SimilarityResultObject } from '@utils/types';
-import { boolToNum } from '@utils/utils';
+import { ItemProps } from '@Types/items';
+import { SimilarityConfig, SimilarityResultObject } from '@Types/similarity';
 import get from 'lodash/get';
 import helper from './helper';
 
@@ -45,7 +45,7 @@ class Main {
   }
 
   calculateOriginSimilarity(item: ItemProps, item2: ItemProps): number {
-    return boolToNum(item.original_language === item2.original_language);
+    return helper.boolToNum(item.original_language === item2.original_language);
   }
 
   calculateKeywordsSimilarity(item1: ItemProps, item2: ItemProps): number {
@@ -60,7 +60,7 @@ class Main {
     const collection1 = item1.collection?.id;
     const collection2 = item2.collection?.id;
 
-    return boolToNum(collection1 === collection2);
+    return helper.boolToNum(collection1 === collection2);
   }
 
   calculateCastSimilarity(item1: ItemProps, item2: ItemProps): number {

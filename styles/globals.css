@@ -1,106 +1,10 @@
 @import url('https://fluxi.me/api/css');
 
+#__next,
 html,
-body,
-#__next {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
-    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !important;
-}
-
-h1,
-h2,
-h3,
-h4,
-p {
-  line-height: 1.6 !important;
-}
-
-h1,
-h2,
-h3,
-h4,
-p.bold {
-  font-weight: 700 !important;
-}
-
-h1 {
-  font-size: 3.85rem !important;
-}
-
-h2 {
-  font-size: 25px !important;
-}
-
-h3 {
-  font-size: 2rem !important;
-}
-
-h4 {
-  font-size: 1.5rem !important;
-}
-
-p {
-  font-size: 1rem !important;
-  font-weight: 500 !important;
-}
-
-.carousel-title {
-  font-size: 25px;
-  line-height: 1.6;
-  font-weight: 700;
-}
-
-.btn-discord {
-  color: #fff !important;
-  background-color: #5865f2 !important;
-}
-
-.btn-google {
-  color: rgba(0, 0, 0, 0.54) !important;
-  background-color: #fff !important;
-}
-
-.btn-apple {
-  color: #fff !important;
-  background-color: #000 !important;
-}
-
-.btn-apple svg {
-  margin-top: -3px;
-}
-
-.overlay .overlay-child {
-  background: rgba(0, 0, 0, 0.85);
-  border-radius: 8px;
-}
-
-.overlay .overlay-child {
-  transition: 0.1s ease all;
-  opacity: 0;
-}
-
-.overlay:hover .overlay-child {
-  opacity: 1 !important;
-}
-
-.l-1 {
-  line-height: 1 !important;
-}
-
-:root {
-  --toggle-height: 24px;
-  --toggle-width: calc(var(--toggle-height) * 16 / 9);
-  --toggle-border: 2px;
-}
-.reset-a,
-.reset-a:hover,
-.reset-a:visited,
-.reset-a:focus,
-.reset-a:active {
-  text-decoration: none;
-  color: inherit;
-  outline: 0;
-  cursor: auto;
+body {
+  width: 100%;
+  height: 100%;
 }
 
 :root {
@@ -110,26 +14,6 @@ p {
 .bg-primary-900-80 {
   background-color: rgba(4, 7, 20, 0.8);
   backdrop-filter: blur(40px);
-}
-
-.loading-animation {
-  background: var(--color-primary-800);
-  background: linear-gradient(146deg, var(--color-primary-800) 5%, var(--color-primary-700) 15%, var(--color-primary-800) 25%);
-  background-size: 5000px 100%;
-  animation-duration: 5s;
-  animation-fill-mode: forwards;
-  animation-iteration-count: infinite;
-  animation-name: shimmer;
-  animation-timing-function: linear;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -5000px 0;
-  }
-  100% {
-    background-position: 5000px 0;
-  }
 }
 
 .user {
@@ -148,23 +32,29 @@ p {
   stroke: #fa320a;
 }
 
-.metacritic {
-  stroke: #ffcc34;
-}
-
 .green {
   color: #46d369;
 }
 
-.card-image {
-  aspect-ratio: 2 / 3;
-  width: 100%;
+.btn-discord {
+  color: #fff !important;
+  background-color: #5865f2 !important;
 }
 
-.hidden-parent .hidden-child {
+.overlay .overlay-child {
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 8px;
+}
+
+.overlay .overlay-child {
+  transition: 0.1s ease all;
   opacity: 0;
 }
 
-.hidden-parent:hover .hidden-child {
-  opacity: 1;
+.overlay:hover .overlay-child {
+  opacity: 1 !important;
+}
+
+:root {
+  --plyr-color-main: var(--color-accent);
 }

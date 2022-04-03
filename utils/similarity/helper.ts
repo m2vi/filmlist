@@ -1,16 +1,15 @@
 import { sortByKey } from '@m2vi/iva';
-import { ItemProps, SimilarityConfig } from '@utils/types';
-import * as mainHelper from '../helper/main';
-import backend from '@utils/backend/api';
+import { ItemProps } from '@Types/items';
+import { SimilarityConfig } from '@Types/similarity';
+import cache from '@utils/apis/cache';
+import { sumId } from '@utils/helper';
 import get from 'lodash/get';
 import has from 'lodash/has';
 
 export class Helper {
-  main: mainHelper.Helper;
   defaultConfig: SimilarityConfig;
 
   constructor() {
-    this.main = mainHelper.helper;
     this.defaultConfig = {
       weighting: {
         keywords: 1,
@@ -27,7 +26,7 @@ export class Helper {
   }
 
   removeOriginalItem(item: Partial<ItemProps>, array: ItemProps[]) {
-    var index = array.findIndex((i) => this.main.sumId(item) === this.main.sumId(i));
+    var index = array.findIndex((i) => sumId(item) === sumId(i));
     if (index > -1) {
       array.splice(index, 1);
     }
@@ -35,7 +34,7 @@ export class Helper {
   }
 
   async getCollection(initialItem: Partial<ItemProps>) {
-    return this.removeOriginalItem(initialItem, (await backend.cachedItems()).items);
+    return this.removeOriginalItem(initialItem, await cache.items.get());
   }
 
   parseConfig(config: SimilarityConfig | undefined = {}): SimilarityConfig {
@@ -53,6 +52,10 @@ export class Helper {
         plot: parse('weighting.plot'),
       },
     };
+  }
+
+  boolToNum(bool: boolean): number {
+    return bool ? 1 : 0;
   }
 }
 

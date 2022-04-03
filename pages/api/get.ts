@@ -1,23 +1,14 @@
-import { client } from '@utils/tmdb/api';
+import { MovieDbTypeEnum } from '@Types/items';
+import filmlist from '@utils/apis/filmlist';
+import { isMovie } from '@utils/helper/tmdb';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { id, type, c } = req.query;
-    let response = {};
+    const { id, type } = Object.freeze(req.query);
 
-    if (c) {
-      response = await client.getBase(parseInt(id as string), type as any);
-    } else {
-      response = await client.get(parseInt(id as string), type as any, { state: null });
-    }
-
-    res.status(200).json({
-      ...response,
-    });
+    res.status(200).json(await filmlist.get(parseInt(id.toString()), MovieDbTypeEnum[isMovie(type) ? 'movie' : 'tv']));
   } catch (error: any) {
-    res.status(500).json({
-      message: error.message,
-    });
+    res.status(500).json({ error: error?.message });
   }
 }

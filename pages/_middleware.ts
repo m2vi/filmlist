@@ -1,15 +1,3 @@
-import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
-import * as config from '@utils/worker/config';
-import api from '@utils/worker/worker';
+import { restricted } from '@utils/middleware/main';
 
-export async function middleware(req: NextRequest, ev: NextFetchEvent) {
-  if (!req.page.name || !config.middleware.restricted.includes(req.page.name)) return;
-
-  const [result, error] = await api.verify(req, true);
-
-  if (!result) {
-    return NextResponse.redirect(`${req.nextUrl.origin}/oauth/login?e=${encodeURIComponent(error)}`);
-  }
-
-  return NextResponse.next();
-}
+export const middleware = restricted;

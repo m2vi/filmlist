@@ -29,7 +29,7 @@ class MyDocument extends Document {
           <meta name='msapplication-TileImage' content='/icons/favicon-144x144.png' />
           <meta name='msapplication-config' content='/icons/browserconfig.xml' />
         </Head>
-        <body className='overflow-x-hidden'>
+        <body>
           <Main />
           <NextScript />
         </body>

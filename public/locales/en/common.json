@@ -108,9 +108,11 @@
     "appearances": "Appearances",
     "birthday": "Birthday",
     "deathday": "Deathday",
-    "age": "Age"
+    "age": "Age",
+    "main_title": "Popular people"
   },
   "details": {
+    "yo": "years old",
     "state": {
       "default": "State",
       "null": "Not in the database",
@@ -143,6 +145,7 @@
   "collection": {
     "count": "Count",
     "local_count": "Local count",
-    "genres": "Genres"
+    "genres": "Genres",
+    "main_title": "Popular collections"
   }
 }

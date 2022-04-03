@@ -104,14 +104,17 @@
       }
     }
   },
+
   "person": {
     "known_for": "Bekannt für",
     "appearances": "Auftritte",
     "birthday": "Geburtstag",
     "deathday": "Todestag",
-    "age": "Alter"
+    "age": "Alter",
+    "main_title": "Beliebte Personen"
   },
   "details": {
+    "yo": "Jahre alt",
     "state": {
       "default": "Zustand",
       "null": "Nicht in der Datenbank",
@@ -144,6 +147,7 @@
   "collection": {
     "count": "Anzahl",
     "local_count": "Lokale Anzahl",
-    "genres": "Genres"
+    "genres": "Genres",
+    "main_title": "Beliebte Filmreihen"
   }
 }

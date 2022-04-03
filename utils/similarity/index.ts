@@ -1,7 +1,10 @@
-import { ItemProps, MovieDbTypeEnum, SimilarityConfig } from '@utils/types';
 import main from './main';
-import tmdb from '../tmdb/api';
 import helper from './helper';
+import { isMovie } from '@utils/helper/tmdb';
+import filmlist from '@utils/apis/filmlist';
+import { ItemProps, MovieDbTypeEnum } from '@Types/items';
+import { SimilarityConfig } from '@Types/similarity';
+import { UserProps } from '@Types/user';
 
 class Similarity {
   public calculate(item1: ItemProps, item2: ItemProps, config: SimilarityConfig = {}): number {
@@ -10,8 +13,8 @@ class Similarity {
     return data;
   }
 
-  public async get(id: number, type: MovieDbTypeEnum) {
-    const item = await tmdb.getFast(id, helper.main.isMovie(type) ? 1 : 0);
+  public async get(id: number, type: MovieDbTypeEnum, user_id: string) {
+    const item = await filmlist.getFast(id, isMovie(type) ? 1 : 0, user_id);
 
     const collection = await helper.getCollection(item);
 
