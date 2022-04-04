@@ -20,3 +20,4 @@
 - [ ] add movie accent color
 - [ ] /collection lazy
 - [x] fix name translations
+- [ ] advance convert class

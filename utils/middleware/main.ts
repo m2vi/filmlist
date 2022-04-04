@@ -31,7 +31,7 @@ export async function closed(req: NextRequest, ev: NextFetchEvent) {
 //? json response
 export async function restrictedApi(req: NextRequest, ev: NextFetchEvent) {
   if (!req.page.name) return;
-  console.log(req.page.name);
+
   if (!data.restricted.includes(req.page.name)) return;
 
   const [result, error] = await api.verify(req, true);
