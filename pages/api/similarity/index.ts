@@ -1,5 +1,3 @@
-import { MovieDbTypeEnum } from '@Types/items';
-import tmdb from '@utils/apis/tmdb';
 import { isMovie } from '@utils/helper/tmdb';
 import similarity from '@utils/similarity';
 import type { NextApiRequest, NextApiResponse } from 'next';

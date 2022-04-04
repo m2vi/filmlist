@@ -57,6 +57,21 @@ const Media = ({ data }: { data: ItemProps }) => {
             };
           }}
         />
+        <AsyncCarousel
+          func={async () => {
+            const items = await basicFetch(
+              `/api/similarity?${QueryString.stringify({ id: data.id_db, type: data.type, locale, user: userClient.id })}`
+            );
+
+            return {
+              items,
+              key: null,
+              length: items.length,
+              query: {},
+              tmdb: true,
+            };
+          }}
+        />
       </div>
     </Fragment>
   );
