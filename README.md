@@ -22,3 +22,4 @@
 - [ ] /collection lazy
 - [x] fix name translations
 - [ ] advance convert class
+- [ ] fix cache (maybe too large)
