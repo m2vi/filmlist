@@ -3,9 +3,8 @@ import { ItemProps } from '@Types/items';
 import db from '@utils/db/main';
 import memoryCache from 'memory-cache';
 import jsonTabs from '@data/tabs.json';
-import { stringify } from 'flatted';
-//@ts-ignore
-import parse from 'fast-json-parse';
+
+const { parse, stringify } = JSON;
 
 class Cache {
   get items() {
