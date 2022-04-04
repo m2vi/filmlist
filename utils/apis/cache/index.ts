@@ -36,6 +36,13 @@ class Cache {
       refresh: () => {},
     };
   }
+
+  get stats() {
+    return {
+      size: memoryCache.size(),
+      memSize: memoryCache.memsize(),
+    };
+  }
 }
 
 export const cache = new Cache();

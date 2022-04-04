@@ -18,7 +18,7 @@ const Carousel = ({ section: { items, key } }: { section: GetTabResponse }) => {
       )}
 
       <Swiper spaceBetween={20} slidesPerView={2} className='mt-2' breakpoints={breakpoints}>
-        {items?.map((props, index) => {
+        {(items ? items : []).map((props, index) => {
           return (
             <SwiperSlide key={index} style={{ width: config.cardWidth }}>
               <Card {...props} />

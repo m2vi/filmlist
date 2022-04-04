@@ -12,11 +12,11 @@ export class Helper {
   constructor() {
     this.defaultConfig = {
       weighting: {
-        keywords: 1,
-        genre_ids: 0.8,
-        credits: 1,
-        origin: 0.75,
-        collection: 0.8,
+        keywords: 2,
+        genre_ids: 0.5,
+        credits: 0,
+        origin: 0.25,
+        collection: 0,
       },
     };
   }

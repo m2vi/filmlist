@@ -41,7 +41,7 @@ class Main {
   }
 
   getIntersection<T>(array1: T[], array2: T[]): T[] {
-    return array1?.filter((element) => array2.includes(element));
+    return array1?.filter((element) => array2?.includes(element));
   }
 
   calculateOriginSimilarity(item: ItemProps, item2: ItemProps): number {
@@ -49,17 +49,9 @@ class Main {
   }
 
   calculateKeywordsSimilarity(item1: ItemProps, item2: ItemProps): number {
-    const one =
-      this.getIntersection(item1?.imdb_keywords, item2?.imdb_keywords)?.length / item1?.imdb_keywords?.length
-        ? item1.imdb_keywords.length
-        : 1;
-    const two =
-      this.getIntersection(item2?.imdb_keywords, item1?.imdb_keywords)?.length / item2?.imdb_keywords?.length
-        ? item2.imdb_keywords.length
-        : 1;
+    const one = this.getIntersection(item1?.imdb_keywords, item2?.imdb_keywords)?.length / item1?.imdb_keywords?.length;
 
-    console.log(one / 2 + two / 2);
-    return one / 2 + two / 2;
+    return one;
   }
 
   calculateGenreIDsSimilarity(item1: ItemProps, item2: ItemProps): number {

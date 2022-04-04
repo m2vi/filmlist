@@ -8,7 +8,7 @@ const AsyncCarousel = ({ func }: { func: () => Promise<GetTabResponse> }) => {
   const [section, setSection] = useState<GetTabResponse>({
     items: placeholderCards(20) as CardProps[],
     length: 20,
-    key: '...',
+    key: '',
     query: {},
   });
 
