@@ -20,7 +20,7 @@ class Similarity {
 
     const collection = await helper.getCollection(item);
 
-    const sorted = helper.sortByScore(collection.map((i) => ({ ...i, similarity_score: this.calculate(item, i) })));
+    const sorted = helper.sortByScore(collection.map((i) => ({ ...i, similarity_score: this.calculate(item, i) }))).reverse();
 
     return sorted;
   }
@@ -29,7 +29,7 @@ class Similarity {
     const client = await user.find(user_id);
     const items = await this.get(id, type, user_id);
 
-    return convert.prepareForFrontend(user.appendUserAttributes(items, client), locale);
+    return convert.prepareForFrontend(user.appendUserAttributes(items, client), locale).slice(0, 20);
   }
 }
 

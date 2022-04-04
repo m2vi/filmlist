@@ -8,7 +8,6 @@ class Db {
     await mongoose.connect(process.env.MONGO_URI!, {
       dbName: 'smarthub',
       autoIndex: true,
-      ssl: true,
     });
 
     if (mongoose.connection) {

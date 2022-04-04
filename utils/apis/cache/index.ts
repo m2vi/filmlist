@@ -13,6 +13,7 @@ class Cache {
           return cachedResponse;
         } else {
           await db.init();
+
           const items = await db.itemSchema.find().lean<ItemProps[]>();
 
           memoryCache.put('db-items', items, 6 * 1000 * 60 * 60);

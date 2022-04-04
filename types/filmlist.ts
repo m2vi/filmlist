@@ -15,6 +15,7 @@ export interface BaseResponse {
   tmdb_item: any;
   rt_item: MovieResponse | TVSeriesResponse | null;
   imdb_item: Movie | Series | null;
+  imdb_keywords: string[];
   translation_de: GetTranslationFromBase;
   trailers: Video[] | null;
   certificate: string | null;

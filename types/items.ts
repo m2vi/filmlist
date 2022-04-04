@@ -81,6 +81,7 @@ export interface ItemProps {
   external_ids: ExternalIds;
   credits: CreditProps;
   keywords: Array<{ id: number; name: string }>;
+  imdb_keywords: Array<string>;
   watchProviders: ProviderEntryProps | null;
   collection: {
     id: number;
@@ -99,7 +100,7 @@ export interface ItemProps {
   user_state?: number | null; //? user property e.g. 1
   user_date_added?: number | null; //? user property e.g. unix timestamp
 
-  index?: number;
+  index?: number; //? old
 }
 
 export interface VoteProps {

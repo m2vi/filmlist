@@ -4,7 +4,7 @@ import { isAnime, parseExternalIds } from '@utils/apis/filmlist/helper';
 import { isMovie } from '@utils/helper/tmdb';
 
 const FromBaseToItem = (data: BaseResponse): ItemProps => {
-  const { tmdb_item, translation_de, certificate, isMovie, watchProviders, trailers, ratings, imdb_item, rt_item } = data;
+  const { tmdb_item, translation_de, certificate, isMovie, watchProviders, trailers, ratings, imdb_item, rt_item, imdb_keywords } = data;
 
   return {
     budget: tmdb_item?.budget ? tmdb_item?.budget : null,
@@ -47,6 +47,7 @@ const FromBaseToItem = (data: BaseResponse): ItemProps => {
     type: isMovie ? 1 : 0,
     credits: tmdb_item?.credits,
     keywords: tmdb_item?.keywords?.keywords ? tmdb_item?.keywords?.keywords : [],
+    imdb_keywords: imdb_keywords ? imdb_keywords : [],
     watchProviders,
     collection: isMovie ? (tmdb_item.belongs_to_collection ? tmdb_item.belongs_to_collection : null) : null,
     trailers: trailers,

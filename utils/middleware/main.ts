@@ -4,7 +4,7 @@ import data from '@data/middleware.json';
 
 export async function restricted(req: NextRequest, ev: NextFetchEvent) {
   if (!req.page.name) return;
-  console.log(req.page.name);
+
   if (!data.restricted.includes(req.page.name)) return;
 
   const [result, error] = await api.verify(req, true);

@@ -8,10 +8,11 @@
 - [ ] create user
 - [ ] add many pre filters (genres, providers, ...)
 - [ ] update algorithm (accuracy)
+- [ ] fix algorithm (keywords)
 - [ ] new update method (current one is too slow)
 - [ ] update icon
 - [ ] change user items easily
-- [ ] imdb keywords
+- [x] imdb keywords
 - [ ] speed up
 - [ ] maybe comments
 - [ ] security check

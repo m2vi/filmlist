@@ -1,4 +1,5 @@
 import Vimdb from 'vimdb';
+import { parser } from './parser';
 
 export enum SearchType {
   Title = 'tt',
@@ -20,6 +21,15 @@ export class Imdb {
       return await this.vimdb.getShow(id);
     } catch (error) {
       return null;
+    }
+  }
+
+  async keywords(id: string) {
+    try {
+      return await parser.keywords(id);
+    } catch (error) {
+      console.log(error);
+      return [];
     }
   }
 

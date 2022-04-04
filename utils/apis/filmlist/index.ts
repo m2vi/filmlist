@@ -45,12 +45,13 @@ class Filmlist {
     };
 
     const tmdb_item: any = await tmdb.get(params, isMovie(type) ? MovieDbTypeEnum['movie'] : MovieDbTypeEnum['tv']);
-    const [imdb_item, rt_item] = !options?.fast
+    const [imdb_item, rt_item, imdb_keywords] = !options?.fast
       ? await Promise.all([
           imdb.get(tmdb_item?.external_ids?.imdb_id),
           rt.find({ name: tmdb_item.title ? tmdb_item.title : tmdb_item.name, type, year: new Date(tmdb_item.release_date).getFullYear() }),
+          imdb.keywords(tmdb_item?.external_ids?.imdb_id),
         ])
-      : [null, null];
+      : [null, null, []];
 
     return {
       tmdb_item,
@@ -62,6 +63,7 @@ class Filmlist {
       watchProviders: getWatchProvidersFromBase(tmdb_item?.['watch/providers']),
       ratings: ratings.getRatingsFromBase(tmdb_item, imdb_item, rt_item),
       isMovie: isMovie(type),
+      imdb_keywords,
     };
   }
 
