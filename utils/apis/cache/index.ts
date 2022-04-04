@@ -3,6 +3,7 @@ import { ItemProps } from '@Types/items';
 import db from '@utils/db/main';
 import memoryCache from 'memory-cache';
 import jsonTabs from '@data/tabs.json';
+import { parse, stringify } from 'flatted';
 
 class Cache {
   get items() {
@@ -10,13 +11,13 @@ class Cache {
       get: async (): Promise<ItemProps[]> => {
         const cachedResponse = memoryCache.get('db-items');
         if (cachedResponse) {
-          return JSON.parse(cachedResponse);
+          return parse(cachedResponse);
         } else {
           await db.init();
 
           const items = await db.itemSchema.find().lean<ItemProps[]>();
 
-          memoryCache.put('db-items', JSON.stringify(items), 6 * 1000 * 60 * 60);
+          memoryCache.put('db-items', stringify(items), 6 * 1000 * 60 * 60);
           return items;
         }
       },
