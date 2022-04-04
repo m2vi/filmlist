@@ -127,3 +127,9 @@ export interface GetCollectionProps {
   };
   items: FrontendItemProps[];
 }
+
+export interface GetOptions {
+  fast?: boolean;
+}
+
+export interface GetBaseOptions extends GetOptions {}

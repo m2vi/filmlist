@@ -1,16 +1,22 @@
-- fix state settings
-- fix move
-- fix update
-- fix set items
-- custom filter
-- manage interface
-- create user
-- add many pre filters (genres, providers, ...)
-- update algorithm (accuracy)
-- new update method (current one is too slow)
-- update icon
-- change user items easily
-- imdb keywords
-- speed up
-- maybe comments
-- security check
+- [ ] fix state settings
+- [ ] fix move
+- [ ] fix update
+- [ ] fix set items
+- [x] fix get speed
+- [ ] custom filter
+- [ ] manage interface
+- [ ] create user
+- [ ] add many pre filters (genres, providers, ...)
+- [ ] update algorithm (accuracy)
+- [ ] new update method (current one is too slow)
+- [ ] update icon
+- [ ] change user items easily
+- [ ] imdb keywords
+- [ ] speed up
+- [ ] maybe comments
+- [ ] security check
+- [ ] replace ugly code
+- [ ] route restrictions
+- [ ] add movie accent color
+- [ ] /collection lazy
+- [x] fix name translations

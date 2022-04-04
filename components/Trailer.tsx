@@ -11,6 +11,7 @@ const Trailer = ({ trailers }: { trailers: Video[] | null }) => {
         }}
         options={{
           autoplay: true,
+          settings: [],
         }}
       />
     </div>

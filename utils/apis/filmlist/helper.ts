@@ -9,7 +9,7 @@ import {
   TvImagesResponse,
   TvTranslationsResponse,
 } from 'moviedb-promise/dist/request-types';
-import _, { object } from 'underscore';
+import _ from 'underscore';
 import { FilterQuery } from 'mongoose';
 import { CardProps } from '@components/Card';
 import { sortByKey } from '@m2vi/iva';
@@ -25,9 +25,19 @@ export const getTranslationFromBase = (
   const poster = _.find(images?.posters ? images?.posters : [], { iso_639_1: 'de' })?.file_path;
   const backdrop = _.find(images?.backdrops ? images?.backdrops : [], { iso_639_1: 'de' as any })?.file_path;
 
+  //? check
   const result = {
     overview: translation?.overview ? translation?.overview : base?.overview,
-    name: translation?.title ? translation?.title : base?.title ? base?.title : base?.name,
+    name:
+      base?.original_language === 'de'
+        ? base?.original_title
+          ? base?.original_title
+          : base?.original_name
+        : translation?.title
+        ? translation?.title
+        : base?.title
+        ? base?.title
+        : base?.name,
     poster_path: poster ? poster : base?.poster_path ? base?.poster_path : null,
     backdrop_path: backdrop ? backdrop : base?.backdrop_path ? base?.backdrop_path : null,
   };

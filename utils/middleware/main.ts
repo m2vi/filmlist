@@ -3,7 +3,9 @@ import api from './verify';
 import data from '@data/middleware.json';
 
 export async function restricted(req: NextRequest, ev: NextFetchEvent) {
-  if (!req.page.name || !data.restricted.includes(req.page.name)) return;
+  if (!req.page.name) return;
+  console.log(req.page.name);
+  if (!data.restricted.includes(req.page.name)) return;
 
   const [result, error] = await api.verify(req, true);
 
@@ -26,8 +28,11 @@ export async function closed(req: NextRequest, ev: NextFetchEvent) {
   return NextResponse.redirect(`${req.nextUrl.origin}/oauth/discord`);
 }
 
+//? json response
 export async function restrictedApi(req: NextRequest, ev: NextFetchEvent) {
-  if (!req.page.name || !data.restricted.includes(req.page.name)) return;
+  if (!req.page.name) return;
+  console.log(req.page.name);
+  if (!data.restricted.includes(req.page.name)) return;
 
   const [result, error] = await api.verify(req, true);
 

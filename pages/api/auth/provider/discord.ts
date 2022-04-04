@@ -87,6 +87,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         secure: process.env.NODE_ENV !== 'development',
         sameSite: 'lax',
         path: '/',
+        expires: new Date(Date.now() + 86400 * 1000 * 7 * 2),
       })
     );
 

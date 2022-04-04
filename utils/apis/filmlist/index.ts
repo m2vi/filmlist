@@ -3,7 +3,9 @@ import {
   CollectionProps,
   FindOneOptions,
   FindOptions,
+  GetBaseOptions,
   GetCollectionProps,
+  GetOptions,
   GetTabProps,
   GetTabResponse,
   PersonsCredits,
@@ -34,7 +36,7 @@ import db from '@utils/db/main';
 import { getUniqueListBy } from '@utils/helper';
 
 class Filmlist {
-  async getBase(id: number, type: MovieDbTypeEnum): Promise<BaseResponse> {
+  async getBase(id: number, type: MovieDbTypeEnum, options?: GetBaseOptions): Promise<BaseResponse> {
     const params = {
       id,
       language: 'en-GB',
@@ -43,10 +45,12 @@ class Filmlist {
     };
 
     const tmdb_item: any = await tmdb.get(params, isMovie(type) ? MovieDbTypeEnum['movie'] : MovieDbTypeEnum['tv']);
-    const [imdb_item, rt_item] = await Promise.all([
-      imdb.get(tmdb_item?.external_ids?.imdb_id),
-      rt.find({ name: tmdb_item.title ? tmdb_item.title : tmdb_item.name, type, year: new Date(tmdb_item.release_date).getFullYear() }),
-    ]);
+    const [imdb_item, rt_item] = !options?.fast
+      ? await Promise.all([
+          imdb.get(tmdb_item?.external_ids?.imdb_id),
+          rt.find({ name: tmdb_item.title ? tmdb_item.title : tmdb_item.name, type, year: new Date(tmdb_item.release_date).getFullYear() }),
+        ])
+      : [null, null];
 
     return {
       tmdb_item,
@@ -61,8 +65,8 @@ class Filmlist {
     };
   }
 
-  async get(id: number, type: MovieDbTypeEnum) {
-    const base = await this.getBase(id, type);
+  async get(id: number, type: MovieDbTypeEnum, options?: GetOptions) {
+    const base = await this.getBase(id, type, options);
 
     return convert.fromBaseToItem(base);
   }
@@ -74,7 +78,7 @@ class Filmlist {
     if (db_item) {
       return db_item;
     } else {
-      return await this.get(id, type);
+      return await this.get(id, type, { fast: true });
     }
   }
 
