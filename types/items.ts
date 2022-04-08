@@ -79,7 +79,7 @@ export interface ItemProps {
   ratings: RatingsResponse | null;
   production_companies: Array<ProductionCompany>;
   external_ids: ExternalIds;
-  credits: CreditProps;
+  credits?: CreditProps; //! not in cache
   keywords: Array<{ id: number; name: string }>;
   imdb_keywords: Array<string>;
   watchProviders: ProviderEntryProps | null;

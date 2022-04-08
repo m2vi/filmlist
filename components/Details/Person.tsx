@@ -1,16 +1,22 @@
 import config from '@data/config.json';
 import { useTranslation } from 'next-i18next';
 import moment from 'moment';
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { truncate } from '@utils/utils';
 import Head from 'next/head';
 import { GetPersonResponse } from '@Types/filmlist';
 import Carousel from '../Carousel';
 import Item from './components/Item';
 import ItemLink from './components/ItemLink';
+import AsyncCarousel from '@components/Carousel/async';
+import QueryString from 'qs';
+import { basicFetch } from '@utils/helper/fetch';
+import { useRouter } from 'next/router';
 
 const Person = ({ data }: { data: GetPersonResponse }) => {
   const { t } = useTranslation();
+  const { locale } = useRouter();
+  const [length, setLength] = useState(0);
 
   useEffect(() => console.log(data), [data]);
 
@@ -37,7 +43,7 @@ const Person = ({ data }: { data: GetPersonResponse }) => {
           <div className='w-full grid grid-cols-2 auto-rows-auto mt-5 gap-5'>
             <Item name={t('person.known_for')} value={data.info.known_for_department!} />
             <ItemLink name='TMDB ID' value={data.info.id?.toString()!} href={`https://www.themoviedb.org/person/${data.info.id}`} />
-            <Item name={t('person.appearances')} value={data.items.length.toString()} />
+            <Item name={t('person.appearances')} value={`${length} (${data.items.length.toString()})`} />
             <ItemLink name='IMDb ID' value={data.info.imdb_id!} href={`https://www.imdb.com/name/${data.info.imdb_id}`} />
             <Item name={t('person.birthday')} value={moment(data.info.birthday).format('l')} />
             {data.info.deathday ? (
@@ -49,7 +55,19 @@ const Person = ({ data }: { data: GetPersonResponse }) => {
         </div>
       </div>
       <div className='pt-80'>
-        <Carousel section={{ key: null, items: data.items, length: data.items.length, query: {} }} />
+        <AsyncCarousel
+          func={async () => {
+            const items = await basicFetch(`/api/person/${data.info.id}/known_for?${QueryString.stringify({ locale })}`);
+            setLength(items?.length);
+            return {
+              items: items.slice(0, 20),
+              key: null,
+              length: 20,
+              query: {},
+              tmdb: true,
+            };
+          }}
+        />
       </div>
     </Fragment>
   );

@@ -1,15 +1,10 @@
 import Card from '@components/Card';
-import { basicFetch } from '@m2vi/iva';
-import { GetTabResponse } from '@Types/filmlist';
-import filmlist from '@utils/apis/filmlist';
 import user from '@utils/user';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { Fragment, useEffect, useState } from 'react';
-import InfiniteScroll from 'react-infinite-scroller';
+import { Fragment, useEffect } from 'react';
 import config from '@data/config.json';
-import QueryString from 'qs';
 import tmdb from '@utils/apis/tmdb';
 import { FrontendItemProps } from '@Types/items';
 

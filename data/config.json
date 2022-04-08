@@ -2,5 +2,6 @@
   "hideGenresFromBrowse": [99, 36, 10762, 10402, 10763, 10764, 10766, 10770, 10767, 10752, 10768, 37],
   "posterWidth": "342",
   "cardWidth": "150px",
+  "pCCardWidth": "285px",
   "highResPosterWidth": "w780"
 }

@@ -15,13 +15,14 @@
         "movies": "Filme",
         "new": "Neu",
         "soon": "Bald verfügbar",
+        "upcoming": "Demnächst",
         "anime": "Anime",
 
         "continue-watching": "Weiterschauen",
         "my list": "Meine Liste",
         "favourites": "Favoriten",
         "recently": "Vor kurzem erschienen",
-        "latest": "Aktuelles",
+        "watch-it-again": "Nochmal ansehen",
         "notifications": "Benachrichtigungen",
         "unfiltered": "Ungefiltert",
         "watched": "Gesehen",
@@ -50,6 +51,8 @@
         "search": "Suche",
         "trends": "Trends",
         "trending": "Trends",
+
+        "company": "Unternehmen",
 
         "action": "Action",
         "action & adventure": "Action & Adventure",
@@ -149,5 +152,10 @@
     "local_count": "Lokale Anzahl",
     "genres": "Genres",
     "main_title": "Beliebte Filmreihen"
+  },
+  "company": {
+    "origin_country": "Herkunftsland",
+    "headquarters": "Hauptsitz",
+    "default": "Produktionsfirmen"
   }
 }

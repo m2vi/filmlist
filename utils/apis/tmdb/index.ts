@@ -1,7 +1,7 @@
 import { removeEmpty } from '@m2vi/iva';
 import { GetRecommendations, GetTabResponse } from '@Types/filmlist';
 import { MovieDbTypeEnum } from '@Types/items';
-import { TmdbGetTab, TmdbGetTrending } from '@Types/tmdb';
+import { TmdbGetTab, TmdbGetTrending, TmdbGetUpcoming } from '@Types/tmdb';
 import convert from '@utils/convert/main';
 import { isMovie } from '@utils/helper/tmdb';
 import user from '@utils/user';
@@ -14,6 +14,7 @@ import {
   DiscoverTvRequest,
   IdAppendToResponseRequest,
   IdRequestParams,
+  UpcomingMoviesRequest,
 } from 'moviedb-promise/dist/request-types';
 
 class Tmdb {
@@ -56,7 +57,7 @@ class Tmdb {
         return this.getTrending({ user: user_id, media_type: 'all', time_window: 'day', language: locale });
     }
 
-    const client = await user.find(user_id);
+    const client = typeof user_id === 'string' ? await user.find(user_id) : user_id;
 
     const raw_items = await (isMovie(type) ? this.api.discoverMovie(params as any) : this.api.discoverTv(params));
     const items = user.appendUserAttributes(convert.prepareTmdbForFrontend(raw_items?.results!), client);
@@ -76,7 +77,7 @@ class Tmdb {
   }
 
   private async getTrending({ user: user_id, media_type, time_window, language }: TmdbGetTrending): Promise<GetTabResponse> {
-    const client = await user.find(user_id);
+    const client = typeof user_id === 'string' ? await user.find(user_id) : user_id;
     const raw_data = await this.api.trending({ media_type, time_window, language });
     let data = raw_data.results as any[];
     //  if (media_type === 'all') data = raw_data.results!.filter((item: any) => _.has(item, 'media_type'));
@@ -99,6 +100,27 @@ class Tmdb {
     const adapted = convert.prepareTmdbForFrontend(res!);
 
     return user.appendUserAttributes(adapted, client);
+  }
+
+  async upcoming({ user: user_id, type, locale, page }: TmdbGetUpcoming) {
+    const client = typeof user_id === 'string' ? await user.find(user_id) : user_id;
+    const params: UpcomingMoviesRequest = { language: locale, region: locale, page };
+
+    const items = isMovie(type) ? (await this.api.upcomingMovies(params)).results! : [];
+
+    const adapted = user.appendUserAttributes(convert.prepareTmdbForFrontend(items), client);
+
+    return {
+      tmdb: true,
+      key: 'upcoming',
+      length: adapted.length,
+      items: adapted,
+      query: removeEmpty({
+        type,
+        locale,
+        page,
+      }),
+    };
   }
 
   async whenisthenextmcufilm(locale: string = 'en') {

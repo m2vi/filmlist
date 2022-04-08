@@ -1,3 +1,3 @@
-import { closed } from '@utils/middleware/main';
+import { closedApi } from '@utils/middleware/main';
 
-export const middleware = closed;
+export const middleware = closedApi;

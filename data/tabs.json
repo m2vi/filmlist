@@ -136,7 +136,7 @@
     "sort_key": false,
     "reverse": true
   },
-  "latest": {
+  "watch-it-again": {
     "filter": {
       "user_state": {
         "$gt": 0
@@ -235,6 +235,12 @@
         "$eq": null
       }
     },
+    "reverse": true
+  },
+  "company": {
+    "sort_key": "popularity"
+  },
+  "genre": {
     "reverse": true
   }
 }

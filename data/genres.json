@@ -2,115 +2,144 @@
   "data": [
     {
       "id": 28,
-      "name": "Action"
+      "name": "Action",
+      "backdrop_path": "/9LuL3pwJiwIWSckeCbOX8G12F4X.jpg"
     },
     {
       "id": 12,
-      "name": "Adventure"
+      "name": "Adventure",
+      "backdrop_path": "/aimQXQtDjrCHMerFM7CkyVlVeO5.jpg"
     },
     {
       "id": 16,
-      "name": "Animation"
+      "name": "Animation",
+      "backdrop_path": "/paO3UfhgoNe2qblfKGanfon6ve7.jpg"
     },
     {
       "id": 7424,
-      "name": "Anime"
+      "name": "Anime",
+      "backdrop_path": "/C9lqFy7YrC0VRAte1kuRZfxIPs.jpg"
     },
     {
       "id": 35,
-      "name": "Comedy"
+      "name": "Comedy",
+      "backdrop_path": "/swL60kl3Gi8Tuidd5qfaqaSvb31.jpg"
     },
     {
       "id": 80,
-      "name": "Crime"
+      "name": "Crime",
+      "backdrop_path": "/4U4q1zjIwCZTNkp6RKWkWPuC7uI.jpg"
     },
     {
       "id": 99,
-      "name": "Documentary"
+      "name": "Documentary",
+      "backdrop_path": "/z1UxwFCSCepPRosjOBVllfrs0PB.jpg"
     },
     {
       "id": 18,
-      "name": "Drama"
+      "name": "Drama",
+      "backdrop_path": "/x1Ohy5LGhy67rRjbXUM1DNDAICA.jpg"
     },
     {
       "id": 10751,
-      "name": "Family"
+      "name": "Family",
+      "backdrop_path": "/askg3SMvhqEl4OL52YuvdtY40Yb.jpg"
     },
     {
       "id": 14,
-      "name": "Fantasy"
+      "name": "Fantasy",
+      "backdrop_path": "/bSXfU4dwZyBA1vMmXvejdRXBvuF.jpg"
     },
     {
       "id": 36,
-      "name": "History"
+      "name": "History",
+      "backdrop_path": "/16DvS9Zb33wVJhy2F5XyS59kqJP.jpg"
     },
     {
       "id": 27,
-      "name": "Horror"
+      "name": "Horror",
+      "backdrop_path": "/yUmtjm5eLK7WohDtt5E2lHXx84P.jpg"
     },
     {
       "id": 10402,
-      "name": "Music"
+      "name": "Music",
+      "backdrop_path": "/fRGxZuo7jJUWQsVg9PREb98Aclp.jpg"
     },
     {
       "id": 9648,
-      "name": "Mystery"
+      "name": "Mystery",
+      "backdrop_path": "/lavdyiJWciCJvyLG37ZOs6HJijg.jpg"
     },
     {
       "id": 10749,
-      "name": "Romance"
+      "name": "Romance",
+      "backdrop_path": "/q5HZvtyqG8Vz39Ee9uTQbLeEml.jpg"
     },
     {
       "id": 878,
-      "name": "Science Fiction"
+      "name": "Science Fiction",
+      "backdrop_path": "/xJHokMbljvjADYdit5fK5VQsXEG.jpg"
     },
     {
       "id": 10770,
-      "name": "TV Movie"
+      "name": "TV Movie",
+      "backdrop_path": "/k0n1NQZsEP9vX3Jv6LqSrTz0SS5.jpg"
     },
     {
       "id": 53,
-      "name": "Thriller"
+      "name": "Thriller",
+      "backdrop_path": "/suaEOtk1N1sgg2MTM7oZd2cfVp3.jpg"
     },
     {
       "id": 10752,
-      "name": "War"
+      "name": "War",
+      "backdrop_path": "/aIND8x6rns3KOazjaePHrpNUAjO.jpg"
     },
     {
       "id": 37,
-      "name": "Western"
-    },
-    {
-      "id": 10759,
-      "name": "Action & Adventure"
+      "name": "Western",
+      "backdrop_path": "/ncTlQsLHZJgOir1kbBSTvSoEZZZ.jpg"
     },
     {
       "id": 10762,
-      "name": "Kids"
-    },
-    {
-      "id": 10763,
-      "name": "News"
-    },
-    {
-      "id": 10764,
-      "name": "Reality"
+      "name": "Kids",
+      "backdrop_path": "/v8e26YNBLViCsPPQ67NuZiy90Gk.jpg"
     },
     {
       "id": 10765,
-      "name": "Sci-Fi & Fantasy"
+      "name": "Sci-Fi & Fantasy",
+      "backdrop_path": "/9ODGMEfZ5Oi9xuQFJ7JTn1Iw8CV.jpg"
     },
     {
-      "id": 10766,
-      "name": "Soap"
-    },
-    {
-      "id": 10767,
-      "name": "Talk"
+      "id": 10759,
+      "name": "Action & Adventure",
+      "backdrop_path": ""
     },
     {
       "id": 10768,
-      "name": "War & Politics"
+      "name": "War & Politics",
+      "backdrop_path": "/eLYJu0JY7uAu0XeltM5OL3fdPDn.jpg"
+    },
+    {
+      "id": 10763,
+      "name": "News",
+      "backdrop_path": ""
+    },
+    {
+      "id": 10764,
+      "name": "Reality",
+      "backdrop_path": ""
+    },
+
+    {
+      "id": 10766,
+      "name": "Soap",
+      "backdrop_path": ""
+    },
+    {
+      "id": 10767,
+      "name": "Talk",
+      "backdrop_path": ""
     }
   ]
 }

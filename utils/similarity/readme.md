@@ -2,9 +2,9 @@
 
 FIX:
 
-- [ ] Divide by 0
-- [ ] Javascript precision stuff
-- [ ] Slow loops
+- [ ] fix divide by 0
+- [ ] javascript precision stuff
+- [ ] fix slow loops
 - [ ] change weighting
-- [ ] too inaccurate
 - [ ] speed up
+- [ ] add production company

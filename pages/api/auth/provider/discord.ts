@@ -5,6 +5,7 @@ import user from '@utils/user';
 import history from '@utils/user/history';
 import { baseUrl } from '@m2vi/iva';
 import { DiscordUser } from '@Types/discord';
+import QueryString from 'qs';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -43,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       body,
     })
       .then((res) => res.json())
-      .catch((err) => console.log(err, 'err1'));
+      .catch((reason) => {});
 
     if (!access_token || typeof access_token !== 'string') {
       return res.redirect(OAUTH_URI);
@@ -61,10 +62,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     let client = null;
 
-    client = await user.find(me.id).catch((reason) => console.log(reason, 'err2'));
+    client = await user.find(me.id).catch((reason) => {});
 
     if (!client) client = await user.create(me.id);
-    if ((client as any)?.error) return res.redirect(`/error?e=${(client as any)?.error}`);
+    if ((client as any)?.error) return res.redirect(`/error?${QueryString.stringify({ e: client.error })}`);
 
     const { sessionId } = await history.insert(me.id, req);
 

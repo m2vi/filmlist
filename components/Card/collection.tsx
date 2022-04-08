@@ -5,7 +5,7 @@ const CollectionCard = ({ id, name, poster_path }: CollectionProps) => {
   if (!poster_path) return null;
   return (
     <Link href={`/collection/${id}`} key={id}>
-      <a className='block cursor-pointer w-full '>
+      <a className='block cursor-pointer w-full'>
         <div className='aspect-square w-full mb-4'>
           <div className='bg-primary-800 rounded-15 aspect-square w-full flex justify-center items-center'>
             {poster_path ? (

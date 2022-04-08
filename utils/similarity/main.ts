@@ -44,28 +44,28 @@ class Main {
     return array1?.filter((element) => array2?.includes(element));
   }
 
-  calculateOriginSimilarity(item: ItemProps, item2: ItemProps): number {
+  originSimilarity(item: ItemProps, item2: ItemProps): number {
     return helper.boolToNum(item.original_language === item2.original_language);
   }
 
-  calculateKeywordsSimilarity(item1: ItemProps, item2: ItemProps): number {
+  keywordsSimilarity(item1: ItemProps, item2: ItemProps): number {
     const one = this.getIntersection(item1?.imdb_keywords, item2?.imdb_keywords)?.length / item1?.imdb_keywords?.length;
 
     return one;
   }
 
-  calculateGenreIDsSimilarity(item1: ItemProps, item2: ItemProps): number {
+  genreIDsSimilarity(item1: ItemProps, item2: ItemProps): number {
     return this.getIntersection(item1.genre_ids, item2.genre_ids).length / item1.genre_ids.length;
   }
 
-  calculateCollectionSimilarity(item1: ItemProps, item2: ItemProps): number {
+  collectionSimilarity(item1: ItemProps, item2: ItemProps): number {
     const collection1 = item1.collection?.id;
     const collection2 = item2.collection?.id;
 
     return helper.boolToNum(collection1 === collection2);
   }
 
-  calculateCastSimilarity(item1: ItemProps, item2: ItemProps): number {
+  castSimilarity(item1: ItemProps, item2: ItemProps): number {
     const cast1 = (item1?.credits?.cast ? item1?.credits?.cast : []).slice(0, 5).map(({ original_name }) => original_name);
     const cast2 = (item2?.credits?.cast ? item2?.credits?.cast : []).slice(0, 5).map(({ original_name }) => original_name);
 
@@ -74,28 +74,28 @@ class Main {
     return Number.isNaN(result) ? 0 : result;
   }
 
-  calculateCrewSimilarity(item1: ItemProps, item2: ItemProps): number {
-    //! FIX CAUSE BAD
-    const crew1 = (item1?.credits?.crew ? item1?.credits?.crew : []).map(({ original_name }) => original_name);
-    const crew2 = (item2?.credits?.crew ? item2?.credits?.crew : []).map(({ original_name }) => original_name);
+  crewSimilarity(item1: ItemProps, item2: ItemProps): number {
+    const crew1 = (item1?.credits?.crew ? item1?.credits?.crew : []).slice(0, 3).map(({ original_name }) => original_name);
+    const crew2 = (item2?.credits?.crew ? item2?.credits?.crew : []).slice(0, 3).map(({ original_name }) => original_name);
 
-    const result = this.getIntersection(crew1, crew2).length / item1.credits?.crew?.length!;
+    const result = this.getIntersection(crew1, crew2).length / item1.credits?.crew?.slice(0, 3).length!;
 
     return Number.isNaN(result) ? 0 : result;
   }
 
   calculateSimilarity(item1: ItemProps, item2: ItemProps, config: SimilarityConfig = {}): number {
+    const s = performance.now()
     const parsed = helper.parseConfig(config);
 
-    const origin = this.calculateOriginSimilarity(item1, item2);
-    const keywords = this.calculateKeywordsSimilarity(item1, item2);
-    const genre_ids = this.calculateGenreIDsSimilarity(item1, item2);
-    const cast = this.calculateCastSimilarity(item1, item2);
-    const crew = this.calculateCrewSimilarity(item1, item2);
-    const collection = this.calculateCollectionSimilarity(item1, item2);
+    const origin = this.originSimilarity(item1, item2);
+    const keywords = this.keywordsSimilarity(item1, item2);
+    const genre_ids = this.genreIDsSimilarity(item1, item2);
+    const collection = this.collectionSimilarity(item1, item2);
+    const cast = this.castSimilarity(item1, item2)
+    const crew = this.crewSimilarity(item1, item2)
 
-    const weighted = this.weight({ origin, keywords, genre_ids, cast, crew, collection }, parsed);
-
+    const weighted = this.weight({ origin, keywords, genre_ids, collection, cast, crew }, parsed);
+   
     return weighted;
   }
 }

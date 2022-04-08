@@ -8,12 +8,17 @@ body {
 }
 
 :root {
-  --color-primary-900: rgb(4, 7, 20) !important;
+  --color-primary-900: rgb(0, 0, 0) !important;
+  /*   --color-primary-900: #000 !important; */
 }
 
 .bg-primary-900-80 {
-  background-color: rgba(4, 7, 20, 0.8);
+  background-color: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(40px);
+}
+
+.bg-primary-900-20 {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .user {
@@ -41,13 +46,17 @@ body {
   background-color: #5865f2 !important;
 }
 
+.gradient-default {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 100%);
+}
+
 .overlay .overlay-child {
-  background: rgba(0, 0, 0, 0.8);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 100%);
   border-radius: 8px;
 }
 
 .overlay .overlay-child {
-  transition: 0.1s ease all;
+  transition: 150ms ease all;
   opacity: 0;
 }
 
@@ -57,4 +66,19 @@ body {
 
 :root {
   --plyr-color-main: var(--color-accent);
+}
+
+.loading-animation {
+  background: var(--color-primary-800);
+  background: linear-gradient(146deg, var(--color-primary-800) 5%, var(--color-primary-700) 15%, var(--color-primary-800) 25%);
+  background-size: 5000px 100%;
+  animation-duration: 5s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: shimmer;
+  animation-timing-function: linear;
+}
+
+.aspect-pc {
+  aspect-ratio: 19 / 12;
 }

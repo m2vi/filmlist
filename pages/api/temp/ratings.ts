@@ -8,8 +8,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const ratings = await db.ratingSchema.find().lean<any[]>();
 
   function decodeIdentifier(id: string) {
-    const author = Buffer.from(id.split('.')[0], 'base64url').toString('utf-8');
-    const timestamp = Buffer.from(id.split('.')[1], 'base64url').toString('utf-8');
+    const author = Buffer.from(id.split('.')[0], 'base64url').toString('utf8');
+    const timestamp = Buffer.from(id.split('.')[1], 'base64url').toString('utf8');
 
     return {
       author,

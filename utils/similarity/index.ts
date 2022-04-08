@@ -20,7 +20,9 @@ class Similarity {
 
     const collection = await helper.getCollection(item);
 
-    const sorted = helper.sortByScore(collection.map((i) => ({ ...i, similarity_score: this.calculate(item, i) }))).reverse();
+    const { data: sorted, time } = helper.track(() =>
+      helper.sortByScore(collection.map((i) => ({ ...i, similarity_score: this.calculate(item, i) }))).reverse()
+    );
 
     return sorted;
   }

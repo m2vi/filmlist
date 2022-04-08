@@ -3,6 +3,8 @@ import { Movie, Series } from 'vimdb';
 import { FrontendItemProps, ItemProps, MovieDbTypeEnum, SimpleObject, VoteProps } from './items';
 import { MovieResponse, TVSeriesResponse } from './rt';
 import { FilterQuery } from 'mongoose';
+import { ProductionCompany } from 'moviedb-promise/dist/types';
+import { UserProps } from './user';
 
 export type ProviderEntryProps = Array<{
   display_priority: number;
@@ -44,6 +46,7 @@ export interface FindOptions {
   filter: FilterQuery<ItemProps>;
   sort?: SortProps;
   slice?: [number, number];
+  shuffle?: boolean;
 }
 
 export interface FindOneOptions {
@@ -51,7 +54,7 @@ export interface FindOneOptions {
 }
 
 export interface GetTabProps {
-  user: string;
+  user: string | UserProps;
   tab: string;
   locale: string;
   start: number;
@@ -59,6 +62,7 @@ export interface GetTabProps {
   includeCredits?: boolean;
   custom_config?: TabFilterOptions | null;
   purpose?: string;
+  shuffle?: boolean;
 }
 
 export interface TabFilterOptions {
@@ -92,10 +96,10 @@ export interface GetTabResponse {
 }
 
 export interface PersonCredits {
-  id: number;
-  name: string;
-  profile_path: string;
-  popularity: number;
+  id: number | undefined;
+  name: string | undefined;
+  profile_path: string | undefined;
+  popularity: number | undefined;
 }
 export type PersonsCredits = Array<PersonCredits>;
 
@@ -134,3 +138,17 @@ export interface GetOptions {
 }
 
 export interface GetBaseOptions extends GetOptions {}
+
+export interface FilmlistProductionCompany extends ProductionCompany {
+  backdrop_path?: string | null;
+  items?: number;
+}
+
+export type FilmlistGenres = Array<FilmlistGenre>;
+
+export interface FilmlistGenre {
+  id: number;
+  name: string;
+  backdrop_path: string | null;
+  items: number;
+}

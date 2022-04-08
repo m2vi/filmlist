@@ -13,9 +13,9 @@ export class Helper {
     this.defaultConfig = {
       weighting: {
         keywords: 2,
-        genre_ids: 0.5,
-        credits: 0,
-        origin: 0.25,
+        genre_ids: 1,
+        credits: 1,
+        origin: 0.5,
         collection: 0,
       },
     };
@@ -56,6 +56,17 @@ export class Helper {
 
   boolToNum(bool: boolean): number {
     return bool ? 1 : 0;
+  }
+
+  track<T>(callback: () => T) {
+    const start = performance.now();
+    const result = callback();
+    const end = performance.now();
+
+    return {
+      data: result,
+      time: end - start,
+    };
   }
 }
 

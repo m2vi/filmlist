@@ -1,6 +1,8 @@
 import {
   BaseResponse,
   CollectionProps,
+  FilmlistGenres,
+  FilmlistProductionCompany,
   FindOneOptions,
   FindOptions,
   GetBaseOptions,
@@ -14,7 +16,7 @@ import { ItemProps, MovieDbTypeEnum, SimpleObject } from '@Types/items';
 import { UserProps } from '@Types/user';
 import convert from '@utils/convert/main';
 import { isMovie } from '@utils/helper/tmdb';
-import _ from 'underscore';
+import _, { sample, uniq } from 'underscore';
 import imdb from '../imdb';
 import ratings from '../ratings';
 import rt from '../rt';
@@ -34,6 +36,10 @@ import { removeEmpty, sortByKey } from '@m2vi/iva';
 import user from '@utils/user';
 import db from '@utils/db/main';
 import { getUniqueListBy } from '@utils/helper';
+import { ProductionCompany } from 'moviedb-promise/dist/types';
+import genres from '../genres';
+import SeedRandom from 'seed-random';
+import { shuffle } from 'shuffle-seed';
 
 class Filmlist {
   async getBase(id: number, type: MovieDbTypeEnum, options?: GetBaseOptions): Promise<BaseResponse> {
@@ -96,7 +102,7 @@ class Filmlist {
     return result ? db.removeId(result) : null;
   }
 
-  async find({ filter, sort, slice }: FindOptions, client: UserProps): Promise<ItemProps[]> {
+  async find({ filter, sort, slice, shuffle }: FindOptions, client: UserProps): Promise<ItemProps[]> {
     let items = await cache.items.get();
     filter = { ...Object.freeze({ ...filter }) };
 
@@ -104,6 +110,8 @@ class Filmlist {
 
     items = sort?.key ? sortByKey(items, sort?.key) : items;
     items = sort?.order === 1 ? items.reverse() : items;
+
+    items = shuffle ? _.shuffle(items) : items;
 
     items = items.slice(slice?.[0], slice?.[1]).reverse();
 
@@ -118,9 +126,18 @@ class Filmlist {
     return tabs[name]!;
   }
 
-  async getTab({ user: user_id, tab, locale, start, end, custom_config = {}, purpose = 'tab' }: GetTabProps): Promise<GetTabResponse> {
+  async getTab({
+    user: user_id,
+    tab,
+    locale,
+    start,
+    end,
+    custom_config = {},
+    purpose = 'tab',
+    shuffle,
+  }: GetTabProps): Promise<GetTabResponse> {
     await db.init();
-    const client = await user.find(user_id);
+    const client = typeof user_id === 'string' ? await user.find(user_id) : user_id;
 
     let items = [];
     const tab_config = await this.getTabConfig(tab);
@@ -145,6 +162,7 @@ class Filmlist {
           order: config?.reverse ? -1 : 1,
         },
         slice: [start ? start : 0, end ? end : 50],
+        shuffle,
       },
       client
     );
@@ -156,7 +174,7 @@ class Filmlist {
       length: items.length,
       items: items,
       query: removeEmpty({
-        user: user_id,
+        user: typeof user_id === 'string' ? user_id : user_id.identifier,
         tab,
         locale,
         start,
@@ -176,7 +194,7 @@ class Filmlist {
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
 
-      if (_.find(item.credits.cast, { id }) || _.find(item.credits.crew, { id })) {
+      if (_.find(item.credits?.cast!, { id }) || _.find(item.credits?.crew!, { id })) {
         itemsWP.push(item);
       }
     }
@@ -195,18 +213,21 @@ class Filmlist {
     let credits = [] as PersonsCredits;
 
     for (let i = 0; i < items.length; i++) {
-      const {
-        credits: { cast, crew },
-      } = items[i];
+      const { credits: base } = items[i];
 
-      for (let i = 0; i < cast.length; i++) {
-        const { id, name, profile_path, popularity } = cast[i];
+      if (!base) continue;
+
+      for (let i = 0; i < base?.cast.length!; i++) {
+        if (!base?.cast?.[i]?.id) continue;
+
+        const { id, name, profile_path, popularity } = base?.cast?.[i]!;
 
         credits.push({ id: id!, name: name!, profile_path: profile_path!, popularity: popularity! });
       }
 
-      for (let i = 0; i < crew.length; i++) {
-        const { id, name, profile_path, popularity } = crew[i];
+      for (let i = 0; i < base?.crew.length!; i++) {
+        if (!base?.cast?.[i]?.id) continue;
+        const { id, name, profile_path, popularity } = base?.crew?.[i]!;
 
         credits.push({ id: id!, name: name!, profile_path: profile_path!, popularity: popularity! });
       }
@@ -215,17 +236,42 @@ class Filmlist {
     return getUniqueListBy(sortByKey(credits, 'popularity').reverse(), 'name').slice(page * (8 * 8), page * (8 * 8) + 8 * 8);
   }
 
+  async update(id: number, type: MovieDbTypeEnum) {
+    const filter = { id_db: id, type: isMovie(type) ? 1 : 0 };
+
+    await db.itemSchema.updateOne(filter, await this.get(filter.id_db, filter.type));
+  }
+
   async updateAll() {
     await db.init();
-    const items = await cache.items.refresh();
+    const items = await cache.itemsSm.refresh();
 
     for (let index = 0; index < items.length; index++) {
-      const { id_db, type, name } = items[index];
+      const { id_db, type } = items[index];
+      if (!id_db || typeof type === 'undefined') continue;
 
-      await db.itemSchema.updateOne({ id_db, type }, await this.get(id_db, type));
+      await this.update(id_db, type);
 
-      console.log(name?.en, index);
+      console.log((index + 1) / items.length);
     }
+  }
+
+  async getCompany(id: number, locale: string, client_id: string) {
+    const items = await this.getTab({
+      start: 0,
+      end: 50,
+      locale,
+      user: client_id,
+      tab: 'none',
+      custom_config: {
+        filter: {
+          'production_companies.id': id,
+        },
+        sort_key: 'popularity',
+      },
+    });
+
+    return items;
   }
 
   async getCollection(id: number, locale: string, client: UserProps): Promise<GetCollectionProps> {
@@ -287,6 +333,69 @@ class Filmlist {
       Object.entries(c).map(([key, value]) => value),
       'popularity'
     ).reverse();
+  }
+
+  async genres(): Promise<FilmlistGenres> {
+    await db.init();
+    const data = await db.itemSchema.find().select('genre_ids backdrop_path ratings').lean<ItemProps[]>();
+    let g: FilmlistGenres = [];
+    const base = genres.array;
+
+    for (let i = 0; i < base.length; i++) {
+      const { id, name, ...props } = base[i];
+
+      const items = sortByKey(_.filter(data, sift({ genre_ids: id })), 'ratings.tmdb.vote_count').reverse();
+      const backdrop_path = sample(items.slice(0, 50))?.backdrop_path?.en;
+
+      g.push({
+        id: id,
+        name: name.toLowerCase(),
+        backdrop_path: backdrop_path ? backdrop_path : null,
+        items: items.length,
+        ...props,
+      });
+    }
+
+    return sortByKey(g, 'key');
+  }
+
+  async productionCompanies() {
+    await db.init();
+    const data = await db.itemSchema.find().select('production_companies backdrop_path popularity').lean<ItemProps[]>();
+    let companies: FilmlistProductionCompany[] = [];
+
+    for (let i = 0; i < data.length; i++) {
+      const { production_companies } = data[i];
+      if (!production_companies) return;
+      for (let i = 0; i < production_companies.length; i++) {
+        const c = production_companies[i];
+
+        companies.push(c);
+      }
+    }
+
+    companies = getUniqueListBy(companies, 'id');
+
+    for (let i = 0; i < companies.length; i++) {
+      const company = companies[i];
+
+      const items = sortByKey(_.filter(data, sift({ 'production_companies.id': company.id })), 'popularity').reverse();
+
+      companies[i] = { ...company, backdrop_path: items[0]?.backdrop_path?.en! ? items[0]?.backdrop_path?.en! : null, items: items.length };
+    }
+
+    return sortByKey(companies, 'items').reverse();
+  }
+
+  async browseGenre(seed: string) {
+    const rng = SeedRandom(seed);
+    const g = await cache.genres.get();
+    const ids = shuffle(
+      g.filter(({ items }) => items > 20),
+      rng()
+    );
+
+    return ids.slice(0, 5);
   }
 }
 

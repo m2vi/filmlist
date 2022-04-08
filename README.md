@@ -1,16 +1,16 @@
 - [ ] fix state settings
 - [ ] fix move
 - [ ] fix update
-- [ ] fix set items
+- [x] fix set items
 - [x] fix get speed
-- [ ] custom filter
+- [ ] custom filter (interface)
 - [ ] manage interface
-- [ ] create user
+- [ ] create user interface
 - [ ] add many pre filters (genres, providers, ...)
-- [ ] update algorithm (accuracy)
-- [ ] fix algorithm (keywords)
+- [x] update algorithm (accuracy)
+- [x] fix algorithm (keywords)
 - [ ] new update method (current one is too slow)
-- [ ] update icon
+- [x] update icon
 - [ ] change user items easily
 - [x] imdb keywords
 - [ ] speed up
@@ -22,4 +22,15 @@
 - [ ] /collection lazy
 - [x] fix name translations
 - [ ] advance convert class
-- [ ] fix cache (maybe too large)
+- [x] fix cache (maybe too large)
+- [x] use redis
+- [x] fix credits thing
+- [x] fix redis json thing (semi fixed)
+- [ ] fix company glitch
+- [x] fix company title
+- [ ] use tab for scroll stuff
+- [ ] more hbo stuff (people on /browse)
+- [ ] fix browse speed
+- [ ] maybe browse cache
+- [ ] search
+- [ ] notifications

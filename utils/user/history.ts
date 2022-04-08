@@ -12,8 +12,8 @@ export class History {
   }
 
   private sessionId(client_id: string, sessionStart: number) {
-    const id = Buffer.from(client_id, 'utf-8').toString('base64url');
-    const timestamp = Buffer.from(sessionStart.toString(), 'utf-8').toString('base64url');
+    const id = Buffer.from(client_id, 'utf8').toString('base64url');
+    const timestamp = Buffer.from(sessionStart.toString(), 'utf8').toString('base64url');
 
     return `${id}.${timestamp}`;
   }

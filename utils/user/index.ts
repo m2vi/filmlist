@@ -35,10 +35,14 @@ class User {
     return Boolean(await db.userSchema.exists({ identifier: id }));
   }
 
-  async find(id: string): Promise<UserProps> {
-    await db.init();
+  async find(id: string, c: boolean = false): Promise<UserProps> {
+    if (c) {
+      await db.init();
+      const u = await db.userSchema.findOne({ $or: [{ identifier: id }, { token: id }] }).lean();
 
-    return await db.userSchema.findOne({ $or: [{ identifier: id }, { token: id }] }).lean();
+      return u
+    }
+    return await cache.user.get(id);
   }
 
   async create(id: string) {
@@ -88,15 +92,15 @@ class User {
     }
   }
 
-  async getItems(id: string): Promise<UserItem[]> {
-    const user = await this.find(id);
+  async getItems(id: string, c: boolean = false): Promise<UserItem[]> {
+    const user = await this.find(id, c);
 
     return user.items;
   }
 
   async updateIndex(id: string) {
     await db.init();
-    const base = await this.getItems(id);
+    const base = await this.getItems(id, true);
     let items: UserItem[] = base;
     items = sortByKey(items, 'index');
     items = items.map((item, index) => ({ ...item, index: index }));
@@ -108,7 +112,7 @@ class User {
 
   async setItem(id: string, item: UserItem, toStart: boolean = false) {
     await db.init();
-    let items = sortByKey(await this.getItems(id), 'index');
+    let items = sortByKey(await this.getItems(id, true), 'index');
     const found = _.find(items, { filter: { id: item.filter.id, type: item.filter.type } });
     if (found) {
       const index = _.findIndex(items, { filter: item.filter });
@@ -119,6 +123,10 @@ class User {
 
     await db.userSchema.updateOne({ identifier: id }, { items });
     await this.updateIndex(id);
+
+    const newU = await cache.user.refresh(id)
+    
+    return _.find(newU.items, {  filter: item.filter })
   }
 
   async move(id: string, item: Partial<UserItem>, index: number) {

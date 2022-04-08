@@ -15,12 +15,13 @@
         "movies": "Movies",
         "new": "New",
         "soon": "Coming soon",
+        "upcoming": "Upcoming",
         "anime": "Anime",
 
         "my list": "My List",
         "favourites": "Favourites",
         "recently": "Recently Released",
-        "latest": "Latest",
+        "watch-it-again": "Watch it again",
         "notifications": "Notifications",
         "unfiltered": "Unfiltered",
         "watched": "Watched",
@@ -49,6 +50,8 @@
         "search": "Search",
         "trends": "Trends",
         "trending": "Trends",
+
+        "company": "Company",
 
         "action": "Action",
         "action & adventure": "Action & Adventure",
@@ -147,5 +150,10 @@
     "local_count": "Local count",
     "genres": "Genres",
     "main_title": "Popular collections"
+  },
+  "company": {
+    "origin_country": "Origin country",
+    "headquarters": "Headquarters",
+    "default": "Production companies"
   }
 }

@@ -19,28 +19,33 @@ const Header = () => {
           <div className='flex justify-start items-center'>
             <span className='cursor-pointer mr-4 text-primary-100 hover:opacity-80'>
               <Link href='/browse'>
-                <a>{t('pages.filmlist.menu.browse')}</a>
+                <a>{t('pages.filmlist.menu.browse').toString()}</a>
               </Link>
             </span>
 
             <span className='cursor-pointer mr-4 text-primary-100 hover:opacity-80'>
               <Link href='/[tab]' as='/tv'>
-                <a>{t('pages.filmlist.menu.tv')}</a>
+                <a>{t('pages.filmlist.menu.tv').toString()}</a>
               </Link>
             </span>
             <span className='cursor-pointer mr-4 text-primary-100 hover:opacity-80'>
               <Link href='/[tab]' as='/movie' prefetch={false}>
-                <a>{t('pages.filmlist.menu.movie')}</a>
+                <a>{t('pages.filmlist.menu.movie').toString()}</a>
               </Link>
             </span>
             <span className='cursor-pointer mr-4 text-primary-100 hover:opacity-80'>
               <Link href='/[tab]' as='/my list'>
-                <a>{t('pages.filmlist.menu.my list')}</a>
+                <a>{t('pages.filmlist.menu.my list').toString()}</a>
               </Link>
             </span>
             <span className='cursor-pointer mr-4 text-primary-100 hover:opacity-80'>
               <Link href='/[tab]' as='/favourites'>
-                <a>{t('pages.filmlist.menu.favourites')}</a>
+                <a>{t('pages.filmlist.menu.favourites').toString()}</a>
+              </Link>
+            </span>
+            <span className='cursor-pointer mr-4 text-primary-100 hover:opacity-80'>
+              <Link href='/[tab]' as='/watch-it-again'>
+                <a>{t('pages.filmlist.menu.watch-it-again').toString()}</a>
               </Link>
             </span>
           </div>
