@@ -9,12 +9,15 @@ body {
 
 :root {
   --color-primary-900: rgb(0, 0, 0) !important;
-  /*   --color-primary-900: #000 !important; */
+  --color-primary-800: hsl(216, 55%, 5%) !important;
+}
+
+.bg-primary-900-high {
+  background-color: rgba(0, 0, 0, 0.99);
 }
 
 .bg-primary-900-80 {
   background-color: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(40px);
 }
 
 .bg-primary-900-20 {

@@ -161,6 +161,7 @@ export interface ProviderProps {
   id: number;
   name: string;
   logo_path: string;
+  items?: number;
 
   key?: string;
   url?: string;

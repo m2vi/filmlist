@@ -97,7 +97,7 @@ class Filmlist {
   }
 
   async find({ filter, sort, slice, shuffle = false, browse = false }: FindOptions, client: UserProps): Promise<ItemProps[]> {
-    let items = browse ? await cache.browse.get() : await cache.items.get();
+    let items = browse ? await cache.items_f.get() : await cache.items.get();
     filter = { ...Object.freeze({ ...filter }) };
 
     items = user.appendUserAttributes(items, client).filter(sift(filter));
@@ -240,7 +240,7 @@ class Filmlist {
 
   async updateAll() {
     await db.init();
-    const items = await cache.itemsSm.refresh();
+    const items = await cache.items_m.refresh();
 
     for (let index = 0; index < items.length; index++) {
       const { id_db, type } = items[index];

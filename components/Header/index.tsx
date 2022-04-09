@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { IoNotifications, IoSearch } from 'react-icons/io5';
+import Notifications, { Dropdown } from './Dropdown';
 
 const Header = () => {
   const { t } = useTranslation();
@@ -61,9 +62,8 @@ const Header = () => {
             <div className='font-normal text-sm text-center flex justify-center items-center mx-4 cursor-pointer h-7 w-7'>
               <IoNotifications className='h-4 w-4' />
             </div>
-            <div className='inline-flex justify-center h-7 w-7 bg-primary-800 text-sm font-medium rounded cursor-pointer'>
-              {avatar && <Image src={avatar} alt='Avatar' height='35px' width='35px' className='rounded no-drag' />}
-            </div>
+
+            <Dropdown avatar={avatar} />
           </div>
         </header>
       </div>

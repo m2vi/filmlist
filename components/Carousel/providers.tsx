@@ -1,20 +1,20 @@
 import { useTranslation } from 'next-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { FilmlistProductionCompany } from '@Types/filmlist';
-import ProductionCompanyCard from '@components/Card/production_company';
+import { ProviderProps } from '@Types/filmlist';
+import ProviderCard from '@components/Card/provider';
 
-const PCCarousel = ({ items, title }: { items: FilmlistProductionCompany[]; title: boolean }) => {
+const ProvidersCarousel = ({ items, title }: { items: ProviderProps[]; title: boolean }) => {
   const { t } = useTranslation();
 
   return (
     <div className='mb-8 h-auto'>
-      {title ? <span className='text-3xl leading-relaxed font-bold'>{t(`company.default`).toString()}</span> : null}
+      {title ? <span className='text-3xl leading-relaxed font-bold'>{t(`details.providers`).toString()}</span> : null}
 
       <Swiper spaceBetween={20} slidesPerView={4} className='mt-2'>
         {(items ? items : []).map((props, index) => {
           return (
             <SwiperSlide key={index}>
-              <ProductionCompanyCard {...props} />
+              <ProviderCard {...props} />
             </SwiperSlide>
           );
         })}
@@ -23,4 +23,4 @@ const PCCarousel = ({ items, title }: { items: FilmlistProductionCompany[]; titl
   );
 };
 
-export default PCCarousel;
+export default ProvidersCarousel;

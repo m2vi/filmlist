@@ -6,7 +6,7 @@ import jsonTabs from '@data/tabs.json';
 import _ from 'underscore';
 import { UserProps } from '@Types/user';
 import filmlist from '../filmlist';
-import { connectToRedis } from './redis';
+import { connectToRedis } from '../../db/redis';
 import fsm from '../filmlist/small';
 
 const { parse, stringify } = JSON;
@@ -40,28 +40,26 @@ class Cache {
     };
   }
 
-  get productionCompanies() {
+  get production_companies() {
     return {
       get: async (): Promise<FilmlistProductionCompany[]> => {
         const redis = await connectToRedis();
-        const cached = await redis.get('production_companies');
+        const cached = await redis.get('companies');
 
         if (cached) {
-          const parsed = parse(cached);
-
-          return parsed;
+          return parse(cached);
         } else {
           const data = await fsm.productionCompanies();
 
-          await redis.set('production_companies', stringify(data));
+          await redis.set('companies', stringify(data));
 
-          return data as any;
+          return data!;
         }
       },
       refresh: async (): Promise<FilmlistProductionCompany[]> => {
         const redis = await connectToRedis();
-        await redis.del('production_companies');
-        const data = await this.productionCompanies.get();
+        await redis.del('companies');
+        const data = await this.production_companies.get();
 
         return data;
       },
@@ -75,9 +73,7 @@ class Cache {
         const cached = await redis.get('genres');
 
         if (cached) {
-          const parsed = parse(cached);
-
-          return parsed;
+          return parse(cached);
         } else {
           const data = await fsm.genres();
 
@@ -96,16 +92,14 @@ class Cache {
     };
   }
 
-  get browse() {
+  get items_f() {
     return {
       get: async (): Promise<ItemProps[]> => {
         const redis = await connectToRedis();
-        const cachedResponse = await redis.get('browse');
+        const cachedResponse = await redis.get('items_f');
 
         if (cachedResponse) {
-          const parsed = parse(cachedResponse);
-
-          return parsed;
+          return parse(cachedResponse);
         } else {
           await db.init();
 
@@ -114,14 +108,14 @@ class Cache {
             .select('id_db genre_ids name original_name popularity poster_path backdrop_path release_date ratings type runtime')
             .lean<ItemProps[]>();
 
-          await redis.set('browse', stringify(items));
+          await redis.set('items_f', stringify(items));
           return items;
         }
       },
       refresh: async () => {
         const redis = await connectToRedis();
-        await redis.del('browse');
-        const items = await this.browse.get();
+        await redis.del('items_f');
+        const items = await this.items_f.get();
 
         return items;
       },
@@ -157,11 +151,11 @@ class Cache {
     };
   }
 
-  get itemsSm() {
+  get items_m() {
     return {
       get: async (): Promise<Array<Partial<ItemProps>>> => {
         const redis = await connectToRedis();
-        const cache = await redis.get('items-sm');
+        const cache = await redis.get('items_m');
 
         if (cache) {
           return parse(cache);
@@ -170,14 +164,14 @@ class Cache {
 
           const items = await db.itemSchema.find().select('id_db type').lean<Array<Partial<ItemProps>>>();
 
-          await redis.set('items-sm', stringify(items));
+          await redis.set('items_m', stringify(items));
           return items;
         }
       },
       refresh: async (): Promise<Array<Partial<ItemProps>>> => {
         const redis = await connectToRedis();
-        await redis.del('items-sm');
-        const items = await this.itemsSm.get();
+        await redis.del('items_m');
+        const items = await this.items_m.get();
 
         return items;
       },

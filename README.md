@@ -12,7 +12,6 @@
 - [ ] lazy swiper
 - [ ] manage interface
 - [ ] maybe comments
-- [ ] maybe multiple item cache things (with credits, for tabs only (eg without summary, overview, etc.))
 - [ ] new update method (current one is too slow)
 - [ ] notifications
 - [ ] replace ugly code
@@ -21,6 +20,7 @@
 - [ ] speed up
 - [ ] use tab for scroll stuff
 - [x] add many pre filters (genres, providers, ...)
+- [x] dropdown
 - [x] fix algorithm (keywords)
 - [x] fix browse speed
 - [x] fix cache (maybe too large)

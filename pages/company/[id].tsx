@@ -19,7 +19,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       ...(await serverSideTranslations(context.locale!, ['common'])),
-      name: (await cache.productionCompanies.get()).find(({ id }) => id === parseInt(context.query.id?.toString()!))?.name,
+      name: (await cache.production_companies.get()).find(({ id }) => id === parseInt(context.query.id?.toString()!))?.name,
       data: await filmlist.getTab({
         user: id,
         locale: context.locale!,

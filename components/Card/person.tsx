@@ -11,7 +11,7 @@ const PersonCard = ({ id, name, profile_path, loading = false }: PersonCredits) 
           <div className='bg-primary-800 rounded aspect-square w-full flex justify-center items-center'>
             {data.profile_path ? (
               <img
-                className='w-full rounded'
+                className='w-full rounded no-drag select-none'
                 src={`https://www.themoviedb.org/t/p/w470_and_h470_face${data.profile_path}`}
                 alt={`${data.id}`}
               />

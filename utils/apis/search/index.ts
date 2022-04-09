@@ -17,7 +17,7 @@ class Search {
   async get({ query, locale, user_id, page }: SearchGet) {
     if (page === 'tmdb') return await this.getTMDB({ query, locale, user_id, page });
     const client = typeof user_id === 'string' ? await user.find(user_id) : user_id;
-    let items = sortByKey(await cache.browse.get(), 'popularity').reverse();
+    let items = sortByKey(await cache.items_f.get(), 'popularity').reverse();
 
     items = query ? matchSorter(items, query, { keys: ['name.de', 'name.en', 'original_name', 'id_db'] }) : items;
 

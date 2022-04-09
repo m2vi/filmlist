@@ -40,7 +40,7 @@ class User {
       await db.init();
       const u = await db.userSchema.findOne({ $or: [{ identifier: id }, { token: id }] }).lean();
 
-      return u
+      return u;
     }
     return await cache.user.get(id);
   }
@@ -124,9 +124,9 @@ class User {
     await db.userSchema.updateOne({ identifier: id }, { items });
     await this.updateIndex(id);
 
-    const newU = await cache.user.refresh(id)
-    
-    return _.find(newU.items, {  filter: item.filter })
+    const newU = await cache.user.refresh(id);
+
+    return _.find(newU.items, { filter: item.filter });
   }
 
   async move(id: string, item: Partial<UserItem>, index: number) {

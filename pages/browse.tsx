@@ -1,12 +1,9 @@
-import Header from '@components/Header';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import filmlist from '@utils/apis/filmlist';
 import user from '@utils/user';
 import Carousel from '@components/Carousel';
-import tmdb from '@utils/apis/tmdb';
-import { MovieDbTypeEnum } from '@Types/items';
 import { useEffect } from 'react';
 import db from '@utils/db/main';
 import { useTranslation } from 'next-i18next';
@@ -39,7 +36,7 @@ const Home = (props: {
         <title>{`${t('pages.filmlist.menu.browse')} – ${t(`pages.filmlist.default`)}`}</title>
       </Head>
 
-      <GenresCarousel items={props?.genres} />
+      <GenresCarousel items={props?.genres} title={false} />
 
       {props?.data?.map((section: any, index: number) => {
         return <Carousel section={section} key={index} />;
@@ -57,7 +54,7 @@ const Home = (props: {
         }}
       />
 
-      <PCCarousel items={props?.production_companies} />
+      <PCCarousel items={props?.production_companies} title={true} />
 
       {props?.browse_genre?.slice(0, 2)?.map((id: number, index: number) => {
         return (
@@ -104,7 +101,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       ...(await serverSideTranslations(context.locale!, ['common'])),
       genres: (await cache.genres.refresh()).filter(({ items }) => items > 0),
       browse_genre: (await fsm.browseGenre(Date.now().toString())).map(({ id }) => id),
-      production_companies: (await cache.productionCompanies.get()).slice(0, 20),
+      production_companies: (await cache.production_companies.get()).slice(0, 20),
       data: await Promise.all([
         filmlist.getTab({ user: client, locale: context.locale!, tab: 'my list', start: 0, end: 20, browse: true }),
         filmlist.getTab({ user: client, locale: context.locale!, tab: 'continue-watching', start: 0, end: 20, browse: true }),

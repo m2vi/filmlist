@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       ...(await serverSideTranslations(context.locale!, ['common'])),
-      data: (await filmlist.collections('de')).map(({ items, ...props }) => props),
+      data: (await filmlist.collections(context.locale!)).map(({ items, ...props }) => props),
     },
   };
 };

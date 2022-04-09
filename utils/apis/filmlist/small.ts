@@ -53,7 +53,17 @@ class FilmlistSm {
       }
     }
 
-    return sortByKey(getUniqueListBy(providers, 'id'), 'id');
+    const unique = getUniqueListBy(providers, 'id');
+
+    for (let i = 0; i < unique.length; i++) {
+      const provider = unique[i];
+
+      const items = sortByKey(_.filter(data, sift({ 'watchProviders.provider_id': provider.id })), 'popularity').reverse();
+
+      unique[i] = { ...provider, items: items.length };
+    }
+
+    return sortByKey(unique, 'items').reverse();
   }
 
   async productionCompanies() {
