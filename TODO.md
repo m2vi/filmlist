@@ -1,0 +1,40 @@
+- [ ] /collection lazy
+- [ ] advance convert class
+- [ ] browse lazy scroll thing
+- [ ] change cache names
+- [ ] change user items easily
+- [ ] create user interface
+- [ ] custom filter (interface)
+- [ ] fix company glitch
+- [ ] fix move
+- [ ] fix state settings
+- [ ] fix update
+- [ ] lazy swiper
+- [ ] manage interface
+- [ ] maybe comments
+- [ ] new update method (current one is too slow)
+- [ ] notifications
+- [ ] replace ugly code
+- [ ] route restrictions
+- [ ] security check
+- [ ] speed up
+- [ ] use tab for scroll stuff
+- [x] add many pre filters (genres, providers, ...)
+- [x] dropdown
+- [x] fix algorithm (keywords)
+- [x] fix browse speed
+- [x] fix cache (maybe too large)
+- [x] fix company title
+- [x] fix credits thing
+- [x] fix get speed
+- [x] fix name translations
+- [x] fix redis clients
+- [x] fix redis json thing (semi fixed)
+- [x] fix set items
+- [x] imdb keywords
+- [x] maybe browse cache
+- [x] more hbo stuff (people on /browse)
+- [x] search
+- [x] update algorithm (accuracy)
+- [x] update icon
+- [x] use redis

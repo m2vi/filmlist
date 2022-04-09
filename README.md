@@ -1,40 +1,24 @@
-- [ ] /collection lazy
-- [ ] advance convert class
-- [ ] browse lazy scroll thing
-- [ ] change cache names
-- [ ] change user items easily
-- [ ] create user interface
-- [ ] custom filter (interface)
-- [ ] fix company glitch
-- [ ] fix move
-- [ ] fix state settings
-- [ ] fix update
-- [ ] lazy swiper
-- [ ] manage interface
-- [ ] maybe comments
-- [ ] new update method (current one is too slow)
-- [ ] notifications
-- [ ] replace ugly code
-- [ ] route restrictions
-- [ ] security check
-- [ ] speed up
-- [ ] use tab for scroll stuff
-- [x] add many pre filters (genres, providers, ...)
-- [x] dropdown
-- [x] fix algorithm (keywords)
-- [x] fix browse speed
-- [x] fix cache (maybe too large)
-- [x] fix company title
-- [x] fix credits thing
-- [x] fix get speed
-- [x] fix name translations
-- [x] fix redis clients
-- [x] fix redis json thing (semi fixed)
-- [x] fix set items
-- [x] imdb keywords
-- [x] maybe browse cache
-- [x] more hbo stuff (people on /browse)
-- [x] search
-- [x] update algorithm (accuracy)
-- [x] update icon
-- [x] use redis
+| Route                   | Purpose                                                                      | Information                                                                                                   |
+| ----------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `/browse`               | Discover new films and getting an overview                                   |                                                                                                               |
+| `/browse-f`             | Discover new films and getting an overview                                   | the same as `/browse` but without items                                                                       |
+| `/whenisthenextmcufilm` | Finding out when the next M\*rvel film will be released                      | I stole the idea from an api                                                                                  |
+| `/[tab]`                | Displaying items according to the tab e.g. top-rated                         | Kinda slow tbh                                                                                                |
+| `/search`               | Search function for films and series                                         | Only in my database                                                                                           |
+| `/search/external`      | Search function for films and series                                         | Only in the tmdb database                                                                                     |
+|                         |                                                                              |                                                                                                               |
+| `/movie/[id]`           | Viewing the details of a film                                                | Also includes suggestions and similar films                                                                   |
+| `/tv/[id]`              | Viewing the details of a series                                              | Also includes suggestions and similar series                                                                  |
+| `/collection`           | Browsing every collection stored in my database                              |                                                                                                               |
+| `/collection/[id]`      | Viewing the details and the films of the collection                          |                                                                                                               |
+| `/person`               | Browsing every person stored in my database                                  | Sorted by popularity                                                                                          |
+| `/person/[id]`          | Viewing information about a person and their appearances                     |                                                                                                               |
+|                         |                                                                              |                                                                                                               |
+| `/company/[id]`         | Finding films and series that were produced by a specified company           | I use the ids from the companies as it makes the route look cooler. You can view them in `/browse-f`          |
+| `/genre/[id]`           | Finding films and series with a given genre                                  |                                                                                                               |
+| `/keywords/[id]`        | Finding films and series that have a given keyword                           | This is actually the same as `/keyword/[id]`, I just use the keywords from tmdb here                          |
+| `/origin/[id]`          | Finding films and series that from a specified origin                        | I think somewhere it also says the origin, but I use the original language which is most of the time the same |
+| `/provider/[id]`        | Finding films and series that are offered on a particular streaming service. | I use the ids from the providers as it makes the route look cooler. You can view them in `/browse-f`          |
+| `/rated/[id]`           | Finding films and series for e.g. minors                                     | Possible values: null, 0, 6, 12,16, 18                                                                        |
+| `/tag/[id]`             | Finding films and series that have a given tag                               | This is actually the same as `/keyword/[id]`, I just use the keywords from imdb here                          |
+| `/year/[id]`            | Finding films and series from a specified year                               |                                                                                                               |
