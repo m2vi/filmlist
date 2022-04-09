@@ -3,7 +3,6 @@ import { GetTabResponse } from '@Types/filmlist';
 import cache from '@utils/apis/cache';
 import filmlist from '@utils/apis/filmlist';
 import genres from '@utils/apis/genres';
-import tmdb from '@utils/apis/tmdb';
 import user from '@utils/user';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -16,12 +15,13 @@ export default Handler;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const id = user.getIdFromRequest(context.req);
-  const genre = parseInt(context.query.id?.toString()!);
+  const provider = parseInt(context.query.id?.toString()!);
+  const providers = await cache.providers.get();
 
   return {
     props: {
       ...(await serverSideTranslations(context.locale!, ['common'])),
-      name: genres.getName(genre),
+      name: providers.find(({ id }) => id === provider)?.name,
       data: await filmlist.getTab({
         user: id,
         locale: context.locale!,
@@ -30,7 +30,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         tab: 'key',
         custom_config: {
           filter: {
-            genre_ids: genre,
+            'watchProviders.provider_id': provider,
           },
         },
       }),

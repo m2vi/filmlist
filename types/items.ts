@@ -2,16 +2,11 @@ import { Types } from 'mongoose';
 import { SimplePerson, Video, Crew, Cast } from 'moviedb-promise/dist/request-types';
 import { ProductionCompany } from 'moviedb-promise/dist/types';
 import { RatingsResponse } from './filmlist';
-import { ProviderProps } from './justwatch';
+import { BaseProviderProps } from './justwatch';
 
 export enum MovieDbTypeEnum {
   'tv' = 0,
   'movie' = 1,
-}
-
-export interface ProviderEntryProps {
-  url: string | undefined | null;
-  providers: ProviderProps[] | null;
 }
 
 export interface CastProps {
@@ -82,7 +77,7 @@ export interface ItemProps {
   credits?: CreditProps; //! not in cache
   keywords: Array<{ id: number; name: string }>;
   imdb_keywords: Array<string>;
-  watchProviders: ProviderEntryProps | null;
+  watchProviders: BaseProviderProps[] | null;
   collection: {
     id: number;
     name: string;

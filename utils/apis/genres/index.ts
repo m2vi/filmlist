@@ -17,10 +17,6 @@ class Genres {
     return this.array.map(({ id }) => id);
   }
 
-  get browseIds() {
-    return this.ids.filter((id) => !config.hideGenresFromBrowse.includes(id));
-  }
-
   get names() {
     return this.array.map(({ name }) => name);
   }
@@ -28,6 +24,11 @@ class Genres {
   getName(genre_id: number): string {
     const result = this.array.find(({ id }) => genre_id === id)?.name;
     return result ? result : '';
+  }
+
+  getID(genre_name: string): number {
+    const result = this.array.find(({ name }) => genre_name === name)?.id;
+    return result ? result : 0;
   }
 
   getNames(genre_ids: number[]): string[] {

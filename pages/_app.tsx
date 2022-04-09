@@ -3,6 +3,7 @@ import 'nprogress/nprogress.css';
 import 'tailwindcss/tailwind.css';
 import 'plyr-react/dist/plyr.css';
 import 'swiper/css';
+import 'swiper/css/lazy';
 import type { AppProps } from 'next/app';
 import { appWithTranslation } from 'next-i18next';
 import { Fragment } from 'react';

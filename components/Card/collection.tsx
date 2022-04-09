@@ -9,7 +9,11 @@ const CollectionCard = ({ id, name, poster_path }: CollectionProps) => {
         <div className='aspect-square w-full mb-4'>
           <div className='bg-primary-800 rounded-15 aspect-square w-full flex justify-center items-center'>
             {poster_path ? (
-              <img className='w-full rounded-15' src={`https://www.themoviedb.org/t/p/w470_and_h470_face${poster_path}`} alt={`${id}`} />
+              <img
+                className='w-full rounded-15 swiper-lazy'
+                src={`https://www.themoviedb.org/t/p/w470_and_h470_face${poster_path}`}
+                alt={`${id}`}
+              />
             ) : (
               <span className='text-xs leading-none text-center w-full'>Not found</span>
             )}

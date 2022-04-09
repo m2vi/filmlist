@@ -1,3 +1,5 @@
+import { ProviderProps } from './filmlist';
+
 export interface GetUrlFromBaseProps {
   params: {
     id: number;
@@ -8,11 +10,9 @@ export interface GetUrlFromBaseProps {
   url: string;
 }
 
-export interface ProviderProps {
-  id?: number;
-  key?: string;
-  name?: string;
-  logo?: string;
-  url?: string;
-  type?: string;
+export interface BaseProviderProps {
+  display_priority: number;
+  logo_path: string;
+  provider_id: number;
+  provider_name: string;
 }

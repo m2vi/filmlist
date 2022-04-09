@@ -1,8 +1,6 @@
 import {
   BaseResponse,
   CollectionProps,
-  FilmlistGenres,
-  FilmlistProductionCompany,
   FindOneOptions,
   FindOptions,
   GetBaseOptions,
@@ -16,7 +14,7 @@ import { ItemProps, MovieDbTypeEnum, SimpleObject } from '@Types/items';
 import { UserProps } from '@Types/user';
 import convert from '@utils/convert/main';
 import { isMovie } from '@utils/helper/tmdb';
-import _, { sample, uniq } from 'underscore';
+import _ from 'underscore';
 import imdb from '../imdb';
 import ratings from '../ratings';
 import rt from '../rt';
@@ -36,10 +34,6 @@ import { removeEmpty, sortByKey } from '@m2vi/iva';
 import user from '@utils/user';
 import db from '@utils/db/main';
 import { getUniqueListBy } from '@utils/helper';
-import { ProductionCompany } from 'moviedb-promise/dist/types';
-import genres from '../genres';
-import SeedRandom from 'seed-random';
-import { shuffle } from 'shuffle-seed';
 
 class Filmlist {
   async getBase(id: number, type: MovieDbTypeEnum, options?: GetBaseOptions): Promise<BaseResponse> {
@@ -102,8 +96,8 @@ class Filmlist {
     return result ? db.removeId(result) : null;
   }
 
-  async find({ filter, sort, slice, shuffle }: FindOptions, client: UserProps): Promise<ItemProps[]> {
-    let items = await cache.items.get();
+  async find({ filter, sort, slice, shuffle = false, browse = false }: FindOptions, client: UserProps): Promise<ItemProps[]> {
+    let items = browse ? await cache.browse.get() : await cache.items.get();
     filter = { ...Object.freeze({ ...filter }) };
 
     items = user.appendUserAttributes(items, client).filter(sift(filter));
@@ -134,7 +128,8 @@ class Filmlist {
     end,
     custom_config = {},
     purpose = 'tab',
-    shuffle,
+    shuffle = false,
+    browse = false,
   }: GetTabProps): Promise<GetTabResponse> {
     await db.init();
     const client = typeof user_id === 'string' ? await user.find(user_id) : user_id;
@@ -163,6 +158,7 @@ class Filmlist {
         },
         slice: [start ? start : 0, end ? end : 50],
         shuffle,
+        browse,
       },
       client
     );
@@ -333,69 +329,6 @@ class Filmlist {
       Object.entries(c).map(([key, value]) => value),
       'popularity'
     ).reverse();
-  }
-
-  async genres(): Promise<FilmlistGenres> {
-    await db.init();
-    const data = await db.itemSchema.find().select('genre_ids backdrop_path ratings').lean<ItemProps[]>();
-    let g: FilmlistGenres = [];
-    const base = genres.array;
-
-    for (let i = 0; i < base.length; i++) {
-      const { id, name, ...props } = base[i];
-
-      const items = sortByKey(_.filter(data, sift({ genre_ids: id })), 'ratings.tmdb.vote_count').reverse();
-      const backdrop_path = sample(items.slice(0, 50))?.backdrop_path?.en;
-
-      g.push({
-        id: id,
-        name: name.toLowerCase(),
-        backdrop_path: backdrop_path ? backdrop_path : null,
-        items: items.length,
-        ...props,
-      });
-    }
-
-    return sortByKey(g, 'key');
-  }
-
-  async productionCompanies() {
-    await db.init();
-    const data = await db.itemSchema.find().select('production_companies backdrop_path popularity').lean<ItemProps[]>();
-    let companies: FilmlistProductionCompany[] = [];
-
-    for (let i = 0; i < data.length; i++) {
-      const { production_companies } = data[i];
-      if (!production_companies) return;
-      for (let i = 0; i < production_companies.length; i++) {
-        const c = production_companies[i];
-
-        companies.push(c);
-      }
-    }
-
-    companies = getUniqueListBy(companies, 'id');
-
-    for (let i = 0; i < companies.length; i++) {
-      const company = companies[i];
-
-      const items = sortByKey(_.filter(data, sift({ 'production_companies.id': company.id })), 'popularity').reverse();
-
-      companies[i] = { ...company, backdrop_path: items[0]?.backdrop_path?.en! ? items[0]?.backdrop_path?.en! : null, items: items.length };
-    }
-
-    return sortByKey(companies, 'items').reverse();
-  }
-
-  async browseGenre(seed: string) {
-    const rng = SeedRandom(seed);
-    const g = await cache.genres.get();
-    const ids = shuffle(
-      g.filter(({ items }) => items > 20),
-      rng()
-    );
-
-    return ids.slice(0, 5);
   }
 }
 

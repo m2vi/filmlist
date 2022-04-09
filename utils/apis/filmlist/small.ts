@@ -1,0 +1,100 @@
+import { sortByKey } from '@m2vi/iva';
+import { FilmlistGenres, FilmlistProductionCompany, ProviderProps } from '@Types/filmlist';
+import { ItemProps } from '@Types/items';
+import db from '@utils/db/main';
+import { getUniqueListBy } from '@utils/helper';
+
+import SeedRandom from 'seed-random';
+import { shuffle } from 'shuffle-seed';
+import sift from 'sift';
+import _, { sample } from 'underscore';
+import cache from '../cache';
+import genres from '../genres';
+
+class FilmlistSm {
+  async genres(): Promise<FilmlistGenres> {
+    await db.init();
+    const data = await db.itemSchema.find().select('genre_ids backdrop_path ratings').lean<ItemProps[]>();
+    let g: FilmlistGenres = [];
+    const base = genres.array;
+
+    for (let i = 0; i < base.length; i++) {
+      const { id, name, ...props } = base[i];
+
+      const items = sortByKey(_.filter(data, sift({ genre_ids: id })), 'ratings.tmdb.vote_count').reverse();
+      const backdrop_path = sample(items.slice(0, 50))?.backdrop_path?.en;
+
+      g.push({
+        id: id,
+        name: name.toLowerCase(),
+        backdrop_path: backdrop_path ? backdrop_path : null,
+        items: items.length,
+        ...props,
+      });
+    }
+
+    return sortByKey(g, 'key');
+  }
+
+  async providers(): Promise<ProviderProps[]> {
+    await db.init();
+    const data = await db.itemSchema.find().select('watchProviders').lean<ItemProps[]>();
+
+    let providers: ProviderProps[] = [];
+
+    for (let i = 0; i < data.length; i++) {
+      const { watchProviders } = data[i];
+      if (!watchProviders) continue;
+
+      for (let i = 0; i < watchProviders.length; i++) {
+        const { provider_id, provider_name, logo_path } = watchProviders[i];
+
+        providers.push({ id: provider_id, name: provider_name, logo_path });
+      }
+    }
+
+    return sortByKey(getUniqueListBy(providers, 'id'), 'id');
+  }
+
+  async productionCompanies() {
+    await db.init();
+    const data = await db.itemSchema.find().select('production_companies backdrop_path popularity').lean<ItemProps[]>();
+    let companies: FilmlistProductionCompany[] = [];
+
+    for (let i = 0; i < data.length; i++) {
+      const { production_companies } = data[i];
+      if (!production_companies) return;
+      for (let i = 0; i < production_companies.length; i++) {
+        const c = production_companies[i];
+
+        companies.push(c);
+      }
+    }
+
+    companies = getUniqueListBy(companies, 'id');
+
+    for (let i = 0; i < companies.length; i++) {
+      const company = companies[i];
+
+      const items = sortByKey(_.filter(data, sift({ 'production_companies.id': company.id })), 'popularity').reverse();
+
+      companies[i] = { ...company, backdrop_path: items[0]?.backdrop_path?.en! ? items[0]?.backdrop_path?.en! : null, items: items.length };
+    }
+
+    return sortByKey(companies, 'items').reverse();
+  }
+
+  async browseGenre(seed: string) {
+    const rng = SeedRandom(seed);
+    const g = await cache.genres.get();
+    const ids = shuffle(
+      g.filter(({ items }) => items > 20),
+      rng()
+    );
+
+    return ids.slice(0, 5);
+  }
+}
+
+export const fsm = new FilmlistSm();
+export default fsm;

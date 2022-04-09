@@ -4,11 +4,12 @@ import cherrio from 'cheerio';
 import _ from 'underscore';
 import { lowerCase } from 'lodash';
 
-import { GetUrlFromBaseProps, ProviderProps } from '@Types/justwatch';
+import { GetUrlFromBaseProps } from '@Types/justwatch';
 import { cachedFetch } from '@utils/helper/fetch';
-import { providers } from '@utils/db/providers';
 import { getUniqueListBy } from '@utils/helper';
 import { isMovie } from '@utils/helper/tmdb';
+import cache from '../cache';
+import { ProviderProps } from '@Types/filmlist';
 
 export class Api {
   checkReq(query: { [key: string]: string | string[] }) {
@@ -22,7 +23,7 @@ export class Api {
 
     try {
       const params = { id: parseInt(id), type: isMovie(type) ? 1 : 0, provider: lowerCase(provider) };
-      const all_providers = await providers.getCachedProviders();
+      const all_providers = await cache.providers.get();
 
       let res = null;
 
@@ -44,6 +45,7 @@ export class Api {
     if (!url) return null;
 
     const scraped = await this.scrap(url, all_providers);
+
     return _.find(scraped, { key: params.provider })?.url;
   }
 
@@ -76,7 +78,7 @@ export class Api {
         })
         .get()
         .map(({ url, imageUrl }) => {
-          const name = _.find(providers, { logo: imageUrl })?.name;
+          const name = _.find(providers, { logo_path: imageUrl })?.name;
 
           if (!name) throw new Error(`The provider (${imageUrl}) does not exist`);
 
@@ -84,10 +86,10 @@ export class Api {
             key: lowerCase(name),
             name,
             url,
-            logo: imageUrl,
+            logo_path: imageUrl,
           };
         }),
-      'logo'
+      'logo_path'
     );
   }
 }

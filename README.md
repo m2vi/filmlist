@@ -1,36 +1,40 @@
-- [ ] fix state settings
-- [ ] fix move
-- [ ] fix update
-- [x] fix set items
-- [x] fix get speed
-- [ ] custom filter (interface)
-- [ ] manage interface
-- [ ] create user interface
-- [ ] add many pre filters (genres, providers, ...)
-- [x] update algorithm (accuracy)
-- [x] fix algorithm (keywords)
-- [ ] new update method (current one is too slow)
-- [x] update icon
+- [ ] /collection lazy
+- [ ] advance convert class
+- [ ] browse lazy scroll thing
+- [ ] change cache names
 - [ ] change user items easily
-- [x] imdb keywords
-- [ ] speed up
+- [ ] create user interface
+- [ ] custom filter (interface)
+- [ ] fix company glitch
+- [ ] fix move
+- [ ] fix state settings
+- [ ] fix update
+- [ ] lazy swiper
+- [ ] manage interface
 - [ ] maybe comments
-- [ ] security check
+- [ ] maybe multiple item cache things (with credits, for tabs only (eg without summary, overview, etc.))
+- [ ] new update method (current one is too slow)
+- [ ] notifications
 - [ ] replace ugly code
 - [ ] route restrictions
-- [ ] add movie accent color
-- [ ] /collection lazy
-- [x] fix name translations
-- [ ] advance convert class
-- [x] fix cache (maybe too large)
-- [x] use redis
-- [x] fix credits thing
-- [x] fix redis json thing (semi fixed)
-- [ ] fix company glitch
-- [x] fix company title
+- [ ] security check
+- [ ] speed up
 - [ ] use tab for scroll stuff
-- [ ] more hbo stuff (people on /browse)
-- [ ] fix browse speed
-- [ ] maybe browse cache
-- [ ] search
-- [ ] notifications
+- [x] add many pre filters (genres, providers, ...)
+- [x] fix algorithm (keywords)
+- [x] fix browse speed
+- [x] fix cache (maybe too large)
+- [x] fix company title
+- [x] fix credits thing
+- [x] fix get speed
+- [x] fix name translations
+- [x] fix redis clients
+- [x] fix redis json thing (semi fixed)
+- [x] fix set items
+- [x] imdb keywords
+- [x] maybe browse cache
+- [x] more hbo stuff (people on /browse)
+- [x] search
+- [x] update algorithm (accuracy)
+- [x] update icon
+- [x] use redis

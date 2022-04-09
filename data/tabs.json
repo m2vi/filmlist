@@ -240,7 +240,7 @@
   "company": {
     "sort_key": "popularity"
   },
-  "genre": {
+  "key": {
     "reverse": true
   }
 }

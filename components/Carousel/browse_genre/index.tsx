@@ -3,28 +3,25 @@ import { useTranslation } from 'next-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import config from '@data/config.json';
 import Card from '@components/Card';
-import { breakpoints } from './config';
+import { breakpoints } from '../config';
 import { GetTabResponse } from '@Types/filmlist';
 import { Fragment } from 'react';
+import genres from '@utils/apis/genres';
 
-const Carousel = ({ section: { items, key, tmdb } }: { section: GetTabResponse }) => {
+const BrowseGenreCarousel = ({ section: { items, key } }: { section: GetTabResponse }) => {
   const { t } = useTranslation();
 
   return (
     <div className='mb-8 h-auto'>
       {key && (
         <Fragment>
-          {!tmdb ? (
-            <Link as={`/${key}`} href='/[tab]'>
-              <a className='text-3xl leading-relaxed font-bold hover:text-primary-200'>{t(`pages.filmlist.menu.${key}`).toString()}</a>
-            </Link>
-          ) : (
-            <span className='text-3xl leading-relaxed font-bold hover:text-primary-200'>{t(`pages.filmlist.menu.${key}`).toString()}</span>
-          )}
+          <Link as={`/genre/${genres}`} href='/genre/[id]'>
+            <a className='text-3xl leading-relaxed font-bold hover:text-primary-200'>{t(`pages.filmlist.menu.${key}`).toString()}</a>
+          </Link>
         </Fragment>
       )}
 
-      <Swiper spaceBetween={20} slidesPerView={2} className='mt-2' lazy={true} breakpoints={breakpoints}>
+      <Swiper spaceBetween={20} slidesPerView={2} className='mt-2' breakpoints={breakpoints}>
         {(items ? items : []).map((props, index) => {
           return (
             <SwiperSlide key={index} style={{ width: config.cardWidth }}>
@@ -37,4 +34,4 @@ const Carousel = ({ section: { items, key, tmdb } }: { section: GetTabResponse }
   );
 };
 
-export default Carousel;
+export default BrowseGenreCarousel;

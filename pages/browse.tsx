@@ -17,8 +17,17 @@ import AsyncCarousel from '@components/Carousel/async';
 import { basicFetch } from '@utils/helper/fetch';
 import QueryString from 'qs';
 import { useRouter } from 'next/router';
+import { FilmlistGenre, FilmlistProductionCompany, GetTabResponse } from '@Types/filmlist';
+import AsyncBrowseGenreCarousel from '@components/Carousel/browse_genre/async';
+import AsyncPersonCarousel from '@components/Carousel/person/async';
+import fsm from '@utils/apis/filmlist/small';
 
-const Home = (props: any) => {
+const Home = (props: {
+  data: GetTabResponse[];
+  production_companies: FilmlistProductionCompany[];
+  browse_genre: number[];
+  genres: FilmlistGenre[];
+}) => {
   useEffect(() => console.log(props), [props]);
 
   const { t } = useTranslation();
@@ -36,11 +45,40 @@ const Home = (props: any) => {
         return <Carousel section={section} key={index} />;
       })}
 
+      <AsyncCarousel
+        func={async () => {
+          return basicFetch(`/api/tmdb-tab/trending?${QueryString.stringify({ locale, page: 1, type: 'movie' })}`);
+        }}
+      />
+
+      <AsyncCarousel
+        func={async () => {
+          return basicFetch(`/api/tmdb-tab/upcoming?${QueryString.stringify({ locale, page: 1, type: 'movie' })}`);
+        }}
+      />
+
       <PCCarousel items={props?.production_companies} />
 
-      {props?.browse_genre?.map((id: number, index: number) => {
+      {props?.browse_genre?.slice(0, 2)?.map((id: number, index: number) => {
         return (
-          <AsyncCarousel
+          <AsyncBrowseGenreCarousel
+            func={async () => {
+              return await basicFetch(`/api/genre/browse?${QueryString.stringify({ id, locale })}`);
+            }}
+            key={index}
+          />
+        );
+      })}
+
+      <AsyncPersonCarousel
+        func={async () => {
+          return await basicFetch(`/api/person/popular?${QueryString.stringify({ page: 1, locale })}`);
+        }}
+      />
+
+      {props?.browse_genre?.slice(2, 10)?.map((id: number, index: number) => {
+        return (
+          <AsyncBrowseGenreCarousel
             func={async () => {
               return await basicFetch(`/api/genre/browse?${QueryString.stringify({ id, locale })}`);
             }}
@@ -65,13 +103,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       ...(await serverSideTranslations(context.locale!, ['common'])),
       genres: (await cache.genres.refresh()).filter(({ items }) => items > 0),
-      browse_genre: (await filmlist.browseGenre(Date.now().toString())).map(({ id }) => id),
+      browse_genre: (await fsm.browseGenre(Date.now().toString())).map(({ id }) => id),
       production_companies: (await cache.productionCompanies.get()).slice(0, 20),
       data: await Promise.all([
-        filmlist.getTab({ user: client, locale: context.locale!, tab: 'my list', start: 0, end: 20 }),
-        filmlist.getTab({ user: client, locale: context.locale!, tab: 'continue-watching', start: 0, end: 20 }),
-        tmdb.getTab({ user: client, locale: context.locale!, tab: 'trending', page: 1, type: MovieDbTypeEnum.movie }),
-        tmdb.upcoming({ user: client, locale: context.locale!, page: 1, type: MovieDbTypeEnum.movie }),
+        filmlist.getTab({ user: client, locale: context.locale!, tab: 'my list', start: 0, end: 20, browse: true }),
+        filmlist.getTab({ user: client, locale: context.locale!, tab: 'continue-watching', start: 0, end: 20, browse: true }),
       ]),
     },
   };

@@ -80,7 +80,9 @@
         "tv movie": "TV-Film",
         "war": "Kriegsfilm",
         "war & politics": "War & Politics",
-        "western": "Western"
+        "western": "Western",
+
+        "popular_persons": "Beliebte Personen"
       },
       "languages": {
         "default": "Herkunftssprache",

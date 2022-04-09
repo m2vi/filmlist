@@ -102,7 +102,7 @@ class Tmdb {
     return user.appendUserAttributes(adapted, client);
   }
 
-  async upcoming({ user: user_id, type, locale, page }: TmdbGetUpcoming) {
+  async upcoming({ user: user_id, type, locale, page }: TmdbGetUpcoming): Promise<GetTabResponse> {
     const client = typeof user_id === 'string' ? await user.find(user_id) : user_id;
     const params: UpcomingMoviesRequest = { language: locale, region: locale, page };
 

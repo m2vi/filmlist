@@ -19,9 +19,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           genre_ids: parseInt(id.toString()),
         },
         reverse: true,
+        hide_unreleased: true,
+        minVotes: 50,
       },
       purpose: 'browse',
       shuffle: true,
+      browse: true,
     });
 
     res.status(200).json(data);

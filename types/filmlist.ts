@@ -47,6 +47,7 @@ export interface FindOptions {
   sort?: SortProps;
   slice?: [number, number];
   shuffle?: boolean;
+  browse?: boolean;
 }
 
 export interface FindOneOptions {
@@ -63,6 +64,7 @@ export interface GetTabProps {
   custom_config?: TabFilterOptions | null;
   purpose?: string;
   shuffle?: boolean;
+  browse?: boolean;
 }
 
 export interface TabFilterOptions {
@@ -100,6 +102,8 @@ export interface PersonCredits {
   name: string | undefined;
   profile_path: string | undefined;
   popularity: number | undefined;
+
+  loading?: boolean;
 }
 export type PersonsCredits = Array<PersonCredits>;
 
@@ -151,4 +155,13 @@ export interface FilmlistGenre {
   name: string;
   backdrop_path: string | null;
   items: number;
+}
+
+export interface ProviderProps {
+  id: number;
+  name: string;
+  logo_path: string;
+
+  key?: string;
+  url?: string;
 }
