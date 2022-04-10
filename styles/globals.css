@@ -9,11 +9,10 @@ body {
 
 :root {
   --color-primary-900: rgb(0, 0, 0) !important;
-  --color-primary-800: hsl(216, 55%, 5%) !important;
 }
 
 .bg-primary-900-high {
-  background-color: rgba(0, 0, 0, 0.99);
+  background-color: rgba(0, 0, 0, 0.95);
 }
 
 .bg-primary-900-80 {

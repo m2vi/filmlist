@@ -29,7 +29,7 @@ export const Dropdown = ({ avatar }: { avatar: string | null }) => {
         leaveFrom='transform opacity-100 scale-100'
         leaveTo='transform opacity-0 scale-95'
       >
-        <div className='absolute right-0 w-250 mt-3 px-3 py-2 origin-top-right bg-primary-900 rounded-8 border border-primary-800'>
+        <div className='absolute right-0 w-250 mt-3 px-3 py-2 origin-top-right bg-primary-900-high rounded-8 border border-primary-800'>
           <Menu.Items>
             <div className='flex flex-col divide-y divide-primary-800'>
               <div className='grid grid-flow-row gap-2 py-2'>

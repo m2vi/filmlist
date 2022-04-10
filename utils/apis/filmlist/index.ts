@@ -92,10 +92,9 @@ class Filmlist {
   async findOne({ filter }: FindOneOptions, client: UserProps): Promise<ItemProps | null> {
     await db.init();
     const item = await db.itemSchema.findOne(filter).lean<ItemProps>();
+    if (!item) return null;
 
-    const result = user.appendUserAttributes([item], client)?.[0];
-
-    return result ? db.removeId(result) : null;
+    return user.appendUserAttributes([db.removeId(item)], client)?.[0];
   }
 
   private async getCachedItems(purpose: PurposeType) {
@@ -216,31 +215,9 @@ class Filmlist {
   }
 
   async persons(page: number) {
-    const items = await cache.items.get();
-    let credits = [] as PersonsCredits;
+    const data = await cache.persons.get();
 
-    for (let i = 0; i < items.length; i++) {
-      const { credits: base } = items[i];
-
-      if (!base) continue;
-
-      for (let i = 0; i < base?.cast.length!; i++) {
-        if (!base?.cast?.[i]?.id) continue;
-
-        const { id, name, profile_path, popularity } = base?.cast?.[i]!;
-
-        credits.push({ id: id!, name: name!, profile_path: profile_path!, popularity: popularity! });
-      }
-
-      for (let i = 0; i < base?.crew.length!; i++) {
-        if (!base?.cast?.[i]?.id) continue;
-        const { id, name, profile_path, popularity } = base?.crew?.[i]!;
-
-        credits.push({ id: id!, name: name!, profile_path: profile_path!, popularity: popularity! });
-      }
-    }
-
-    return getUniqueListBy(sortByKey(credits, 'popularity').reverse(), 'name').slice(page * (8 * 8), page * (8 * 8) + 8 * 8);
+    return data.slice(page * (8 * 8), page * (8 * 8) + 8 * 8);
   }
 
   async update(id: number, type: MovieDbTypeEnum) {

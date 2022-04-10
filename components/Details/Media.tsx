@@ -1,21 +1,15 @@
-import config from '@data/config.json';
 import { useTranslation } from 'next-i18next';
 import { Fragment, useEffect } from 'react';
 import Head from 'next/head';
 import Item from './components/Item';
-import ItemLink from './components/ItemLink';
 import GenreIds from './components/GenreIds';
 import { durationFormat } from '@utils/apis/filmlist/helper';
 import { useRouter } from 'next/router';
 import { ItemProps } from '@Types/items';
-import AsyncCarousel from '@components/Carousel/async';
-import QueryString from 'qs';
 import userClient from '@utils/user/client';
-import { basicFetch } from '@utils/helper/fetch';
 import TrailerModal from './components/TrailerModal';
-import PersonCard from '@components/Card/person';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import Rating from '@components/Card/Rating';
+import Carousel from './components/Carousel';
 
 const Media = ({ data }: { data: ItemProps }) => {
   const { t } = useTranslation();
@@ -25,7 +19,7 @@ const Media = ({ data }: { data: ItemProps }) => {
   return (
     <Fragment>
       <Head>
-        <title>{`${data.name[locale]} – ${t(`pages.filmlist.default`)}`}</title>
+        <title>{`${data.name?.[locale]} – ${t(`pages.filmlist.default`)}`}</title>
       </Head>
 
       <div className='w-full grid grid-cols-2 gap-80 px-80'>
@@ -35,8 +29,8 @@ const Media = ({ data }: { data: ItemProps }) => {
           </div>
         </div>
         <div className='w-full' style={{ maxWidth: '480px' }}>
-          <h2 className='text-4xl leading-none font-bold'>{data.name[locale]}</h2>
-          <p className='text-primary-300 mt-4 text-justify mb-5'>{data.overview[locale]}</p>
+          <h2 className='text-4xl leading-none font-bold'>{data.name?.[locale]}</h2>
+          <p className='text-primary-300 mt-4 text-justify mb-5'>{data.overview?.[locale]}</p>
 
           <Rating ratings={data.ratings} user_rating={data.user_rating} />
 
@@ -60,38 +54,7 @@ const Media = ({ data }: { data: ItemProps }) => {
       </div> */}
 
       <div className='pt-80'>
-        <AsyncCarousel
-          func={async () => {
-            const items = await basicFetch(
-              `/api/similarity?${QueryString.stringify({ id: data.id_db, type: data.type, locale, user: userClient.id })}`
-            );
-
-            return {
-              items,
-              key: null,
-              length: items.length,
-              query: {},
-              tmdb: true,
-            };
-          }}
-        />
-        {process.env.NODE_ENV === 'development' ? (
-          <AsyncCarousel
-            func={async () => {
-              const items = await basicFetch(
-                `/api/recommendations?${QueryString.stringify({ id: data.id_db, type: data.type, locale, user: userClient.id })}`
-              );
-
-              return {
-                items,
-                key: null,
-                length: items.length,
-                query: {},
-                tmdb: true,
-              };
-            }}
-          />
-        ) : null}
+        <Carousel id={data.id_db} type={data.type} locale={locale} user={userClient} />
       </div>
     </Fragment>
   );

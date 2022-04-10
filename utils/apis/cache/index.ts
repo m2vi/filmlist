@@ -1,14 +1,15 @@
-import { FilmlistGenres, FilmlistProductionCompany, ProviderProps, TabsType } from '@Types/filmlist';
+import { FilmlistGenres, FilmlistProductionCompany, PersonCredits, PersonsCredits, ProviderProps, TabsType } from '@Types/filmlist';
 import { ItemProps } from '@Types/items';
 import db from '@utils/db/main';
 import jsonTabs from '@data/tabs.json';
 
 import _ from 'underscore';
 import { UserProps } from '@Types/user';
-import filmlist from '../filmlist';
 import { connectToRedis } from '../../db/redis';
 import fsm from '../filmlist/small';
 import attr from '../filmlist/attributes';
+import { getUniqueListBy } from '@utils/helper';
+import { sortByKey } from '@m2vi/iva';
 
 const { parse, stringify } = JSON;
 
@@ -198,6 +199,60 @@ class Cache {
         const redis = await connectToRedis();
         await redis.del('providers');
         const data = await this.providers.get();
+
+        return data;
+      },
+    };
+  }
+
+  get persons() {
+    return {
+      fetch: async (): Promise<PersonsCredits> => {
+        await db.init();
+        const items = await db.itemSchema.find().select('credits');
+        let credits = [] as PersonsCredits;
+
+        for (let i = 0; i < items.length; i++) {
+          const { credits: base } = items[i];
+
+          if (!base) continue;
+
+          for (let i = 0; i < base?.cast.length!; i++) {
+            if (!base?.cast?.[i]?.id) continue;
+
+            const { id, name, profile_path, popularity } = base?.cast?.[i]!;
+
+            credits.push({ id: id!, name: name!, profile_path: profile_path!, popularity: popularity! });
+          }
+
+          for (let i = 0; i < base?.crew.length!; i++) {
+            if (!base?.cast?.[i]?.id) continue;
+            const { id, name, profile_path, popularity } = base?.crew?.[i]!;
+
+            credits.push({ id: id!, name: name!, profile_path: profile_path!, popularity: popularity! });
+          }
+        }
+
+        return getUniqueListBy(sortByKey(credits, 'popularity').reverse(), 'name');
+      },
+      get: async (): Promise<PersonsCredits> => {
+        const redis = await connectToRedis();
+        const cached = await redis.get('persons');
+
+        if (cached) {
+          return parse(cached);
+        } else {
+          const data = await this.persons.fetch();
+
+          await redis.set('persons', stringify(data));
+
+          return data;
+        }
+      },
+      refresh: async (): Promise<PersonsCredits> => {
+        const redis = await connectToRedis();
+        await redis.del('persons');
+        const data = await this.persons.get();
 
         return data;
       },

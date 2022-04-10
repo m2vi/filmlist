@@ -1,4 +1,5 @@
 - [ ] /collection lazy
+- [ ] add omdb api
 - [ ] advance convert class
 - [ ] browse lazy scroll thing
 - [ ] change user items easily
