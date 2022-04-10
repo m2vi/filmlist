@@ -1,6 +1,6 @@
 import Redis from 'ioredis';
 
-const client = new Redis(process.env.REDIS_URL!, { lazyConnect: true });
+const client = new Redis(process.env.REDIS_URL!, { lazyConnect: true, password: process.env.REDIS_PASSWORD });
 
 export async function connectToRedis() {
   const ping = await client.ping();
