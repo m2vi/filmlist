@@ -48,7 +48,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       ...(await serverSideTranslations(context.locale!, ['common'])),
-      genres: (await cache.genres.refresh()).filter(({ items }) => items > 0),
+      genres: (await cache.genres.get()).filter(({ items }) => items > 0),
       production_companies: (await cache.production_companies.get()).slice(0, 20),
       providers: await cache.providers.get(),
     },

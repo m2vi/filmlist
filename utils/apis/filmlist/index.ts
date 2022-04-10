@@ -9,6 +9,7 @@ import {
   GetTabProps,
   GetTabResponse,
   PersonsCredits,
+  PurposeType,
 } from '@Types/filmlist';
 import { ItemProps, MovieDbTypeEnum, SimpleObject } from '@Types/items';
 import { UserProps } from '@Types/user';
@@ -89,15 +90,26 @@ class Filmlist {
   } */
 
   async findOne({ filter }: FindOneOptions, client: UserProps): Promise<ItemProps | null> {
-    const items = await cache.items.get();
+    await db.init();
+    const item = await db.itemSchema.findOne(filter).lean<ItemProps>();
 
-    const result = user.appendUserAttributes(items, client).find(sift(filter));
+    const result = user.appendUserAttributes([item], client)?.[0];
 
     return result ? db.removeId(result) : null;
   }
 
-  async find({ filter, sort, slice, shuffle = false, browse = false }: FindOptions, client: UserProps): Promise<ItemProps[]> {
-    let items = browse ? await cache.items_f.get() : await cache.items.get();
+  private async getCachedItems(purpose: PurposeType) {
+    switch (purpose) {
+      case 'items_f':
+        return await cache.items_f.get();
+
+      default:
+        return await cache.items.get();
+    }
+  }
+
+  async find({ filter, sort, slice, shuffle = false, purpose }: FindOptions, client: UserProps): Promise<ItemProps[]> {
+    let items = await this.getCachedItems(purpose);
     filter = { ...Object.freeze({ ...filter }) };
 
     items = user.appendUserAttributes(items, client).filter(sift(filter));
@@ -127,9 +139,8 @@ class Filmlist {
     start,
     end,
     custom_config = {},
-    purpose = 'tab',
+    purpose,
     shuffle = false,
-    browse = false,
   }: GetTabProps): Promise<GetTabResponse> {
     await db.init();
     const client = typeof user_id === 'string' ? await user.find(user_id) : user_id;
@@ -158,7 +169,7 @@ class Filmlist {
         },
         slice: [start ? start : 0, end ? end : 50],
         shuffle,
-        browse,
+        purpose,
       },
       client
     );
@@ -265,6 +276,7 @@ class Filmlist {
         },
         sort_key: 'popularity',
       },
+      purpose: 'items_f',
     });
 
     return items;
@@ -278,6 +290,7 @@ class Filmlist {
         filter: { 'collection.id': id },
         slice: [0, Number.MAX_SAFE_INTEGER],
         sort: { key: 'release_date', order: -1 },
+        purpose: 'items_f',
       },
       client
     );

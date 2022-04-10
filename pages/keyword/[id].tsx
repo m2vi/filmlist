@@ -33,6 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             keywords: keyword,
           },
         },
+        purpose: 'items_f',
       }),
     },
   };

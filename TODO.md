@@ -1,7 +1,6 @@
 - [ ] /collection lazy
 - [ ] advance convert class
 - [ ] browse lazy scroll thing
-- [ ] change cache names
 - [ ] change user items easily
 - [ ] create user interface
 - [ ] custom filter (interface)
@@ -17,9 +16,9 @@
 - [ ] replace ugly code
 - [ ] route restrictions
 - [ ] security check
-- [ ] speed up
 - [ ] use tab for scroll stuff
 - [x] add many pre filters (genres, providers, ...)
+- [x] change cache names
 - [x] dropdown
 - [x] fix algorithm (keywords)
 - [x] fix browse speed
@@ -35,6 +34,7 @@
 - [x] maybe browse cache
 - [x] more hbo stuff (people on /browse)
 - [x] search
+- [x] speed up
 - [x] update algorithm (accuracy)
 - [x] update icon
 - [x] use redis

@@ -31,6 +31,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         custom_config: {
           filter: getYearNumbers(year!),
         },
+        purpose: 'items_f',
       }),
     },
   };

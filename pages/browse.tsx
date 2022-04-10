@@ -99,12 +99,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       ...(await serverSideTranslations(context.locale!, ['common'])),
-      genres: (await cache.genres.refresh()).filter(({ items }) => items > 0),
+      genres: (await cache.genres.get()).filter(({ items }) => items > 0),
       browse_genre: (await fsm.browseGenre(Date.now().toString())).map(({ id }) => id),
       production_companies: (await cache.production_companies.get()).slice(0, 20),
       data: await Promise.all([
-        filmlist.getTab({ user: client, locale: context.locale!, tab: 'my list', start: 0, end: 20, browse: true }),
-        filmlist.getTab({ user: client, locale: context.locale!, tab: 'continue-watching', start: 0, end: 20, browse: true }),
+        filmlist.getTab({ user: client, locale: context.locale!, tab: 'my list', start: 0, end: 20, purpose: 'items_f' }),
+        filmlist.getTab({ user: client, locale: context.locale!, tab: 'continue-watching', start: 0, end: 20, purpose: 'items_f' }),
       ]),
     },
   };

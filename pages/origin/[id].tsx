@@ -32,6 +32,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             original_language: language,
           },
         },
+        purpose: 'items_f',
       }),
     },
   };

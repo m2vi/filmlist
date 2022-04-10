@@ -22,9 +22,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         hide_unreleased: true,
         minVotes: 50,
       },
-      purpose: 'browse',
+      purpose: 'items_f',
       shuffle: true,
-      browse: true,
     });
 
     res.status(200).json(data);

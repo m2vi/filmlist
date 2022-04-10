@@ -8,6 +8,7 @@ import { UserProps } from '@Types/user';
 import filmlist from '../filmlist';
 import { connectToRedis } from '../../db/redis';
 import fsm from '../filmlist/small';
+import attr from '../filmlist/attributes';
 
 const { parse, stringify } = JSON;
 
@@ -103,10 +104,7 @@ class Cache {
         } else {
           await db.init();
 
-          const items = await db.itemSchema
-            .find()
-            .select('id_db genre_ids name original_name popularity poster_path backdrop_path release_date ratings type runtime')
-            .lean<ItemProps[]>();
+          const items = await db.itemSchema.find().select(attr.items_f).lean<ItemProps[]>();
 
           await redis.set('items_f', stringify(items));
           return items;
@@ -162,7 +160,7 @@ class Cache {
         } else {
           await db.init();
 
-          const items = await db.itemSchema.find().select('id_db type').lean<Array<Partial<ItemProps>>>();
+          const items = await db.itemSchema.find().select(attr.items_m).lean<Array<Partial<ItemProps>>>();
 
           await redis.set('items_m', stringify(items));
           return items;

@@ -33,6 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             'watchProviders.provider_id': provider,
           },
         },
+        purpose: 'items_f',
       }),
     },
   };

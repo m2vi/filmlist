@@ -20,6 +20,7 @@ const Card = ({ name, poster_path, release_date, id_db, ratings, type, isLoading
   return (
     <Wrapper id_db={id_db} isLoading={isLoading} type={type} user_rating={user_rating}>
       <Poster poster_path={poster_path} />
+
       <div className='absolute w-full h-full top-0 left-0 z-10 overlay-child flex items-end justify-start px-2'>
         <div className='w-full pb-2'>
           <Title name={name} />

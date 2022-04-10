@@ -42,12 +42,14 @@ export interface SortProps {
   order?: 1 | -1;
 }
 
+export type PurposeType = 'items' | 'items_f';
+
 export interface FindOptions {
+  purpose: PurposeType;
   filter: FilterQuery<ItemProps>;
   sort?: SortProps;
   slice?: [number, number];
   shuffle?: boolean;
-  browse?: boolean;
 }
 
 export interface FindOneOptions {
@@ -62,9 +64,8 @@ export interface GetTabProps {
   end: number;
   includeCredits?: boolean;
   custom_config?: TabFilterOptions | null;
-  purpose?: string;
+  purpose: PurposeType;
   shuffle?: boolean;
-  browse?: boolean;
 }
 
 export interface TabFilterOptions {

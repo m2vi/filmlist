@@ -31,6 +31,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             'production_companies.id': parseInt(context.query.id?.toString()!),
           },
         },
+        purpose: 'items_f',
       }),
     },
   };

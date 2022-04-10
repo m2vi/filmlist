@@ -20,5 +20,4 @@
 | `/origin/[id]`          | Finding films and series that from a specified origin                        | I think somewhere it also says the origin, but I use the original language which is most of the time the same |
 | `/provider/[id]`        | Finding films and series that are offered on a particular streaming service. | I use the ids from the providers as it makes the route look cooler. You can view them in `/browse-f`          |
 | `/rated/[id]`           | Finding films and series for e.g. minors                                     | Possible values: null, 0, 6, 12,16, 18                                                                        |
-| `/tag/[id]`             | Finding films and series that have a given tag                               | This is actually the same as `/keyword/[id]`, I just use the keywords from imdb here                          |
 | `/year/[id]`            | Finding films and series from a specified year                               |                                                                                                               |

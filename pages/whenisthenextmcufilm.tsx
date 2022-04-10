@@ -33,8 +33,6 @@ Handler.layout = true;
 export default Handler;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const id = user.getIdFromRequest(context.req);
-
   return {
     props: {
       ...(await serverSideTranslations(context.locale!, ['common'])),

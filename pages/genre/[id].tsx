@@ -33,6 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             genre_ids: genre,
           },
         },
+        purpose: 'items_f',
       }),
     },
   };

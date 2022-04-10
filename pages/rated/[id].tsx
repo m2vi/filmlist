@@ -32,6 +32,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             rated: rated === 'null' ? null : rated,
           },
         },
+        purpose: 'items_f',
       }),
     },
   };
