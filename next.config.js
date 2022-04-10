@@ -33,10 +33,6 @@ const nextConfig = {
       },
     ];
   },
-  compiler: {
-    reactRemoveProperties: true,
-  },
-  swcMinify: true,
 };
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
