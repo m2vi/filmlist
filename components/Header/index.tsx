@@ -1,10 +1,10 @@
 import userClient from '@utils/user/client';
 import { useTranslation } from 'next-i18next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { IoNotifications, IoSearch } from 'react-icons/io5';
-import Notifications, { Dropdown } from './Dropdown';
+import { Dropdown } from './Dropdown';
+import Notifications from './Notifications';
 
 const Header = () => {
   const { t } = useTranslation();
@@ -59,9 +59,8 @@ const Header = () => {
             <Link href='/[tab]' as='/anime' prefetch={false}>
               <a className='font-normal text-sm text-center ml-4 l-1 h-7 flex items-center'>Anime</a>
             </Link>
-            <div className='font-normal text-sm text-center flex justify-center items-center mx-4 cursor-pointer h-7 w-7'>
-              <IoNotifications className='h-4 w-4' />
-            </div>
+
+            <Notifications />
 
             <Dropdown avatar={avatar} />
           </div>

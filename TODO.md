@@ -1,11 +1,9 @@
 - [ ] /collection lazy
-- [ ] add omdb api
 - [ ] advance convert class
 - [ ] browse lazy scroll thing
 - [ ] change user items easily
 - [ ] create user interface
 - [ ] custom filter (interface)
-- [ ] fix company glitch
 - [ ] fix move
 - [ ] fix state settings
 - [ ] fix update
@@ -14,18 +12,17 @@
 - [ ] maybe comments
 - [ ] media carousel switch
 - [ ] new update method (current one is too slow)
-- [ ] notifications
 - [ ] replace ugly code
-- [ ] route restrictions
 - [ ] security check
-- [ ] use tab for scroll stuff
 - [x] add /for_you route
 - [x] add many pre filters (genres, providers, ...)
+- [x] add omdb api
 - [x] change cache names
 - [x] dropdown
 - [x] fix algorithm (keywords)
 - [x] fix browse speed
 - [x] fix cache (maybe too large)
+- [x] fix company glitch
 - [x] fix company title
 - [x] fix credits thing
 - [x] fix get speed
@@ -33,9 +30,12 @@
 - [x] fix redis clients
 - [x] fix redis json thing (semi fixed)
 - [x] fix set items
+- [x] fix shimmer animation
 - [x] imdb keywords
 - [x] maybe browse cache
 - [x] more hbo stuff (people on /browse)
+- [x] notifications
+- [x] route restrictions
 - [x] search
 - [x] speed up
 - [x] update algorithm (accuracy)

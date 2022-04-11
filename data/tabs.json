@@ -6,8 +6,7 @@
       }
     },
     "sort_key": "release_date",
-    "hide_unreleased": true,
-    "reverse": true
+    "hide_unreleased": true
   },
   "movie": {
     "filter": {

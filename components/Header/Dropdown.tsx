@@ -3,9 +3,7 @@ import { UserCookie } from '@Types/user';
 import userClient from '@utils/user/client';
 import Image from 'next/image';
 import { Fragment, useEffect, useState } from 'react';
-import { IoLogOut } from 'react-icons/io5';
 import DropdownItem from './DropdownItem';
-import { LogoutIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 
 export const Dropdown = ({ avatar }: { avatar: string | null }) => {
@@ -29,9 +27,9 @@ export const Dropdown = ({ avatar }: { avatar: string | null }) => {
         leaveFrom='transform opacity-100 scale-100'
         leaveTo='transform opacity-0 scale-95'
       >
-        <div className='absolute right-0 w-250 mt-3 px-3 py-2 origin-top-right bg-primary-900-high rounded-8 border border-primary-800'>
+        <div className='absolute right-0 w-250 mt-3 px-3 py-2 origin-top-right bg-primary-800 shadow-xl rounded-8'>
           <Menu.Items>
-            <div className='flex flex-col divide-y divide-primary-800'>
+            <div className='flex flex-col divide-y divide-primary-700'>
               <div className='grid grid-flow-row gap-2 py-2'>
                 <Menu.Item>
                   <DropdownItem>

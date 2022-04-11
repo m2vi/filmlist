@@ -9,6 +9,7 @@ body {
 
 :root {
   --color-primary-900: rgb(0, 0, 0) !important;
+  --color-primary-800: #21222c !important;
 }
 
 .bg-primary-900-high {
@@ -79,6 +80,15 @@ body {
   animation-iteration-count: infinite;
   animation-name: shimmer;
   animation-timing-function: linear;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -5000px 0;
+  }
+  100% {
+    background-position: 5000px 0;
+  }
 }
 
 .aspect-pc {

@@ -16,7 +16,7 @@ const Wrapper = ({
   user_rating: number | null | undefined;
 }) => {
   return (
-    <Link href={`/${type ? 'movie' : 'tv'}/[id]`} as={`/${type ? 'movie' : 'tv'}/${id_db}`} prefetch={false}>
+    <Link href={`/${type ? 'movie' : 'tv'}/[id]`} as={`/${type ? 'movie' : 'tv'}/${id_db}`}>
       {isLoading ? (
         <div className='w-full grid place-items-center relative loading-animation rounded-8 overflow-hidden mt-1'>
           <div style={{ aspectRatio: '2 / 3', width: '100%' }} className='no-drag select-none w-full overflow-hidden relative'></div>
