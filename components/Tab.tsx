@@ -7,18 +7,24 @@ import { Fragment, useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import Card from './Card';
 import config from '@data/config.json';
+import userClient from '@utils/user/client';
 
 const Tab = (props: { data: GetTabResponse; name?: string }) => {
   const { t } = useTranslation();
   const [items, setItems] = useState(props.data.items);
+  const [client, setClient] = useState('');
   useEffect(() => console.log(props.data), [props.data]);
 
   useEffect(() => setItems(props.data.items), [props.data.items]);
+  useEffect(() => setClient(userClient.getUser()?.username!), []);
 
   return (
     <Fragment>
       <Head>
-        <title>{`${props.name ? props.name : t(`pages.filmlist.menu.${props.data.query.tab}`)} – ${t(`pages.filmlist.default`)}`}</title>
+        <title>{`${props.name ? props.name : t(`pages.filmlist.menu.${props.data.query.tab}`, { replace: { name: client } })} – ${t(
+          `pages.filmlist.default`,
+          { replace: { name: client } }
+        )}`}</title>
       </Head>
       <InfiniteScroll
         loadMore={(page) => {

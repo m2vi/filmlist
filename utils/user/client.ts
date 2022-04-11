@@ -1,4 +1,4 @@
-import { UserCookie, UserProps } from '@Types/user';
+import { UserCookie } from '@Types/user';
 import cookie from 'js-cookie';
 import jwt from 'jsonwebtoken';
 import QueryString from 'qs';

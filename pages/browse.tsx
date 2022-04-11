@@ -44,6 +44,14 @@ const Home = (props: {
 
       <AsyncCarousel
         func={async () => {
+          const data = await basicFetch(`/api/similarity/fu?${QueryString.stringify({ locale })}`);
+
+          return data;
+        }}
+      />
+
+      <AsyncCarousel
+        func={async () => {
           return basicFetch(`/api/tmdb-tab/trending?${QueryString.stringify({ locale, page: 1, type: 'movie' })}`);
         }}
       />

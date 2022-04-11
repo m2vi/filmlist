@@ -1,5 +1,4 @@
 import genreList from '@data/genres.json';
-import config from '@data/config.json';
 import { removeDuplicates } from '../filmlist/helper';
 import { sortByKey } from '@m2vi/iva';
 

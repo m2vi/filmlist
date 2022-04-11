@@ -3,7 +3,7 @@
 | `/browse`               | Discover new films and getting an overview                                   |                                                                                                               |
 | `/browse-f`             | Discover new films and getting an overview                                   | the same as `/browse` but without items                                                                       |
 | `/whenisthenextmcufilm` | Finding out when the next M\*rvel film will be released                      | I stole the idea from an api                                                                                  |
-| `/[tab]`                | Displaying items according to the tab e.g. top-rated                         | Kinda slow tbh                                                                                                |
+| `/[tab]`                | Displaying items according to the tab e.g. top-rated                         |                                                                                                               |
 | `/search`               | Search function for films and series                                         | Only in my database                                                                                           |
 | `/search/external`      | Search function for films and series                                         | Only in the tmdb database                                                                                     |
 |                         |                                                                              |                                                                                                               |

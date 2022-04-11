@@ -1,9 +1,8 @@
-import { FilmlistGenres, FilmlistProductionCompany, PersonCredits, PersonsCredits, ProviderProps, TabsType } from '@Types/filmlist';
+import { FilmlistGenres, FilmlistProductionCompany, PersonsCredits, ProviderProps, TabsType } from '@Types/filmlist';
 import { ItemProps } from '@Types/items';
 import db from '@utils/db/main';
 import jsonTabs from '@data/tabs.json';
 
-import _ from 'underscore';
 import { UserProps } from '@Types/user';
 import { connectToRedis } from '../../db/redis';
 import fsm from '../filmlist/small';

@@ -8,7 +8,6 @@ import {
   GetOptions,
   GetTabProps,
   GetTabResponse,
-  PersonsCredits,
   PurposeType,
 } from '@Types/filmlist';
 import { ItemProps, MovieDbTypeEnum, SimpleObject } from '@Types/items';
@@ -34,7 +33,7 @@ import sift from 'sift';
 import { removeEmpty, sortByKey } from '@m2vi/iva';
 import user from '@utils/user';
 import db from '@utils/db/main';
-import { getUniqueListBy } from '@utils/helper';
+import similarity from '@utils/similarity';
 
 class Filmlist {
   async getBase(id: number, type: MovieDbTypeEnum, options?: GetBaseOptions): Promise<BaseResponse> {
@@ -141,7 +140,7 @@ class Filmlist {
     purpose,
     shuffle = false,
   }: GetTabProps): Promise<GetTabResponse> {
-    await db.init();
+    if (tab === 'for_you') return await similarity.getForYou(user_id, locale, start, end);
     const client = typeof user_id === 'string' ? await user.find(user_id) : user_id;
 
     let items = [];
@@ -291,7 +290,6 @@ class Filmlist {
   }
 
   async collections(locale: string = 'en'): Promise<CollectionProps[]> {
-    await db.init();
     const items = await cache.items.get();
     const c: SimpleObject<CollectionProps> = {};
 

@@ -81,7 +81,8 @@
         "war & politics": "War & Politics",
         "western": "Western",
 
-        "popular_persons": "Popular persons"
+        "popular_persons": "Popular persons",
+        "for_you": "Nur für {{name}}"
       },
       "languages": {
         "default": "Original Language",

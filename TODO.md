@@ -12,12 +12,14 @@
 - [ ] lazy swiper
 - [ ] manage interface
 - [ ] maybe comments
+- [ ] media carousel switch
 - [ ] new update method (current one is too slow)
 - [ ] notifications
 - [ ] replace ugly code
 - [ ] route restrictions
 - [ ] security check
 - [ ] use tab for scroll stuff
+- [x] add /for_you route
 - [x] add many pre filters (genres, providers, ...)
 - [x] change cache names
 - [x] dropdown
