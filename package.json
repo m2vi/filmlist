@@ -17,7 +17,7 @@
     "@svgr/webpack": "^6.2.1",
     "@tsndr/cloudflare-worker-jwt": "^1.1.6",
     "cheerio": "^1.0.0-rc.10",
-    "cookie": "^0.4.2",
+    "cookie": "^0.5.0",
     "copy-to-clipboard": "^3.3.1",
     "ioredis": "^5.0.4",
     "js-cookie": "^3.0.1",
