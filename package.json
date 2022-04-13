@@ -58,7 +58,7 @@
     "@types/node": "17.0.23",
     "@types/nprogress": "^0.2.0",
     "@types/qs": "^6.9.7",
-    "@types/react": "18.0.1",
+    "@types/react": "18.0.3",
     "@types/react-infinite-scroller": "^1.2.3",
     "@types/request-ip": "^0.0.37",
     "@types/seed-random": "^2.2.1",
