@@ -36,12 +36,11 @@
   "favourites-s": {
     "filter": {
       "user_state": 2,
-      "ratings.user.vote_count": {
+      "user_rating": {
         "$gt": 0
       }
     },
-    "sort_key": "ratings.user.vote_average",
-    "reverse": true
+    "sort_key": "user_rating"
   },
   "watched": {
     "filter": {
