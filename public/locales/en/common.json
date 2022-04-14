@@ -160,5 +160,12 @@
     "origin_country": "Origin country",
     "headquarters": "Headquarters",
     "default": "Production companies"
+  },
+  "ratings": {
+    "user": "User rating",
+    "tmdb": "The Movie Database",
+    "imdb": "Internet Movie Database",
+    "rt": "Tomatometer",
+    "metacritic": "Metacritic"
   }
 }

@@ -162,5 +162,12 @@
     "origin_country": "Herkunftsland",
     "headquarters": "Hauptsitz",
     "default": "Produktionsfirmen"
+  },
+  "ratings": {
+    "user": "Nutzerbewertung",
+    "tmdb": "The Movie Database",
+    "imdb": "Internet Movie Database",
+    "rt": "Tomatometer",
+    "metacritic": "Metacritic"
   }
 }

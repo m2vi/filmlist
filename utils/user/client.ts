@@ -16,8 +16,10 @@ export class UserClient {
     return user?.id ? user?.id : null;
   }
 
-  getAvatarUrl(size: string | number = 256): string {
+  getAvatarUrl(size: string | number = 256): string | null {
     const user = this.getUser();
+
+    if (!user) return null;
 
     return `https://cdn.discordapp.com/avatars/${user?.identifier}/${user?.avatar}?${QueryString.stringify({ size })}`;
   }

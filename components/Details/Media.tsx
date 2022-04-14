@@ -10,6 +10,7 @@ import userClient from '@utils/user/client';
 import TrailerModal from './components/TrailerModal';
 import Rating from '@components/Card/Rating';
 import Carousel from './components/Carousel';
+import Ratings from './components/Ratings';
 
 const Media = ({ data }: { data: ItemProps }) => {
   const { t } = useTranslation();
@@ -32,7 +33,7 @@ const Media = ({ data }: { data: ItemProps }) => {
           <h2 className='text-4xl leading-none font-bold'>{data.name?.[locale]}</h2>
           <p className='text-primary-300 mt-4 text-justify mb-5'>{data.overview?.[locale]}</p>
 
-          <Rating ratings={data.ratings} user_rating={data.user_rating} />
+          <Ratings data={data} />
 
           <div className='w-full grid grid-cols-2 auto-rows-auto mt-5 gap-5'>
             <Item name={t('details.runtime')} value={data.runtime ? durationFormat(data.runtime, locale!) : '-'} />

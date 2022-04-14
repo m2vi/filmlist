@@ -24,7 +24,7 @@ const TrailerModal = ({ data }: { data: ItemProps }) => {
         src={`https://image.tmdb.org/t/p/${config.highResPosterWidth}${data.poster_path?.[locale]}`}
         alt=''
         style={{ aspectRatio: '2 / 3' }}
-        className='no-drag select-none overflow-hidden relative w-full cursor-pointer'
+        className='no-drag select-none overflow-hidden relative w-full cursor-pointer border border-primary-800 rounded-15'
         title='Trailer'
         onClick={openModal}
       />

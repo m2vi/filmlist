@@ -8,9 +8,9 @@ import { Fragment, useEffect, useState } from 'react';
 import { IoNotifications } from 'react-icons/io5';
 
 async function getNotifications(locale: string = 'en'): Promise<Array<FrontendItemProps>> {
-  const tab = await basicFetch(`/api/tab/notifications?locale=${locale}&start=0&end=15`);
+  const tab = await basicFetch(`/api/notifications?locale=${locale}`);
 
-  return tab?.items;
+  return tab;
 }
 
 const Notifications = () => {
@@ -41,7 +41,7 @@ const Notifications = () => {
         <div className='grid grid-flow-row absolute right-0 bg-primary-800 w-400 mt-3 origin-top-right rounded-8 shadow-xl overflow-hidden  border border-primary-700'>
           <div className='w-full overflow-y-auto h-full'>
             <Popover.Panel className='divide-y divide-primary-700 h-300'>
-              {data.map(({ id_db, type, name, release_date, backdrop_path }, i) => {
+              {(Array.isArray(data) ? data : []).map(({ id_db, type, name, release_date, backdrop_path }, i) => {
                 return (
                   <Link href={`/${type ? 'movie' : 'tv'}/[id]`} as={`/${type ? 'movie' : 'tv'}/${id_db}`} key={i}>
                     <a className='flex p-3 hover:bg-primary-900 cursor-pointer'>
@@ -56,20 +56,18 @@ const Notifications = () => {
                   </Link>
                 );
               })}
+              <Link as='/notifications' href='/[tab]'>
+                <a
+                  className='w-full flex justify-center px-3 rounded-b-8 py-3 border border-transparent border-t-primary-700 hover:bg-primary-900 cursor-pointer'
+                  title='View more'
+                >
+                  <svg xmlns='http://www.w3.org/2000/svg' className='h-4 w-4 mr-1' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 9l-7 7-7-7' />
+                  </svg>
+                </a>
+              </Link>
             </Popover.Panel>
           </div>
-          <Popover.Panel className='w-full'>
-            <Link as='/notifications' href='/[tab]'>
-              <a
-                className='w-full flex justify-center px-3 rounded-b-8 py-3 border border-transparent border-t-primary-700 hover:bg-primary-900 cursor-pointer'
-                title='View more'
-              >
-                <svg xmlns='http://www.w3.org/2000/svg' className='h-4 w-4 mr-1' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 9l-7 7-7-7' />
-                </svg>
-              </a>
-            </Link>
-          </Popover.Panel>
         </div>
       </Transition>
     </Popover>

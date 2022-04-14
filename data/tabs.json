@@ -1,9 +1,16 @@
 {
   "notifications": {
     "filter": {
-      "user_state": {
-        "$lt": 0
-      }
+      "$or": [
+        {
+          "user_state": {
+            "$lt": 0
+          }
+        },
+        {
+          "user_state": null
+        }
+      ]
     },
     "sort_key": "release_date",
     "hide_unreleased": true
@@ -41,7 +48,19 @@
       "user_state": {
         "$gt": 0
       }
-    }
+    },
+    "reverse": true
+  },
+  "rate": {
+    "filter": {
+      "user_state": {
+        "$gt": 0
+      },
+      "user_rating": {
+        "$eq": null
+      }
+    },
+    "reverse": true
   },
   "continue-watching": {
     "filter": {

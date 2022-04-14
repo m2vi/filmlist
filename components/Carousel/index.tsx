@@ -33,7 +33,7 @@ const Carousel = ({ section: { items, key, tmdb } }: { section: GetTabResponse }
       )}
 
       <Swiper spaceBetween={20} slidesPerView={2} className='mt-2' lazy={true} breakpoints={breakpoints}>
-        {(items ? items : []).map((props, index) => {
+        {(Array.isArray(items) ? items : []).map((props, index) => {
           return (
             <SwiperSlide key={index} style={{ width: config.cardWidth }}>
               <Card {...props} />

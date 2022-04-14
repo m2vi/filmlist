@@ -15,7 +15,7 @@ const BrowseGenreCarousel = ({ section: { items, key } }: { section: GetTabRespo
     <div className='mb-8 h-auto'>
       {key && (
         <Fragment>
-          <Link as={`/genre/${genres}`} href='/genre/[id]'>
+          <Link as={`/genre/${genres.getID(key)}`} href='/genre/[id]'>
             <a className='text-3xl leading-relaxed font-bold hover:text-primary-200'>{t(`pages.filmlist.menu.${key}`).toString()}</a>
           </Link>
         </Fragment>

@@ -2,7 +2,7 @@ import userClient from '@utils/user/client';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { IoNotifications, IoSearch } from 'react-icons/io5';
+import { IoSearch } from 'react-icons/io5';
 import { Dropdown } from './Dropdown';
 import Notifications from './Notifications';
 

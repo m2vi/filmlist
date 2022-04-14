@@ -53,6 +53,7 @@ module.exports = {
         transparent: 'transparent',
         default: 'red',
         white: 'white',
+        dark: '#21222c',
         primary: {
           100: 'var(--color-primary-100)',
           200: 'var(--color-primary-200)',

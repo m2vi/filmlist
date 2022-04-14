@@ -7,6 +7,7 @@ import { isMovie } from '@utils/helper/tmdb';
 import { IdAppendToResponseRequest, MovieResponse, ShowResponse } from 'moviedb-promise/dist/request-types';
 import { Movie, Series } from 'vimdb';
 import imdb from '../imdb';
+import omdb from '../omdb';
 import rt from '../rt';
 import tmdb from '../tmdb';
 
@@ -83,9 +84,18 @@ class Ratings {
     };
   }
 
+  async getMetacriticRating(id: string): Promise<VoteProps> {
+    const data = await omdb.getById(id);
+
+    return {
+      vote_average: data?.Metascore ? parseInt(data?.Metascore) / 10 : null,
+      vote_count: null,
+    };
+  }
+
   async get(id: number, type: MovieDbTypeEnum): Promise<RatingsResponse> {
     const item = (await tmdb.get({ id, append_to_response: 'external_ids' }, type)) as any;
-    const [imdb, rt, user_rating] = await Promise.all([
+    const [imdb, rt, user_rating, metacritic] = await Promise.all([
       this.getImdbRating(item?.external_ids?.imdb_id),
       this.getRtRating({
         name: item.title ? item.title : item.name,
@@ -93,6 +103,7 @@ class Ratings {
         year: new Date(item?.first_air_date ? item?.first_air_date : item?.release_date).getFullYear(),
       }),
       this.getUserRating(id, type),
+      this.getMetacriticRating(item?.external_ids?.imdb_id),
     ]);
 
     return {
@@ -102,7 +113,8 @@ class Ratings {
       },
       imdb,
       rt,
-      user_rating,
+      metacritic,
+      user: user_rating,
     };
   }
 }

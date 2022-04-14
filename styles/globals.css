@@ -9,7 +9,6 @@ body {
 
 :root {
   --color-primary-900: rgb(0, 0, 0) !important;
-  --color-primary-800: #21222c !important;
 }
 
 .bg-primary-900-high {
@@ -38,6 +37,10 @@ body {
 
 .rt {
   stroke: #fa320a;
+}
+
+.metacritic {
+  stroke: #ffcc34;
 }
 
 .green {

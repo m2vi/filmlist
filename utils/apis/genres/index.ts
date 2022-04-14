@@ -26,7 +26,7 @@ class Genres {
   }
 
   getID(genre_name: string): number {
-    const result = this.array.find(({ name }) => genre_name === name)?.id;
+    const result = this.array.find(({ name }) => genre_name.toLowerCase() === name.toLowerCase())?.id;
     return result ? result : 0;
   }
 

@@ -6,8 +6,8 @@ import { nanoid } from 'nanoid';
 import { NextApiRequestCookies } from 'next/dist/server/api-utils';
 import jwt from 'jsonwebtoken';
 import cache from '@utils/apis/cache';
-import _ from 'lodash';
-import { sortByKey } from '@m2vi/iva';
+import _, { round } from 'lodash';
+import { removeEmpty, sortByKey } from '@m2vi/iva';
 import { arrayMove } from '@utils/utils';
 import { NextApiRequest } from 'next';
 
@@ -35,13 +35,16 @@ class User {
   }
 
   async find(id: string, c: boolean = false): Promise<UserProps> {
+    if (!id) return null as any;
     if (c) {
       await db.init();
       const u = await db.userSchema.findOne({ $or: [{ identifier: id }, { token: id }] }).lean();
 
       return u;
     }
-    return await cache.user.get(id);
+    const client = await cache.user.get(id);
+
+    return client;
   }
 
   async create(id: string) {
@@ -115,7 +118,7 @@ class User {
     const found = _.find(items, { filter: { id: item.filter.id, type: item.filter.type } });
     if (found) {
       const index = _.findIndex(items, { filter: item.filter });
-      items[index] = { ...found, ...item, index: toStart ? items.length : index };
+      items[index] = { ...found, ...removeEmpty(item), index: toStart ? items.length : index };
     } else {
       items.push({ ...item, index: items.length });
     }
@@ -144,7 +147,7 @@ class User {
   appendUserAttributes<T>(items: T[], user: UserProps | null): T[] {
     return items.map((item) => {
       const user_item = user?.items?.find(({ filter }) => filter.id === (item as any)?.id_db && filter.type === (item as any).type);
-
+    
       return {
         ...item,
         user_state: typeof user_item?.state !== 'undefined' ? user_item?.state : null,
@@ -153,6 +156,24 @@ class User {
         // user_date_added: null,
       };
     });
+  }
+
+  async get(id: string) {
+    const u = await this.find(id);
+    const ratings = u.items.filter(({ rating }) => rating !== null);
+
+    return {
+      id: u.identifier,
+      average_rating: round(parseFloat((ratings.reduce((prev, curr) => prev + curr.rating!, 0) / ratings.length).toPrecision(12)), 1),
+      ratings: ratings.length,
+      last_ratings: sortByKey(ratings, 'index')
+        .reverse()
+        .slice(0, 20)
+        .map(({ filter, rating }) => ({
+          ...filter,
+          rating,
+        })),
+    };
   }
 }
 

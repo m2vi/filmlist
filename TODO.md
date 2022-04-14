@@ -14,6 +14,7 @@
 - [ ] new update method (current one is too slow)
 - [ ] replace ugly code
 - [ ] security check
+- [ ] speed up algorithm
 - [x] add /for_you route
 - [x] add many pre filters (genres, providers, ...)
 - [x] add omdb api
