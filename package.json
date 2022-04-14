@@ -49,7 +49,7 @@
     "vimdb": "^4.0.6"
   },
   "devDependencies": {
-    "@types/cookie": "^0.4.1",
+    "@types/cookie": "^0.5.0",
     "@types/js-cookie": "^3.0.1",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/lodash": "^4.14.181",
