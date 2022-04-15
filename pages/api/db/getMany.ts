@@ -6,9 +6,16 @@ import convert from '@utils/convert/main';
 import { isMovie, isValidId, isValidType } from '@utils/helper/tmdb';
 import user from '@utils/user';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import _ from 'underscore';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { filters, purpose = 'items', lazy, convert: doConvert, locale = 'en' } = Object.freeze(req.query);
+  const {
+    filters,
+    purpose = 'items',
+    lazy,
+    convert: doConvert,
+    locale = 'en',
+  } = _.has(req.query, 'filters') ? Object.freeze(req.query) : Object.freeze(req.body);
   const client = await user.getIdFromRequest(req);
 
   try {
