@@ -13,3 +13,7 @@ export const isValidType = (type: any) => {
 
   return ['movie', '1', 'tv', '0'].includes(str);
 };
+
+export const isValidId = (id: any) => {
+  return id?.toString() === parseInt(id?.toString())?.toString();
+};

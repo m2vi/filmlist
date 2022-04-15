@@ -5,11 +5,13 @@ export interface JwtPayload {
   iat: number;
 }
 
+export interface FilterProps {
+  id: number;
+  type: number;
+}
+
 export interface UserItem {
-  filter: {
-    id: number;
-    type: number;
-  };
+  filter: FilterProps;
   index: number;
   state: number | null;
   rating: number | null;
