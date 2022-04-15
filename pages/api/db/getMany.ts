@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         filter: { $or: arr },
         purpose: purpose ? (purpose.toString() as any) : 'items',
         sort: {
-          key: `name.en`,
+          key: `name.${locale ? locale.toString() : 'en'}`,
 
           order: 1,
         },
