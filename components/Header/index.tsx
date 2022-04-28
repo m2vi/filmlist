@@ -2,9 +2,10 @@ import userClient from '@utils/user/client';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { IoSearch } from 'react-icons/io5';
+import { IoDownload, IoSearch } from 'react-icons/io5';
 import { Dropdown } from './Dropdown';
 import Notifications from './Notifications';
+import { FiDownload } from 'react-icons/fi';
 
 const Header = () => {
   const { t } = useTranslation();
@@ -51,12 +52,12 @@ const Header = () => {
             </span>
           </div>
           <div className='flex items-center justify-end'>
-            <Link href='/search' prefetch={false}>
+            <Link href='/search'>
               <a className='font-normal text-sm h-full text-center items-center cursor-pointer'>
                 <IoSearch className='h-4 w-4' />
               </a>
             </Link>
-            <Link href='/[tab]' as='/anime' prefetch={false}>
+            <Link href='/[tab]' as='/anime'>
               <a className='font-normal text-sm text-center ml-4 l-1 h-7 flex items-center'>Anime</a>
             </Link>
 

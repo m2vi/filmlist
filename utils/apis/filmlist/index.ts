@@ -8,7 +8,9 @@ import {
   GetOptions,
   GetTabProps,
   GetTabResponse,
+  PersonsCredits,
   PurposeType,
+  TabsType,
 } from '@Types/filmlist';
 import { ItemProps, MovieDbTypeEnum, SimpleObject } from '@Types/items';
 import { UserProps } from '@Types/user';
@@ -28,12 +30,12 @@ import {
   reduceNumArray,
   collectionGenreIds,
 } from './helper';
-import cache from '../cache';
 import sift from 'sift';
 import { removeEmpty, sortByKey } from '@m2vi/iva';
 import user from '@utils/user';
 import db from '@utils/db/main';
 import similarity from '@utils/similarity';
+import cache from '../cache';
 
 class Filmlist {
   async getBase(id: number, type: MovieDbTypeEnum, options?: GetBaseOptions): Promise<BaseResponse> {
@@ -99,10 +101,10 @@ class Filmlist {
   private async getCachedItems(purpose: PurposeType) {
     switch (purpose) {
       case 'items_f':
-        return await cache.items_f.get();
+        return await cache.get<ItemProps[]>('items_f');
 
       default:
-        return await cache.items.get();
+        return await cache.get<ItemProps[]>('items');
     }
   }
 
@@ -123,7 +125,7 @@ class Filmlist {
   }
 
   private async getTabConfig(name: string) {
-    const tabs = await cache.tabs.get();
+    const tabs = await cache.get<TabsType>('tabs');
 
     if (!tabs[name]) return {};
 
@@ -191,7 +193,7 @@ class Filmlist {
   }
 
   async getPerson(id: number, locale: string = 'en', client: UserProps) {
-    const items = await cache.items.get();
+    const items = await cache.get<ItemProps[]>('items');
     let itemsWP = [] as ItemProps[];
 
     const info = await tmdb.api.personInfo({ id, language: locale, append_to_response: 'external_ids' });
@@ -214,7 +216,7 @@ class Filmlist {
   }
 
   async persons(page: number) {
-    const data = await cache.persons.get();
+    const data = await cache.get<PersonsCredits>('persons');
 
     return data.slice(page * (8 * 8), page * (8 * 8) + 8 * 8);
   }
@@ -227,7 +229,7 @@ class Filmlist {
 
   async updateAll() {
     await db.init();
-    const items = await cache.items_m.refresh();
+    const items = await cache.refresh<ItemProps[]>('items_m');
 
     for (let index = 0; index < items.length; index++) {
       const { id_db, type } = items[index];
@@ -290,7 +292,7 @@ class Filmlist {
   }
 
   async collections(locale: string = 'en'): Promise<CollectionProps[]> {
-    const items = await cache.items.get();
+    const items = await cache.get<ItemProps[]>('items');
     const c: SimpleObject<CollectionProps> = {};
 
     for (let i = 0; i < items.length; i++) {

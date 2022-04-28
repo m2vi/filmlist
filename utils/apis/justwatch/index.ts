@@ -8,8 +8,9 @@ import { GetUrlFromBaseProps } from '@Types/justwatch';
 import { cachedFetch } from '@utils/helper/fetch';
 import { getUniqueListBy } from '@utils/helper';
 import { isMovie } from '@utils/helper/tmdb';
-import cache from '../cache';
+
 import { ProviderProps } from '@Types/filmlist';
+import cache from '../cache';
 
 export class Api {
   checkReq(query: { [key: string]: string | string[] }) {
@@ -23,7 +24,7 @@ export class Api {
 
     try {
       const params = { id: parseInt(id), type: isMovie(type) ? 1 : 0, provider: lowerCase(provider) };
-      const all_providers = await cache.providers.get();
+      const all_providers = await cache.get<ProviderProps[]>('providers');
 
       let res = null;
 

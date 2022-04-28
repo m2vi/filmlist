@@ -1,5 +1,5 @@
 import { sortByKey } from '@m2vi/iva';
-import { FilmlistGenres, FilmlistProductionCompany, ProviderProps } from '@Types/filmlist';
+import { FilmlistGenres, FilmlistProductionCompany, PersonsCredits, ProviderProps } from '@Types/filmlist';
 import { ItemProps } from '@Types/items';
 import db from '@utils/db/main';
 import { getUniqueListBy } from '@utils/helper';
@@ -96,13 +96,42 @@ class FilmlistSm {
 
   async browseGenre(seed: string) {
     const rng = SeedRandom(seed);
-    const g = await cache.genres.get();
+    const g = await cache.get<FilmlistGenres>('genres');
     const ids = shuffle(
       g.filter(({ items }) => items > 20),
       rng()
     );
 
     return ids.slice(0, 5);
+  }
+
+  async persons(): Promise<PersonsCredits> {
+    await db.init();
+    const items = await db.itemSchema.find().select('credits');
+    let credits = [] as PersonsCredits;
+
+    for (let i = 0; i < items.length; i++) {
+      const { credits: base } = items[i];
+
+      if (!base) continue;
+
+      for (let i = 0; i < base?.cast.length!; i++) {
+        if (!base?.cast?.[i]?.id) continue;
+
+        const { id, name, profile_path, popularity } = base?.cast?.[i]!;
+
+        credits.push({ id: id!, name: name!, profile_path: profile_path!, popularity: popularity! });
+      }
+
+      for (let i = 0; i < base?.crew.length!; i++) {
+        if (!base?.cast?.[i]?.id) continue;
+        const { id, name, profile_path, popularity } = base?.crew?.[i]!;
+
+        credits.push({ id: id!, name: name!, profile_path: profile_path!, popularity: popularity! });
+      }
+    }
+
+    return getUniqueListBy(sortByKey(credits, 'popularity').reverse(), 'name');
   }
 }
 

@@ -1,8 +1,7 @@
 import Tab from '@components/Tab';
-import { GetTabResponse } from '@Types/filmlist';
+import { FilmlistProductionCompany, GetTabResponse } from '@Types/filmlist';
 import cache from '@utils/apis/cache';
 import filmlist from '@utils/apis/filmlist';
-import tmdb from '@utils/apis/tmdb';
 import user from '@utils/user';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -19,7 +18,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       ...(await serverSideTranslations(context.locale!, ['common'])),
-      name: (await cache.production_companies.get()).find(({ id }) => id === parseInt(context.query.id?.toString()!))?.name,
+      name: (await cache.get<FilmlistProductionCompany[]>('companies')).find(({ id }) => id === parseInt(context.query.id?.toString()!))
+        ?.name,
       data: await filmlist.getTab({
         user: id,
         locale: context.locale!,

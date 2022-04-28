@@ -5,11 +5,12 @@ import { IncomingMessage } from 'http';
 import { nanoid } from 'nanoid';
 import { NextApiRequestCookies } from 'next/dist/server/api-utils';
 import jwt from 'jsonwebtoken';
-import cache from '@utils/apis/cache';
+
 import _, { round } from 'lodash';
 import { removeEmpty, sortByKey } from '@m2vi/iva';
 import { arrayMove } from '@utils/utils';
 import { NextApiRequest } from 'next';
+import cache from '@utils/apis/cache';
 
 //! security
 class User {
@@ -147,7 +148,7 @@ class User {
   appendUserAttributes<T>(items: T[], user: UserProps | null): T[] {
     return items.map((item) => {
       const user_item = user?.items?.find(({ filter }) => filter.id === (item as any)?.id_db && filter.type === (item as any).type);
-    
+
       return {
         ...item,
         user_state: typeof user_item?.state !== 'undefined' ? user_item?.state : null,

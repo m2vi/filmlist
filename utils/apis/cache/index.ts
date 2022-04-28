@@ -1,23 +1,30 @@
-import { FilmlistGenres, FilmlistProductionCompany, PersonsCredits, ProviderProps, TabsType } from '@Types/filmlist';
-import { ItemProps } from '@Types/items';
-import db from '@utils/db/main';
-import jsonTabs from '@data/tabs.json';
-
 import { UserProps } from '@Types/user';
-import { connectToRedis } from '../../db/redis';
-import fsm from '../filmlist/small';
-import attr from '../filmlist/attributes';
-import { getUniqueListBy } from '@utils/helper';
-import { sortByKey } from '@m2vi/iva';
+import db from '@utils/db/main';
+import { connectToRedis } from '@utils/db/redis';
+import { config } from './config';
+
+type Keys = keyof typeof config;
 
 const { parse, stringify } = JSON;
 
 class Cache {
+  get config() {
+    return config;
+  }
+
+  get key() {
+    const project = 'filmlist';
+
+    return (key: string) => {
+      return Buffer.from(`${project}.${key}`, 'utf8').toString('base64url');
+    };
+  }
+
   get user() {
     return {
       get: async (id: string): Promise<UserProps> => {
         const redis = await connectToRedis();
-        const cached = await redis.get(`user-${id}`);
+        const cached = await redis.get(this.key(`user-${id}`));
 
         if (cached) {
           return parse(cached);
@@ -25,14 +32,14 @@ class Cache {
           await db.init();
           const u = await db.userSchema.findOne({ $or: [{ identifier: id }, { token: id }] }).lean();
 
-          await redis.set(`user-${id}`, stringify(u));
+          await redis.set(this.key(`user-${id}`), stringify(u));
 
           return u;
         }
       },
       refresh: async (id: string): Promise<UserProps> => {
         const redis = await connectToRedis();
-        await redis.del(`user-${id}`);
+        await redis.del(this.key(`user-${id}`));
 
         const u = await this.user.get(id);
 
@@ -41,230 +48,29 @@ class Cache {
     };
   }
 
-  get production_companies() {
-    return {
-      get: async (): Promise<FilmlistProductionCompany[]> => {
-        const redis = await connectToRedis();
-        const cached = await redis.get('companies');
+  async get<T>(key: Keys): Promise<T> {
+    const key_d = config?.[key];
+    const redis = await connectToRedis();
+    const cached = await redis.get(this.key(key_d.key));
 
-        if (cached) {
-          return parse(cached);
-        } else {
-          const data = await fsm.productionCompanies();
+    if (cached) {
+      return parse(cached);
+    } else {
+      const data: any = await key_d.data();
 
-          await redis.set('companies', stringify(data));
+      await redis.set(this.key(key_d.key), stringify(data));
 
-          return data!;
-        }
-      },
-      refresh: async (): Promise<FilmlistProductionCompany[]> => {
-        const redis = await connectToRedis();
-        await redis.del('companies');
-        const data = await this.production_companies.get();
-
-        return data;
-      },
-    };
+      return data;
+    }
   }
 
-  get genres() {
-    return {
-      get: async (): Promise<FilmlistGenres> => {
-        const redis = await connectToRedis();
-        const cached = await redis.get('genres');
+  async refresh<T>(key: Keys) {
+    const key_d = config?.[key];
+    const redis = await connectToRedis();
 
-        if (cached) {
-          return parse(cached);
-        } else {
-          const data = await fsm.genres();
+    await redis.del(this.key(key_d.key));
 
-          await redis.set('genres', stringify(data));
-
-          return data;
-        }
-      },
-      refresh: async (): Promise<FilmlistGenres> => {
-        const redis = await connectToRedis();
-        await redis.del('genres');
-        const data = await this.genres.get();
-
-        return data;
-      },
-    };
-  }
-
-  get items_f() {
-    return {
-      get: async (): Promise<ItemProps[]> => {
-        const redis = await connectToRedis();
-        const cachedResponse = await redis.get('items_f');
-
-        if (cachedResponse) {
-          return parse(cachedResponse);
-        } else {
-          await db.init();
-
-          const items = await db.itemSchema.find().select(attr.items_f).lean<ItemProps[]>();
-
-          await redis.set('items_f', stringify(items));
-          return items;
-        }
-      },
-      refresh: async () => {
-        const redis = await connectToRedis();
-        await redis.del('items_f');
-        const items = await this.items_f.get();
-
-        return items;
-      },
-    };
-  }
-
-  get items() {
-    return {
-      get: async (): Promise<ItemProps[]> => {
-        const redis = await connectToRedis();
-        const cachedResponse = await redis.get('items');
-
-        if (cachedResponse) {
-          const parsed = parse(cachedResponse);
-
-          return parsed;
-        } else {
-          await db.init();
-
-          const items = await db.itemSchema.find().lean<ItemProps[]>();
-
-          await redis.set('items', stringify(items));
-          return items;
-        }
-      },
-      refresh: async () => {
-        const redis = await connectToRedis();
-        await redis.del('items');
-        const items = await this.items.get();
-
-        return items;
-      },
-    };
-  }
-
-  get items_m() {
-    return {
-      get: async (): Promise<Array<Partial<ItemProps>>> => {
-        const redis = await connectToRedis();
-        const cache = await redis.get('items_m');
-
-        if (cache) {
-          return parse(cache);
-        } else {
-          await db.init();
-
-          const items = await db.itemSchema.find().select(attr.items_m).lean<Array<Partial<ItemProps>>>();
-
-          await redis.set('items_m', stringify(items));
-          return items;
-        }
-      },
-      refresh: async (): Promise<Array<Partial<ItemProps>>> => {
-        const redis = await connectToRedis();
-        await redis.del('items_m');
-        const items = await this.items_m.get();
-
-        return items;
-      },
-    };
-  }
-
-  get providers() {
-    return {
-      get: async (): Promise<ProviderProps[]> => {
-        const redis = await connectToRedis();
-        const cached = await redis.get('providers');
-
-        if (cached) {
-          const parsed = parse(cached);
-
-          return parsed;
-        } else {
-          const data = await fsm.providers();
-
-          await redis.set('providers', stringify(data));
-
-          return data;
-        }
-      },
-      refresh: async (): Promise<ProviderProps[]> => {
-        const redis = await connectToRedis();
-        await redis.del('providers');
-        const data = await this.providers.get();
-
-        return data;
-      },
-    };
-  }
-
-  get persons() {
-    return {
-      fetch: async (): Promise<PersonsCredits> => {
-        await db.init();
-        const items = await db.itemSchema.find().select('credits');
-        let credits = [] as PersonsCredits;
-
-        for (let i = 0; i < items.length; i++) {
-          const { credits: base } = items[i];
-
-          if (!base) continue;
-
-          for (let i = 0; i < base?.cast.length!; i++) {
-            if (!base?.cast?.[i]?.id) continue;
-
-            const { id, name, profile_path, popularity } = base?.cast?.[i]!;
-
-            credits.push({ id: id!, name: name!, profile_path: profile_path!, popularity: popularity! });
-          }
-
-          for (let i = 0; i < base?.crew.length!; i++) {
-            if (!base?.cast?.[i]?.id) continue;
-            const { id, name, profile_path, popularity } = base?.crew?.[i]!;
-
-            credits.push({ id: id!, name: name!, profile_path: profile_path!, popularity: popularity! });
-          }
-        }
-
-        return getUniqueListBy(sortByKey(credits, 'popularity').reverse(), 'name');
-      },
-      get: async (): Promise<PersonsCredits> => {
-        const redis = await connectToRedis();
-        const cached = await redis.get('persons');
-
-        if (cached) {
-          return parse(cached);
-        } else {
-          const data = await this.persons.fetch();
-
-          await redis.set('persons', stringify(data));
-
-          return data;
-        }
-      },
-      refresh: async (): Promise<PersonsCredits> => {
-        const redis = await connectToRedis();
-        await redis.del('persons');
-        const data = await this.persons.get();
-
-        return data;
-      },
-    };
-  }
-
-  get tabs() {
-    return {
-      get: async (): Promise<TabsType> => {
-        return jsonTabs;
-      },
-      refresh: () => {},
-    };
+    return await this.get<T>(key);
   }
 
   async stats() {

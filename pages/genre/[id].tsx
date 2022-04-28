@@ -1,9 +1,7 @@
 import Tab from '@components/Tab';
 import { GetTabResponse } from '@Types/filmlist';
-import cache from '@utils/apis/cache';
 import filmlist from '@utils/apis/filmlist';
 import genres from '@utils/apis/genres';
-import tmdb from '@utils/apis/tmdb';
 import user from '@utils/user';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';

@@ -34,7 +34,7 @@ export class Helper {
   }
 
   async getCollection(initialItem: Partial<ItemProps>) {
-    return this.removeOriginalItem(initialItem, await cache.items.get());
+    return this.removeOriginalItem(initialItem, await cache.get('items'));
   }
 
   parseConfig(config: SimilarityConfig | undefined = {}): SimilarityConfig {

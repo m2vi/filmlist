@@ -7,10 +7,6 @@ body {
   height: 100%;
 }
 
-:root {
-  --color-primary-900: rgb(0, 0, 0) !important;
-}
-
 .bg-primary-900-high {
   background-color: rgba(0, 0, 0, 0.95);
 }

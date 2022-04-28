@@ -7,17 +7,17 @@ import Carousel from '@components/Carousel';
 import { useEffect } from 'react';
 import db from '@utils/db/main';
 import { useTranslation } from 'next-i18next';
-import cache from '@utils/apis/cache';
 import PCCarousel from '@components/Carousel/pc';
 import GenresCarousel from '@components/Carousel/genres';
 import AsyncCarousel from '@components/Carousel/async';
 import { basicFetch } from '@utils/helper/fetch';
 import QueryString from 'qs';
 import { useRouter } from 'next/router';
-import { FilmlistGenre, FilmlistProductionCompany, GetTabResponse } from '@Types/filmlist';
+import { FilmlistGenre, FilmlistGenres, FilmlistProductionCompany, GetTabResponse } from '@Types/filmlist';
 import AsyncBrowseGenreCarousel from '@components/Carousel/browse_genre/async';
 import AsyncPersonCarousel from '@components/Carousel/person/async';
 import fsm from '@utils/apis/filmlist/small';
+import cache from '@utils/apis/cache';
 
 const Home = (props: {
   data: GetTabResponse[];
@@ -107,9 +107,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       ...(await serverSideTranslations(context.locale!, ['common'])),
-      genres: (await cache.genres.get()).filter(({ items }) => items > 0),
+      genres: (await cache.get<FilmlistGenres>('genres')).filter(({ items }) => items > 0),
       browse_genre: (await fsm.browseGenre(Date.now().toString())).map(({ id }) => id),
-      production_companies: (await cache.production_companies.get()).slice(0, 20),
+      production_companies: (await cache.get<FilmlistGenres[]>('companies')).slice(0, 20),
       data: await Promise.all([
         filmlist.getTab({ user: client, locale: context.locale!, tab: 'my list', start: 0, end: 20, purpose: 'items_f' }),
         filmlist.getTab({ user: client, locale: context.locale!, tab: 'continue-watching', start: 0, end: 20, purpose: 'items_f' }),

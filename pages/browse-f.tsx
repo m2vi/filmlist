@@ -5,15 +5,15 @@ import user from '@utils/user';
 import { useEffect } from 'react';
 import db from '@utils/db/main';
 import { useTranslation } from 'next-i18next';
-import cache from '@utils/apis/cache';
 import PCCarousel from '@components/Carousel/pc';
 import GenresCarousel from '@components/Carousel/genres';
 import { basicFetch } from '@utils/helper/fetch';
 import QueryString from 'qs';
 import { useRouter } from 'next/router';
-import { FilmlistGenre, FilmlistProductionCompany, ProviderProps } from '@Types/filmlist';
+import { FilmlistGenre, FilmlistGenres, FilmlistProductionCompany, ProviderProps } from '@Types/filmlist';
 import AsyncPersonCarousel from '@components/Carousel/person/async';
 import ProvidersCarousel from '@components/Carousel/providers';
+import cache from '@utils/apis/cache';
 
 const Home = (props: { production_companies: FilmlistProductionCompany[]; genres: FilmlistGenre[]; providers: ProviderProps[] }) => {
   useEffect(() => console.log(props), [props]);
@@ -48,9 +48,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       ...(await serverSideTranslations(context.locale!, ['common'])),
-      genres: (await cache.genres.get()).filter(({ items }) => items > 0),
-      production_companies: (await cache.production_companies.get()).slice(0, 20),
-      providers: await cache.providers.get(),
+      genres: (await cache.get<FilmlistGenres>('genres')).filter(({ items }) => items > 0),
+      production_companies: (await cache.get<FilmlistProductionCompany[]>('companies')).slice(0, 20),
+      providers: await cache.get<ProviderProps[]>('providers'),
     },
   };
 };
