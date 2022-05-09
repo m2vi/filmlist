@@ -1,5 +1,6 @@
 import { BaseResponse } from '@Types/filmlist';
 import { FrontendItemProps, ItemProps } from '@Types/items';
+import downloads from '@utils/apis/downloads/api';
 import { isAnime, parseExternalIds } from '@utils/apis/filmlist/helper';
 import { isMovie } from '@utils/helper/tmdb';
 
@@ -74,6 +75,8 @@ export const FromItemToFrontend = (
     user_rating,
     user_date_added,
     runtime,
+    file_date_added,
+    file_details,
   }: ItemProps,
   locale: string = 'en'
 ): FrontendItemProps => {
@@ -92,6 +95,8 @@ export const FromItemToFrontend = (
     ...(typeof user_state !== 'undefined' ? { user_state } : {}),
     ...(typeof user_rating !== 'undefined' ? { user_rating } : {}),
     ...(typeof user_date_added !== 'undefined' ? { user_date_added } : {}),
+    ...(typeof file_date_added !== 'undefined' ? { file_date_added } : {}),
+    ...(typeof file_details !== 'undefined' && file_details !== null ? { file_details: downloads.formatInfo(file_details) } : {}),
   };
 };
 

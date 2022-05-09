@@ -24,10 +24,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const arr: Partial<ItemProps>[] = base
       .filter((item: Partial<FilterProps>) => isValidType(item.type) && isValidId(item.id))
-      .map((item: FilterProps) => ({
-        id_db: parseInt(item.id as any),
-        type: isMovie(item.type) ? 1 : 0,
-      }));
+      .map((item: FilterProps) => {
+        if (item.imdb_id) {
+          return {
+            'external_ids.imdb_id': item.imdb_id,
+          };
+        } else {
+          return {
+            id_db: parseInt(item.id as any),
+            type: isMovie(item.type) ? 1 : 0,
+          };
+        }
+      });
 
     if (arr.length <= 0) throw Error('User input malformed');
 

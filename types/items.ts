@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 import { SimplePerson, Video, Crew, Cast } from 'moviedb-promise/dist/request-types';
 import { ProductionCompany } from 'moviedb-promise/dist/types';
-import { RawDetails } from './downloads';
+import { FDetails, RawDetails } from './downloads';
 import { RatingsResponse } from './filmlist';
 import { BaseProviderProps } from './justwatch';
 
@@ -123,4 +123,6 @@ export interface FrontendItemProps {
   user_state?: number | null; //? user property e.g. 1
   user_rating?: number | null; //? user property e.g. 7.0
   user_date_added?: number | null; //? user property e.g. unix timestamp
+  file_date_added?: number | null; //? user property e.g. unix timestamp
+  file_details?: FDetails | null; //? user property
 }

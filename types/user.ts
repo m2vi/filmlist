@@ -8,6 +8,7 @@ export interface JwtPayload {
 export interface FilterProps {
   id: number;
   type: number;
+  imdb_id: string;
 }
 
 export interface UserItem {

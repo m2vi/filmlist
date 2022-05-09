@@ -12,12 +12,8 @@ class Cache {
     return config;
   }
 
-  get key() {
-    const project = 'filmlist';
-
-    return (key: string) => {
-      return Buffer.from(`${project}.${key}`, 'utf8').toString('base64url');
-    };
+  key(key: string, project = 'filmlist') {
+    return `${project}.${key}`;
   }
 
   get user() {
@@ -71,6 +67,11 @@ class Cache {
     await redis.del(this.key(key_d.key));
 
     return await this.get<T>(key);
+  }
+
+  async flush() {
+    const redis = await connectToRedis();
+    return await redis.flushall();
   }
 
   async stats() {
