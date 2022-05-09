@@ -20,10 +20,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const base = JSON.parse(filters.toString());
-    if (!Array.isArray(base) || base.length <= 0) throw Error('User input malformed');
+    if (!Array.isArray(base) || base.length <= 0) throw Error('User input malformed (2)');
 
     const arr: Partial<ItemProps>[] = base
-      .filter((item: Partial<FilterProps>) => isValidType(item.type) && isValidId(item.id))
+      .filter((item: Partial<FilterProps>) => (isValidType(item.type) && isValidId(item.id)) || item.imdb_id)
       .map((item: FilterProps) => {
         if (item.imdb_id) {
           return {
