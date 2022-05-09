@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .map((item: FilterProps) => {
         if (item.imdb_id) {
           return {
-            'external_ids.imdb_id': item.imdb_id,
+            'external_ids.imdb_id': item.imdb_id.trim(),
           };
         } else {
           return {

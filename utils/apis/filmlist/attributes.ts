@@ -11,6 +11,7 @@ class Attributes {
       'keywords',
       'production_companies',
       'collection',
+      'external_ids',
       ...this.frontendItems,
     ];
   }
@@ -20,7 +21,7 @@ class Attributes {
   }
 
   get items_m(): Array<keyof ItemProps> {
-    return ['id_db', 'type'];
+    return ['id_db', 'type', 'external_ids'];
   }
 }
 
