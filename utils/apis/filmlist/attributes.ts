@@ -17,7 +17,19 @@ class Attributes {
   }
 
   get frontendItems(): Array<keyof FrontendItemProps> {
-    return ['id_db', 'genre_ids', 'name', 'poster_path', 'backdrop_path', 'release_date', 'runtime', 'type', 'ratings'];
+    return [
+      'id_db',
+      'genre_ids',
+      'name',
+      'poster_path',
+      'backdrop_path',
+      'release_date',
+      'runtime',
+      'type',
+      'ratings',
+      'external_ids',
+      'overview',
+    ];
   }
 
   get items_m(): Array<keyof ItemProps> {
