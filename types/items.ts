@@ -117,6 +117,8 @@ export interface FrontendItemProps {
   runtime: number | null;
   type: MovieDbTypeEnum;
   ratings: RatingsResponse | null;
+  overview: string | null;
+  external_ids: ExternalIds;
 
   similarity_score?: number; //? algorithm property
 
