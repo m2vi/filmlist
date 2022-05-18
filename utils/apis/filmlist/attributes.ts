@@ -2,18 +2,7 @@ import { FrontendItemProps, ItemProps } from '@Types/items';
 
 class Attributes {
   get items_f(): Array<keyof ItemProps> {
-    return [
-      'original_name',
-      'popularity',
-      'rated',
-      'watchProviders',
-      'original_language',
-      'keywords',
-      'production_companies',
-      'collection',
-      'external_ids',
-      ...this.frontendItems,
-    ];
+    return ['original_name', 'watchProviders', 'keywords', 'production_companies', 'collection', 'external_ids', ...this.frontendItems];
   }
 
   get frontendItems(): Array<keyof FrontendItemProps> {
@@ -29,6 +18,9 @@ class Attributes {
       'ratings',
       'external_ids',
       'overview',
+      'popularity',
+      'rated',
+      'original_language',
     ];
   }
 

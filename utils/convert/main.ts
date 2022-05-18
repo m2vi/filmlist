@@ -79,6 +79,9 @@ export const FromItemToFrontend = (
     file_details,
     external_ids,
     overview,
+    rated,
+    popularity,
+    original_language,
   }: ItemProps,
   locale: string = 'en'
 ): FrontendItemProps => {
@@ -94,6 +97,9 @@ export const FromItemToFrontend = (
     type: isMovie(type) ? 1 : 0,
     overview: overview?.[locale] ? overview?.[locale] : null,
     external_ids,
+    rated: rated ? rated : null,
+    popularity: popularity,
+    original_language: original_language,
 
     ...(typeof similarity_score !== 'undefined' ? { similarity_score } : {}),
     ...(typeof user_state !== 'undefined' ? { user_state } : {}),
@@ -124,6 +130,9 @@ export const FromTmdbToFrontend = (i: any): FrontendItemProps => {
     type: isMovie ? 1 : 0,
     overview: i?.overview ? i?.overview : null,
     external_ids: {},
+    rated: i?.rated ? i?.rated : null,
+    popularity: i?.popularity ? i?.popularity : null,
+    original_language: i?.original_language ? i?.original_language : null,
   };
 };
 

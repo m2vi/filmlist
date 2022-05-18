@@ -119,6 +119,9 @@ export interface FrontendItemProps {
   ratings: RatingsResponse | null;
   overview: string | null;
   external_ids: ExternalIds;
+  original_language: string;
+  popularity: number | null;
+  rated: string | null;
 
   similarity_score?: number; //? algorithm property
 
