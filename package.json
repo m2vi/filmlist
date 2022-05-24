@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@faker-js/faker": "^6.3.1",
+    "@faker-js/faker": "^7.0.1",
     "@headlessui/react": "^1.6.1",
     "@heroicons/react": "^1.0.6",
     "@m2vi/iva": "^1.0.11",
