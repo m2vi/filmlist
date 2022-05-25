@@ -1,3 +1,3 @@
-import { restrictedApi } from '@utils/middleware/main';
+import { open, restrictedApi } from '@utils/middleware/main';
 
-export const middleware = restrictedApi;
+export const middleware = open;
