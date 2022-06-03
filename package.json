@@ -35,7 +35,7 @@
     "next-i18next": "^11.0.0",
     "nprogress": "^0.2.0",
     "object-hash": "^3.0.0",
-    "plyr-react": "^4.0.0",
+    "plyr-react": "^5.0.2",
     "qs": "^6.10.3",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
