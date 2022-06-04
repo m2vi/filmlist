@@ -17,6 +17,8 @@ module.exports = {
       '7xl': '5rem',
     },
     spacing: {
+      '02': '2px',
+      '03': '3px',
       0: '0px',
       1: '5px',
       2: '10px',
@@ -66,6 +68,8 @@ module.exports = {
           900: 'var(--color-primary-900)',
         },
         accent: {
+          s: '#ffa55c',
+          t: '#73c5ee',
           DEFAULT: 'var(--color-accent)',
           hover: 'var(--color-accent-hover)',
           disabled: 'var(--color-accent-disabled)',
@@ -76,6 +80,7 @@ module.exports = {
         0: '0px',
         3: '3px',
         5: '5px',
+        6: '6px',
         8: '8px',
         10: '10px',
         15: '12px',

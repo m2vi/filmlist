@@ -1,65 +1,25 @@
 {
-  "notifications": {
-    "filter": {
-      "$or": [
-        {
-          "user_state": {
-            "$lt": 0
-          }
-        },
-        {
-          "user_state": null
-        }
-      ]
-    },
-    "sort_key": "release_date",
-    "hide_unreleased": true
-  },
   "movie": {
     "filter": {
       "type": 1
-    },
-    "reverse": true
+    }
   },
   "tv": {
     "filter": {
       "type": 0
-    },
-    "reverse": true
+    }
   },
   "favourites": {
     "filter": {
       "user_state": 2
-    },
-    "reverse": true
-  },
-  "favourites-s": {
-    "filter": {
-      "user_state": 2,
-      "user_rating": {
-        "$gt": 0
-      }
-    },
-    "sort_key": "user_rating"
+    }
   },
   "watched": {
     "filter": {
       "user_state": {
         "$gt": 0
       }
-    },
-    "reverse": true
-  },
-  "rate": {
-    "filter": {
-      "user_state": {
-        "$gt": 0
-      },
-      "user_rating": {
-        "$eq": null
-      }
-    },
-    "reverse": true
+    }
   },
   "continue-watching": {
     "filter": {
@@ -67,36 +27,17 @@
     },
     "sort_key": false
   },
-  "anime": {
-    "filter": {
-      "genre_ids": 7424
-    },
-    "reverse": true
-  },
-  "anime-watched": {
-    "filter": {
-      "genre_ids": 7424,
-      "user_state": {
-        "$gt": 0
-      }
-    },
-    "reverse": true
-  },
-  "anime-list": {
-    "filter": {
-      "genre_ids": 7424,
-      "user_state": {
-        "$lt": 0
-      }
-    },
-    "reverse": true
-  },
   "animation": {
     "filter": {
       "genre_ids": {
         "$eq": 16,
         "$ne": 7424
       }
+    }
+  },
+  "und": {
+    "filter": {
+      "user_state": null
     }
   },
   "kids": {
@@ -115,15 +56,6 @@
       ]
     }
   },
-  "all-time-popular-tmdb": {
-    "filter": {
-      "ratings.tmdb.vote_count": {
-        "$gt": 0
-      }
-    },
-    "sort_key": "ratings.tmdb.vote_count",
-    "reverse": true
-  },
   "all-time-popular": {
     "filter": {
       "ratings.imdb.vote_count": {
@@ -139,7 +71,28 @@
         "$ne": null
       }
     },
-    "sort_key": "popularity",
+    "sort_key": "popularity"
+  },
+  "classics": {
+    "filter": {
+      "ratings.imdb.vote_count": {
+        "$gte": 100000
+      },
+      "ratings.imdb.vote_average": {
+        "$gte": 8
+      },
+      "ratings.rt.vote_average": {
+        "$gte": 0
+      },
+      "genre_ids": {
+        "$nin": [16]
+      },
+      "type": 1,
+      "release_date": {
+        "$lte": 1000000000000
+      }
+    },
+    "sort_key": "ratings.rt.vote_average",
     "reverse": true
   },
   "my list": {
@@ -147,10 +100,10 @@
       "user_state": -1
     },
     "sort_key": false,
-    "hide_unreleased": true
+    "reverse": true
   },
   "new": {
-    "sort_key": false,
+    "sort_key": "details.date_added",
     "reverse": true
   },
   "watch-it-again": {
@@ -162,44 +115,12 @@
     "sort_key": false,
     "hide_unreleased": true
   },
-  "recently": {
-    "sort_key": "release_date",
-    "hide_unreleased": true,
-    "reverse": true
-  },
   "soon": {
     "sort_key": "release_date",
     "only_unreleased": true,
     "reverse": true
   },
-  "top-rated-tmdb": {
-    "filter": {
-      "ratings.tmdb.vote_count": {
-        "$gte": 200
-      }
-    },
-    "sort_key": "ratings.tmdb.vote_average",
-    "hide_unreleased": true,
-    "reverse": true
-  },
   "top-rated": {
-    "filter": {
-      "user_rating": {
-        "$gte": 0
-      }
-    },
-    "sort_key": "user_rating",
-    "hide_unreleased": true
-  },
-  "rated": {
-    "filter": {
-      "user_rating": {
-        "$gte": 0
-      }
-    },
-    "reverse": true
-  },
-  "top-rated-imdb": {
     "filter": {
       "ratings.imdb.vote_count": {
         "$gte": 200
@@ -209,55 +130,7 @@
     "hide_unreleased": true,
     "reverse": true
   },
-  "top-rated-rt": {
-    "filter": {
-      "ratings.rt.vote_average": {
-        "$gte": 0
-      }
-    },
-    "sort_key": "ratings.rt.vote_average",
-    "hide_unreleased": true,
-    "reverse": true
-  },
   "unfiltered": {
     "sort_key": false
-  },
-  "temp": {
-    "filter": {
-      "type": 1,
-      "user_state": {
-        "$lt": 0
-      },
-      "ratings.imdb.vote_average": {
-        "$gte": 7
-      }
-    },
-    "hide_unreleased": true,
-    "sort_key": "ratings.imdb.vote_count"
-  },
-  "update": {
-    "sort_key": "updated_at"
-  },
-  "index": {
-    "sort_key": "user_index",
-    "reverse": false
-  },
-  "index-r": {
-    "sort_key": "user_index",
-    "reverse": true
-  },
-  "ex": {
-    "filter": {
-      "user_state": {
-        "$eq": null
-      }
-    },
-    "reverse": true
-  },
-  "company": {
-    "sort_key": "popularity"
-  },
-  "key": {
-    "reverse": true
   }
 }

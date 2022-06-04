@@ -1,38 +1,31 @@
-import { Types } from 'mongoose';
-import { SimplePerson, Video, Crew, Cast } from 'moviedb-promise/dist/request-types';
+import { FilterQuery } from 'mongoose';
+import { Cast, Crew, SimplePerson, Video } from 'moviedb-promise/dist/request-types';
 import { ProductionCompany } from 'moviedb-promise/dist/types';
-import { FDetails, RawDetails } from './downloads';
-import { RatingsResponse } from './filmlist';
+import { Movie, Series } from 'vimdb';
+import { SimpleObject } from './common';
+import { FDetails, RawDetails } from './info';
 import { BaseProviderProps } from './justwatch';
+import { MovieResponse, TVSeriesResponse } from './rt';
+import { UserProps } from './user';
 
-export enum MovieDbTypeEnum {
-  'tv' = 0,
-  'movie' = 1,
+export interface FrontendItemProps {
+  id_db: number;
+  genre_ids: number[];
+  name: string | null;
+  poster_path: string | null;
+  backdrop_path: string | null;
+  release_date: number;
+  runtime: number | null;
+  type: MovieDbTypeEnum;
+  ratings: RatingsResponse | null;
+  overview: string | null;
+  external_ids: ExternalIds;
+  original_language: string;
+  popularity: number | null;
+  rated: string | null;
+
+  details: FDetails | null;
 }
-
-export interface CastProps {
-  character: string;
-  gender: number | null;
-  id: number;
-  known_for_department: string;
-  original_name: string;
-  profile_path: string | null;
-}
-
-export interface CrewProps {
-  department: string;
-  gender: number | null;
-  id: number;
-  known_for_department: string;
-  job: string;
-  original_name: string;
-  profile_path: string | null;
-}
-
-export type CreditProps = {
-  crew: Crew[];
-  cast: Cast[];
-};
 
 export interface ExternalIds {
   rt_id?: string | null; //? not normally included. only after being added by the parseExternalIds function
@@ -42,15 +35,30 @@ export interface ExternalIds {
   instagram_id?: string | null;
   twitter_id?: string | null;
 
-  id?: number | null; //! does not exist on append_to_request ig
+  id?: number | null; //! does not exist on append_to_request
 }
 
-export interface SimpleObject<T> {
-  [key: string]: T;
+export enum MovieDbTypeEnum {
+  'tv' = 0,
+  'movie' = 1,
 }
+
+export interface VoteProps {
+  vote_average: number | null;
+  vote_count: number | null;
+  vote_class?: string | null; //! rt
+}
+
+export interface RatingsResponse {
+  [provider: string]: VoteProps;
+}
+
+export type CreditProps = {
+  crew: Crew[];
+  cast: Cast[];
+};
 
 export interface ItemProps {
-  _id?: Types.ObjectId | string | null;
   id_db: number;
   backdrop_path: SimpleObject<string | null>;
   created_by: Array<SimplePerson> | null;
@@ -75,7 +83,7 @@ export interface ItemProps {
   ratings: RatingsResponse | null;
   production_companies: Array<ProductionCompany>;
   external_ids: ExternalIds;
-  credits?: CreditProps; //! not in cache
+  credits?: CreditProps;
   keywords: Array<{ id: number; name: string }>;
   imdb_keywords: Array<string>;
   watchProviders: BaseProviderProps[] | null;
@@ -95,39 +103,117 @@ export interface ItemProps {
   user_rating?: number | null; //? user property e.g. 7.0
   user_state?: number | null; //? user property e.g. 1
   user_date_added?: number | null; //? user property e.g. unix timestamp
-  file_date_added?: number | null; //? user property e.g. unix timestamp
-  file_details?: RawDetails | null; //? user property
 
   index?: number; //? old
+
+  details?: RawDetails;
 }
 
-export interface VoteProps {
-  vote_average: number | null;
-  vote_count: number | null;
-  vote_class?: string | null; //! rt
+export interface BaseResponse {
+  tmdb_item: any;
+  rt_item: MovieResponse | TVSeriesResponse | null;
+  imdb_item: Movie | Series | null;
+  imdb_keywords: string[];
+  translation_de: GetTranslationFromBase;
+  trailers: Video[] | null;
+  certificate: string | null;
+  watchProviders: any;
+  ratings: RatingsResponse;
+  isMovie: boolean;
 }
 
-export interface FrontendItemProps {
-  id_db: number;
-  genre_ids: number[];
-  name: string | null;
+export interface GetTranslationFromBase {
+  overview: string | null;
+  name: string;
   poster_path: string | null;
   backdrop_path: string | null;
-  release_date: number;
-  runtime: number | null;
-  type: MovieDbTypeEnum;
-  ratings: RatingsResponse | null;
-  overview: string | null;
-  external_ids: ExternalIds;
-  original_language: string;
-  popularity: number | null;
-  rated: string | null;
-
-  similarity_score?: number; //? algorithm property
-
-  user_state?: number | null; //? user property e.g. 1
-  user_rating?: number | null; //? user property e.g. 7.0
-  user_date_added?: number | null; //? user property e.g. unix timestamp
-  file_date_added?: number | null; //? user property e.g. unix timestamp
-  file_details?: FDetails | null; //? user property
 }
+
+export interface GetTabProps {
+  user: string | UserProps;
+  tab: string;
+  locale: string;
+  start: number;
+  end: number;
+  includeCredits?: boolean;
+  custom_config?: TabFilterOptions | null;
+  purpose: PurposeType;
+  shuffle?: boolean;
+}
+
+export type PurposeType = 'items' | 'items_f' | 'items_l';
+
+export interface TabFilterOptions {
+  filter?: FilterQuery<ItemProps>;
+  sort_key?: string | boolean;
+  reverse?: boolean;
+  includeGenres?: number[];
+  only_unreleased?: boolean;
+  hide_unreleased?: boolean;
+  minVotes?: number;
+  includeCredits?: boolean;
+  language?: string;
+  release_year?: string;
+}
+
+export interface GetTabResponse {
+  tmdb?: boolean;
+  key: string | null;
+  length: number;
+  items: FrontendItemProps[];
+  query: SimpleObject<any>;
+}
+
+export interface FilmlistProductionCompany extends ProductionCompany {
+  backdrop_path?: string | null;
+  items?: number;
+}
+
+export interface GetOptions {
+  fast?: boolean;
+}
+
+export interface GetBaseOptions extends GetOptions {}
+
+export interface SortProps {
+  key?: string;
+  order?: 1 | -1;
+}
+
+export interface FindOptions {
+  purpose: PurposeType;
+  filter: FilterQuery<ItemProps>;
+  sort?: SortProps;
+  slice?: [number, number];
+  shuffle?: boolean;
+}
+
+export interface FindOneOptions {
+  filter: FilterQuery<ItemProps>;
+}
+
+export interface PersonCredits {
+  id: number | undefined;
+  name: string | undefined;
+  profile_path: string | undefined;
+  popularity: number | undefined;
+
+  loading?: boolean;
+}
+
+export type PersonsCredits = Array<PersonCredits>;
+
+export interface CardProps extends FrontendItemProps {
+  isLoading?: boolean;
+}
+
+export type FilmlistGenres = Array<FilmlistGenre>;
+
+export interface FilmlistGenre {
+  id: number;
+  name: string;
+  backdrop_path: string | null;
+  items: number;
+}
+
+export type TabsType = SimpleObject<TabFilterOptions>;

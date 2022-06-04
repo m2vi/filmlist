@@ -15,17 +15,21 @@
     "jsx": "preserve",
     "incremental": true,
     "baseUrl": ".",
+    "downlevelIteration": true,
     "paths": {
+      "@apis/*": ["apis/*"],
+      "@clients/*": ["clients/*"],
+      "@assets/*": ["assets/*"],
       "@components/*": ["components/*"],
       "@contexts/*": ["contexts/*"],
+      "@data/*": ["data/*"],
+      "@models/*": ["models/*"],
       "@pages/*": ["pages/*"],
       "@public/*": ["public/*"],
       "@styles/*": ["styles/*"],
-      "@utils/*": ["utils/*"],
-      "@models/*": ["models/*"],
-      "@data/*": ["data/*"],
       "@Types/*": ["types/*"],
-      "@assets/*": ["assets/*"]
+      "@utils/*": ["clients/*"],
+      "@helper/*": ["helper/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

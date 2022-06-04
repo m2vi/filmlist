@@ -1,23 +1,34 @@
-| Route                   | Purpose                                                                      | Information                                                                                                   |
-| ----------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `/browse`               | Discover new films and getting an overview                                   |                                                                                                               |
-| `/browse-f`             | Discover new films and getting an overview                                   | the same as `/browse` but without items                                                                       |
-| `/whenisthenextmcufilm` | Finding out when the next M\*rvel film will be released                      | I stole the idea from an api                                                                                  |
-| `/[tab]`                | Displaying items according to the tab e.g. top-rated                         |                                                                                                               |
-| `/search`               | Search function for films and series                                         | Only in my database                                                                                           |
-| `/search/external`      | Search function for films and series                                         | Only in the tmdb database                                                                                     |
-|                         |                                                                              |                                                                                                               |
-| `/movie/[id]`           | Viewing the details of a film                                                | Also includes suggestions and similar films                                                                   |
-| `/tv/[id]`              | Viewing the details of a series                                              | Also includes suggestions and similar series                                                                  |
-| `/collection`           | Browsing every collection stored in my database                              |                                                                                                               |
-| `/collection/[id]`      | Viewing the details and the films of the collection                          |                                                                                                               |
-| `/person`               | Browsing every person stored in my database                                  | Sorted by popularity                                                                                          |
-| `/person/[id]`          | Viewing information about a person and their appearances                     |                                                                                                               |
-|                         |                                                                              |                                                                                                               |
-| `/company/[id]`         | Finding films and series that were produced by a specified company           | I use the ids from the companies as it makes the route look cooler. You can view them in `/browse-f`          |
-| `/genre/[id]`           | Finding films and series with a given genre                                  |                                                                                                               |
-| `/keywords/[id]`        | Finding films and series that have a given keyword                           | This is actually the same as `/keyword/[id]`, I just use the keywords from tmdb here                          |
-| `/origin/[id]`          | Finding films and series that from a specified origin                        | I think somewhere it also says the origin, but I use the original language which is most of the time the same |
-| `/provider/[id]`        | Finding films and series that are offered on a particular streaming service. | I use the ids from the providers as it makes the route look cooler. You can view them in `/browse-f`          |
-| `/rated/[id]`           | Finding films and series for e.g. minors                                     | Possible values: null, 0, 6, 12,16, 18                                                                        |
-| `/year/[id]`            | Finding films and series from a specified year                               |                                                                                                               |
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+## Getting Started
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+
+[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+
+The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

@@ -1,3 +1,3 @@
-import { restricted } from '@utils/middleware/main';
+import { restricted } from '@apis/middleware';
 
 export const middleware = restricted;

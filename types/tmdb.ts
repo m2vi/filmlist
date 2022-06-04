@@ -25,3 +25,10 @@ export interface TmdbGetTrending {
 }
 
 export interface GetCompanyResponse extends Company {}
+
+export interface GetRecommendations {
+  user: string;
+  id: number;
+  type: MovieDbTypeEnum;
+  locale: string;
+}

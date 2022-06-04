@@ -1,10 +1,9 @@
+import user from '@apis/user';
+import { baseUrl } from '@m2vi/iva';
+import { DiscordUser } from '@Types/oauth';
 import { serialize } from 'cookie';
 import { sign } from 'jsonwebtoken';
 import { NextApiRequest, NextApiResponse } from 'next';
-import user from '@utils/user';
-import history from '@utils/user/history';
-import { baseUrl } from '@m2vi/iva';
-import { DiscordUser } from '@Types/discord';
 import QueryString from 'qs';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -67,12 +66,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!client) client = await user.create(me.id);
     if ((client as any)?.error) return res.redirect(`/error?${QueryString.stringify({ e: client.error })}`);
 
-    const { sessionId } = await history.insert(me.id, req);
-
     const token = sign(
       {
         ...me,
-        sessionId: sessionId,
         identifier: client.identifier,
         token: client.token,
         created_at: client.created_at,

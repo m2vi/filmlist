@@ -1,13 +1,13 @@
+import userClient from '@clients/user.client';
 import { basicFetch } from '@m2vi/iva';
-import { GetTabResponse } from '@Types/filmlist';
+import { GetTabResponse } from '@Types/items';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import QueryString from 'qs';
 import { Fragment, useEffect, useState } from 'react';
-import InfiniteScroll from 'react-infinite-scroller';
-import Card from './Card';
 import config from '@data/config.json';
-import userClient from '@utils/user/client';
+import Card from './Card';
+import InfiniteScroll from 'react-infinite-scroller';
 
 const Tab = (props: { data: GetTabResponse; name?: string }) => {
   const { t } = useTranslation();

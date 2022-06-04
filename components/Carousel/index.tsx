@@ -2,11 +2,11 @@ import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import config from '@data/config.json';
-import Card from '@components/Card';
-import { breakpoints } from './config';
-import { GetTabResponse } from '@Types/filmlist';
 import { Fragment, useEffect, useState } from 'react';
-import userClient from '@utils/user/client';
+import { GetTabResponse } from '@Types/items';
+import userClient from '@clients/user.client';
+import Card from '@components/Card';
+import { breakpoints } from '@helper/carousel';
 
 const Carousel = ({ section: { items, key, tmdb } }: { section: GetTabResponse }) => {
   const { t } = useTranslation();

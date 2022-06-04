@@ -1,7 +1,8 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { FilmlistGenres } from '@Types/filmlist';
-import GenreCard from '@components/Card/genre';
+
 import { useTranslation } from 'next-i18next';
+import { FilmlistGenres } from '@Types/items';
+import GenreCard from '@components/Card/genre';
 
 const GenresCarousel = ({ items, title }: { items: FilmlistGenres; title: boolean }) => {
   const { t } = useTranslation();

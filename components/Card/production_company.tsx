@@ -1,6 +1,6 @@
-import { FilmlistProductionCompany } from '@Types/filmlist';
 import Link from 'next/link';
 import config from '@data/config.json';
+import { FilmlistProductionCompany } from '@Types/items';
 
 const ProductionCompanyCard = ({ id, logo_path, backdrop_path }: FilmlistProductionCompany) => {
   return (
@@ -21,7 +21,7 @@ const ProductionCompanyCard = ({ id, logo_path, backdrop_path }: FilmlistProduct
 
         <div className='w-full absolute inset-0 gradient-default'>
           <div className='backdrop-blur-sm bg-primary-900-20 aspect-video w-full flex justify-center items-center'>
-            <div className='max-h-full py-4 px-8' style={{ filter: 'grayscale(1) invert(1)' }}>
+            <div className='max-h-full py-4 px-8' style={{ filter: 'grayscale(1) invert(1) brightness(2)' }}>
               <img className='max-h-80 w-full no-drag select-none' src={`https://www.themoviedb.org/t/p/w500${logo_path}`} alt={`${id}`} />
             </div>
           </div>

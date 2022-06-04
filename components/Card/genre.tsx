@@ -1,9 +1,9 @@
-import { FilmlistGenre } from '@Types/filmlist';
 import Link from 'next/link';
 import config from '@data/config.json';
 import { useTranslation } from 'next-i18next';
+import { FilmlistGenre } from '@Types/items';
 
-const GenreCard = ({ id, name, items, backdrop_path }: FilmlistGenre) => {
+const GenreCard = ({ id, name, backdrop_path }: FilmlistGenre) => {
   const { t } = useTranslation();
 
   return (

@@ -1,14 +1,23 @@
-import { DiscordUser } from './discord';
+import { DiscordUser } from './oauth';
 
-export interface JwtPayload {
-  jti: string;
-  iat: number;
+export interface UserRatings {
+  identifier: string;
+  author: string;
+  filter: {
+    id_db: number;
+    type: number;
+  };
+  rating: number;
 }
 
-export interface FilterProps {
-  id: number;
-  type: number;
-  imdb_id?: string;
+export interface UserProps {
+  token: string;
+  identifier: string;
+
+  items: Array<UserItem>;
+  notifications: Array<Notification>;
+
+  created_at: number;
 }
 
 export interface UserItem {
@@ -18,31 +27,15 @@ export interface UserItem {
   rating: number | null;
 }
 
-export interface UserProps {
-  token: string;
-  identifier: string;
-
-  items: Array<UserItem>;
-  history: Array<HistoryItem>;
-  notifications: Array<Notification>;
-
-  created_at: number;
+export interface FilterProps {
+  id: number;
+  type: number;
+  imdb_id?: string;
 }
 
-export interface HistoryItem {
-  client_id: string;
-
-  client_ip: string | null;
-  client_ua: string | null;
-  client_lang: string | null;
-
-  sessionId: string;
-  sessionStart: number;
-}
-
-export interface Notification {
-  identifier: string;
-  status: 'read' | 'unread'; //? 'unread' does not make sense lol
+export interface JwtPayload {
+  jti: string;
+  iat: number;
 }
 
 export interface UserCookie extends DiscordUser {

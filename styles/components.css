@@ -1,0 +1,37 @@
+.loading-animation {
+  background: var(--color-primary-800);
+  background: linear-gradient(146deg, var(--color-primary-800) 5%, var(--color-primary-700) 15%, var(--color-primary-800) 25%);
+  background-size: 5000px 100%;
+  animation-duration: 5s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: shimmer;
+  animation-timing-function: linear;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -5000px 0;
+  }
+  100% {
+    background-position: 5000px 0;
+  }
+}
+
+.gradient-default {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 100%);
+}
+
+.overlay .overlay-child {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 100%);
+  border-radius: 8px;
+}
+
+.overlay .overlay-child {
+  transition: 150ms ease all;
+  opacity: 0;
+}
+
+.overlay:hover .overlay-child {
+  opacity: 1 !important;
+}

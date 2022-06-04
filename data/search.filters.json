@@ -1,0 +1,199 @@
+[
+  {
+    "index": "sort_key",
+    "name": "Sortierkriterium",
+    "values": [
+      {
+        "key": "sort_key",
+        "name": "Titel (A-Z)",
+        "value": "name",
+        "reverse": false
+      },
+      {
+        "key": "sort_key",
+        "name": "Titel (Z-A)",
+        "value": "name",
+        "reverse": true
+      },
+      {
+        "key": "sort_key",
+        "name": "Zuletzt hinzugefügt",
+        "value": "details.date_added",
+        "reverse": true
+      },
+      {
+        "key": "sort_key",
+        "name": "Laufzeit",
+        "value": "details.runtime",
+        "reverse": true
+      },
+      {
+        "key": "sort_key",
+        "name": "Größe",
+        "value": "details.rsize.value",
+        "reverse": true
+      },
+      {
+        "key": "sort_key",
+        "name": "Bitrate",
+        "value": "details.bit_rate",
+        "reverse": true
+      },
+      {
+        "key": "sort_key",
+        "name": "Bewertung (asc.)",
+        "value": "ratings.imdb.vote_average",
+        "reverse": true
+      },
+      {
+        "key": "sort_key",
+        "name": "Bewertung (desc.)",
+        "value": "ratings.imdb.vote_average",
+        "reverse": false
+      },
+      {
+        "key": "sort_key",
+        "name": "Veröffentlichung (asc.)",
+        "value": "release_date",
+        "reverse": true
+      },
+      {
+        "key": "sort_key",
+        "name": "Veröffentlichung (desc.)",
+        "value": "release_date",
+        "reverse": false
+      },
+      {
+        "key": "sort_key",
+        "name": "Popularität",
+        "value": "popularity",
+        "reverse": true
+      }
+    ]
+  },
+  {
+    "index": "details.source",
+    "name": "Source",
+    "values": [
+      {
+        "key": "details.source",
+        "name": "UHD BluRay",
+        "value": "UHD BluRay"
+      },
+      {
+        "key": "details.source",
+        "name": "BluRay",
+        "value": "BluRay"
+      },
+      {
+        "key": "details.source",
+        "name": "WEBRip",
+        "value": "WEBRip"
+      },
+      {
+        "key": "details.source",
+        "name": "WEB-DL",
+        "value": "WEB-DL"
+      },
+      {
+        "key": "details.source",
+        "name": "DVDRip",
+        "value": "DVDRip"
+      },
+      {
+        "key": "details.source",
+        "name": "null",
+        "value": null
+      }
+    ]
+  },
+  {
+    "index": "type",
+    "name": "Typ",
+    "values": [
+      {
+        "key": "type",
+        "name": "Film",
+        "value": 1
+      },
+      {
+        "key": "type",
+        "name": "Serie",
+        "value": 0
+      }
+    ]
+  },
+  {
+    "index": "details.releaser",
+    "name": "Veröffentlicher",
+    "values": [
+      {
+        "key": "details.releaser",
+        "name": "M2V",
+        "value": "M2V"
+      },
+      {
+        "key": "details.releaser",
+        "name": "ZERO",
+        "value": "ZERO"
+      },
+      {
+        "key": "details.releaser",
+        "name": "NIMA4K",
+        "value": "NIMA4K"
+      },
+      {
+        "key": "details.releaser",
+        "name": "QfG",
+        "value": "QfG"
+      }
+    ]
+  },
+  {
+    "index": "details.resolution_name",
+    "name": "Auflösung",
+    "values": [
+      {
+        "key": "details.resolution_name",
+        "name": "UHD",
+        "value": "UHD"
+      },
+      {
+        "key": "details.resolution_name",
+        "name": "QHD",
+        "value": "QHD"
+      },
+      {
+        "key": "details.resolution_name",
+        "name": "FHD",
+        "value": "FHD"
+      },
+      {
+        "key": "details.resolution_name",
+        "name": "null",
+        "value": null
+      }
+    ]
+  },
+  {
+    "index": "details.disk",
+    "name": "Speicherort",
+    "values": [
+      {
+        "key": "details.disk",
+        "name": "F:\\\\",
+        "value": "F:\\"
+      },
+      {
+        "key": "details.disk",
+        "name": "G:\\\\",
+        "value": "G:\\"
+      },
+      {
+        "key": "details.disk",
+        "name": "J:\\\\",
+        "value": "J:\\"
+      }
+    ]
+  }
+]

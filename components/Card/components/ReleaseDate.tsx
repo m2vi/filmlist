@@ -1,4 +1,4 @@
-import { moment } from '@utils/apis/moment';
+import { moment } from '@apis/moment';
 
 const ReleaseDate = ({ release_date }: { release_date: number }) => {
   return (
