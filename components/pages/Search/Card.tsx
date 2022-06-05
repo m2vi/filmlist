@@ -7,7 +7,10 @@ const Card = ({ poster_path, name, release_date, details }: FrontendItemProps) =
   return (
     <a className='flex mb-4' style={{ width: '165px' }}>
       <div className='flex flex-col'>
-        <div className='border border-primary-800 rounded-6 overflow-hidden '>
+        <div
+          className='border border-primary-800 rounded-6 overflow-hidden '
+          style={{ border: '0.4px solid hsla(0, 0%, 13.5%, 0.2)', boxShadow: '0px 8.25px 9px rgba(0, 0, 0, 0.25)' }}
+        >
           <img
             src={`https://image.tmdb.org/t/p/w342${poster_path}`}
             alt=''

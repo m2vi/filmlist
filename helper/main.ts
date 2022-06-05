@@ -190,3 +190,26 @@ export const placeholderCards = (n: number): Partial<CardProps>[] => {
     })
   );
 };
+
+export const convertMinutes = (mins: number) => {
+  let hours: string | number = Math.floor(mins / 60);
+  let minutes: string | number = mins % 60;
+
+  if (hours < 1) {
+    hours = '';
+  } else if (hours == 1) {
+    hours = hours + ' Stunde ';
+  } else {
+    hours = hours + ' Stunden ';
+  }
+
+  if (minutes < 1) {
+    minutes = '';
+  } else if (minutes == 1) {
+    minutes = minutes + ' Minute';
+  } else {
+    minutes = minutes + ' Minuten';
+  }
+
+  return `${hours} ${minutes}`;
+};

@@ -47,6 +47,7 @@ import find from 'lodash/find';
 import sample from 'lodash/sample';
 import genres from './genres';
 import attr from './attr';
+import { sortBy } from 'lodash';
 
 class Main {
   async getBase(id: number, type: MovieDbTypeEnum, options?: GetBaseOptions): Promise<BaseResponse> {
@@ -162,7 +163,7 @@ class Main {
   async f_local_items(locale: string) {
     const items = await cache.get<ItemProps[]>('items_local');
 
-    return convert.prepareForFrontend(items, locale);
+    return sortByKey(convert.prepareForFrontend(items, locale), 'name');
   }
 
   async providers(): Promise<ProviderProps[]> {

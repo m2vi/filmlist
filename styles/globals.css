@@ -1,8 +1,88 @@
 @import url('https://fluxi.me/api/css');
 
-#__next,
-html,
-body {
-  width: 100%;
-  height: 100%;
+h2 {
+  font-size: 22px !important;
+  color: #fff !important;
+  line-height: 22px !important;
+}
+
+.leading-22 {
+  line-height: 22px !important;
+}
+
+p.description {
+  max-height: 148px;
+  color: #fff;
+  line-height: 22px;
+}
+
+ul.genre-pills > li {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+ul.genre-pills > li > a {
+  display: block;
+  background: var(--color-primary-800);
+  color: var(--color-accent);
+  font-size: 12px;
+  padding: 1px 5px 0;
+  border: 1px solid var(--color-primary-700);
+  border-radius: 4px;
+  text-decoration: none;
+  line-height: 21px;
+}
+
+ul.genre-pills > li > a.imdb {
+  margin-left: -1px;
+  padding: 1px 7px 0;
+  font-weight: 800;
+  background: #dba506;
+  color: #000;
+  border: 1px solid #dba506;
+  background: linear-gradient(to right, #dba506 0%, #f2dc81 50%, #dba506 100%);
+}
+
+ul.genre-pills > li > a.xrel {
+  margin-left: -1px;
+  padding: 1px 7px 0;
+  font-weight: 900;
+  background: #dfdfdf;
+  color: #000;
+  border: 1px solid #939393;
+  background: linear-gradient(to right, #939393 0%, #dfdfdf 50%, #939393 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#939393',endColorstr='#dfdfdf',GradientType=1 );
+}
+
+.dv-icon {
+  height: 19px !important;
+}
+
+.hdr-icon {
+  height: 18px !important;
+}
+
+ul.release-infos {
+  color: #fff;
+  padding: 0;
+  line-height: 22px;
+}
+ul {
+  list-style: none;
+}
+
+ul.release-infos > li > span {
+  display: inline-block;
+  width: 75px;
+  font-weight: 600;
+}
+
+.article {
+  padding-bottom: 40px;
+  margin-bottom: 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.article:last-child {
+  border-bottom: none;
 }

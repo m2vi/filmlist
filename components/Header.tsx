@@ -5,6 +5,7 @@ import { IoDownload, IoSearch } from 'react-icons/io5';
 import { FiDownload } from 'react-icons/fi';
 import Image from 'next/image';
 import userClient from '@clients/user.client';
+import { DownloadIcon } from '@heroicons/react/solid';
 
 const Header = () => {
   const { t } = useTranslation();
@@ -53,6 +54,11 @@ const Header = () => {
             <Link href='/search'>
               <a className='font-normal text-sm h-full text-center items-center cursor-pointer'>
                 <IoSearch className='h-4 w-4' />
+              </a>
+            </Link>
+            <Link href='/downloads'>
+              <a className='font-normal text-sm h-full text-center items-center cursor-pointer ml-4'>
+                <DownloadIcon className='h-4 w-4' />
               </a>
             </Link>
             <div className='flex justify-center h-7 w-7 bg-primary-800 text-sm font-medium rounded cursor-pointer ml-4'>

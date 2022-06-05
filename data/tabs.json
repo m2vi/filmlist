@@ -38,7 +38,9 @@
   "und": {
     "filter": {
       "user_state": null
-    }
+    },
+    "sort_key": "details.date_added",
+    "reverse": true
   },
   "kids": {
     "filter": {
