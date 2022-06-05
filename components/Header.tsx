@@ -18,34 +18,34 @@ const Header = () => {
         <header className='text-primary-200 w-full flex justify-between items-center h-80'>
           <div className='flex justify-start items-center'>
             <span className='cursor-pointer mr-4 text-primary-100 hover:opacity-80'>
-              <Link href='/browse'>
-                <a>{t('pages.filmlist.menu.browse').toString()}</a>
+              <Link href='/'>
+                <a>{t('pages.filmlist.menu.browse')}</a>
               </Link>
             </span>
 
             <span className='cursor-pointer mr-4 text-primary-100 hover:opacity-80'>
               <Link href='/[tab]' as='/tv'>
-                <a>{t('pages.filmlist.menu.tv').toString()}</a>
+                <a>{t('pages.filmlist.menu.tv')}</a>
               </Link>
             </span>
             <span className='cursor-pointer mr-4 text-primary-100 hover:opacity-80'>
               <Link href='/[tab]' as='/movie' prefetch={false}>
-                <a>{t('pages.filmlist.menu.movie').toString()}</a>
+                <a>{t('pages.filmlist.menu.movie')}</a>
               </Link>
             </span>
             <span className='cursor-pointer mr-4 text-primary-100 hover:opacity-80'>
               <Link href='/[tab]' as='/my list'>
-                <a>{t('pages.filmlist.menu.my list').toString()}</a>
+                <a>{t('pages.filmlist.menu.my list')}</a>
               </Link>
             </span>
             <span className='cursor-pointer mr-4 text-primary-100 hover:opacity-80'>
               <Link href='/[tab]' as='/favourites'>
-                <a>{t('pages.filmlist.menu.favourites').toString()}</a>
+                <a>{t('pages.filmlist.menu.favourites')}</a>
               </Link>
             </span>
             <span className='cursor-pointer mr-4 text-primary-100 hover:opacity-80'>
               <Link href='/[tab]' as='/watch-it-again'>
-                <a>{t('pages.filmlist.menu.watch-it-again').toString()}</a>
+                <a>{t('pages.filmlist.menu.watch-it-again')}</a>
               </Link>
             </span>
           </div>

@@ -8,7 +8,7 @@ export interface CardProps extends FrontendItemProps {
   isLoading?: boolean;
 }
 
-const Card = ({ name, poster_path, release_date, id_db, ratings, type, isLoading = false }: CardProps) => {
+const Card = ({ name, poster_path, release_date, id_db, ratings, type, isLoading = false, details }: CardProps) => {
   return (
     <Wrapper id_db={id_db} isLoading={isLoading} type={type} user_rating={null}>
       <Poster poster_path={poster_path} />

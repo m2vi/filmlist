@@ -10,22 +10,14 @@ import findIndex from 'lodash/findIndex';
 import { round } from 'lodash';
 import { IncomingMessage } from 'http';
 import cache from './cache';
+import { MovieDbTypeEnum } from '@Types/items';
+import { isMovie } from '@helper/main';
 
 //! security
 class User {
   async getRatings(id: string): Promise<UserRatings> {
     await mongodb.init();
     return mongodb.removeId(await mongodb.ratingSchema.find({ author: id }).lean());
-  }
-
-  boiler(id: string): UserProps {
-    return {
-      token: nanoid(32),
-      identifier: id.toString(),
-      items: [],
-      notifications: [],
-      created_at: Date.now(),
-    };
   }
 
   async exists(id: string) {
@@ -44,14 +36,6 @@ class User {
     const client = await cache.user.get(id);
 
     return client;
-  }
-
-  async create(id: string) {
-    await mongodb.init();
-    if (await this.exists(id)) return { error: 'Account already exists' };
-    const doc = new mongodb.userSchema(this.boiler(id));
-
-    return await doc.save();
   }
 
   async delete(id: string) {
@@ -159,6 +143,10 @@ class User {
           rating,
         })),
     };
+  }
+
+  async set(client_id: string, id: number, type: MovieDbTypeEnum, state: number, move: boolean) {
+    return await this.setItem(client_id, { filter: { id, type: isMovie(type) ? 1 : 0 }, index: 0, rating: null, state }, move);
   }
 }
 

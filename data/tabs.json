@@ -113,7 +113,8 @@
       }
     },
     "sort_key": false,
-    "hide_unreleased": true
+    "hide_unreleased": true,
+    "reverse": true
   },
   "soon": {
     "sort_key": "release_date",

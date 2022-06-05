@@ -18,7 +18,7 @@ import user from './user';
 class Tmdb {
   api: MovieDb;
   constructor() {
-    this.api = new MovieDb(process.env.TMDB_TOKEN!);
+    this.api = new MovieDb(process.env.MOVIE_TOKEN!);
   }
 
   async get(params: string | number | IdAppendToResponseRequest, type: MovieDbTypeEnum) {
@@ -102,7 +102,8 @@ class Tmdb {
 
   async upcoming({ user: user_id, type, locale, page }: TmdbGetUpcoming): Promise<GetTabResponse> {
     const client = typeof user_id === 'string' ? await user.find(user_id) : user_id;
-    const params: UpcomingMoviesRequest = { language: locale, region: locale, page };
+
+    const params: UpcomingMoviesRequest = { language: locale, region: 'de', page };
 
     const items = isMovie(type) ? (await this.api.upcomingMovies(params)).results! : [];
 

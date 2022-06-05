@@ -23,10 +23,14 @@ const Wrapper = ({
         </div>
       ) : (
         <a
-          className={`flex flex-col flex-1 cursor-pointer relative overlay mb-2 border border-primary-800 rounded-8 mt-1 ${
+          className={`flex flex-col flex-1 cursor-pointer relative overlay mb-2 rounded-10 mt-1 ${
             (user_rating ? user_rating : 10) <= 5 ? 'grayscale' : ''
           } transform hover:-translate-y-1 transition-all duration-150`}
-          style={{ width: config.cardWidth }}
+          style={{
+            width: config.cardWidth,
+            border: '0.4px solid hsla(0, 0%, 13.5%, 0.2)',
+            boxShadow: '0px 8.25px 9px rgba(0, 0, 0, 0.25)',
+          }}
         >
           {children}
         </a>

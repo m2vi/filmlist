@@ -17,12 +17,14 @@ const Home = (props: { production_companies: FilmlistGenre[]; items: GetTabRespo
       <Head>
         <title>Browse</title>
       </Head>
-      <PCCarousel items={props?.production_companies} title={false} />
+
+      <GenresCarousel items={props?.genres} title={false} />
 
       {props?.items?.map((section: any, index: number) => {
         return <Carousel section={section} key={index} />;
       })}
-      <GenresCarousel items={props?.genres} title={true} />
+
+      <PCCarousel items={props?.production_companies} title={true} />
     </Fragment>
   );
 };
@@ -43,8 +45,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         main.getTab({ user: client, locale: context.locale!, tab: 'my list', start: 0, end: 20, purpose: 'items_l' }),
         main.getTab({ user: client, locale: context.locale!, tab: 'new', start: 0, end: 20, purpose: 'items_l' }),
         tmdb.getTab({ user: client, locale: context.locale!, tab: 'trending', page: 1, type: 1 }),
-        main.getTab({ user: client, locale: context.locale!, tab: 'classics', start: 0, end: 20, purpose: 'items_l', shuffle: true }),
-        tmdb.getTab({ user: client, locale: context.locale!, tab: 'upcoming', page: 1, type: 1 }),
+        tmdb.upcoming({ user: client, locale: context.locale!, page: 1, type: 1 }),
       ]),
     },
   };

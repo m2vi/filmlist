@@ -424,6 +424,26 @@ class Main {
 
     return convert ? convert.prepareForFrontend(items, locale.toString()) : items;
   }
+
+  async update(id: number, type: MovieDbTypeEnum) {
+    const filter = { id_db: id, type: isMovie(type) ? 1 : 0 };
+
+    await mongodb.itemSchema.updateOne(filter, await this.get(filter.id_db, filter.type));
+  }
+
+  async updateAll() {
+    await mongodb.init();
+    const items = await cache.refresh<ItemProps[]>('items_m');
+
+    for (let index = 0; index < items.length; index++) {
+      const { id_db, type } = items[index];
+      if (!id_db || typeof type === 'undefined') continue;
+
+      await this.update(id_db, type);
+
+      console.log((index + 1) / items.length);
+    }
+  }
 }
 
 export const main = new Main();

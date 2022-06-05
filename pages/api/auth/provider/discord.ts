@@ -63,8 +63,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     client = await user.find(me.id).catch((reason) => {});
 
-    if (!client) client = await user.create(me.id);
-    if ((client as any)?.error) return res.redirect(`/error?${QueryString.stringify({ e: client.error })}`);
+    if (!client) return res.redirect('/');
+    if ((client as any)?.error) return res.redirect(`/error?${QueryString.stringify({ e: (client as any)?.error })}`);
 
     const token = sign(
       {
@@ -72,7 +72,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         identifier: client.identifier,
         token: client.token,
         created_at: client.created_at,
-        history: client.history.slice(0, 5),
       },
       process.env.JWT_SECRET!,
       { expiresIn: '2 weeks' }

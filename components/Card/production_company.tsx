@@ -6,9 +6,10 @@ const ProductionCompanyCard = ({ id, logo_path, backdrop_path }: FilmlistProduct
   return (
     <Link href={`/company/${id}`} key={id}>
       <a
-        className='block cursor-pointer w-full relative overflow-hidden rounded-15 aspect-video border border-primary-800'
+        className='block cursor-pointer w-full relative overflow-hidden rounded-10 aspect-video'
         style={{
           width: config.pCCardWidth,
+          boxShadow: '0px 8.25px 9px rgba(0, 0, 0, 0.25)',
         }}
       >
         <div
@@ -19,8 +20,14 @@ const ProductionCompanyCard = ({ id, logo_path, backdrop_path }: FilmlistProduct
           }}
         ></div>
 
-        <div className='w-full absolute inset-0 gradient-default'>
-          <div className='backdrop-blur-sm bg-primary-900-20 aspect-video w-full flex justify-center items-center'>
+        <div
+          className='w-full absolute inset-0'
+          style={{
+            background: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.9) 100%)',
+            filter: 'drop-shadow(0px 7.5px 8.4px rgba(0, 0, 0, 0.25))',
+          }}
+        >
+          <div className='aspect-video w-full flex justify-center items-center'>
             <div className='max-h-full py-4 px-8' style={{ filter: 'grayscale(1) invert(1) brightness(2)' }}>
               <img className='max-h-80 w-full no-drag select-none' src={`https://www.themoviedb.org/t/p/w500${logo_path}`} alt={`${id}`} />
             </div>
