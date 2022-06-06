@@ -7,7 +7,7 @@ import CardLarge from './CardLarge';
 
 const Page = ({ data }: { data: FrontendItemProps[] }) => {
   return (
-    <div className='h-full w-full flex flex-col'>
+    <div className='h-full w-full flex flex-col divide-opacity-10 divide-white divide-y divide-solid'>
       <Head>
         <title>Downloads</title>
       </Head>

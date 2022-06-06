@@ -17,10 +17,10 @@ const Page = ({ data }: { data: FrontendItemProps[] }) => {
     <div className='w-full h-full'>
       <div className='pt-11 mt-5 w-full px-120 pb-11 max-w-screen-f2xl mx-auto'>
         <div className='flex flex-col'>
-          <div className='px-2 mb-4'>
+          <div className='px-1 mb-4'>
             <Search />
           </div>
-          <div className='mb-8 px-2 flex items-center gap-4 justify-between w-full mx-auto'>
+          <div className='mb-8 px-1 flex items-center gap-4 justify-between w-full mx-auto'>
             <div className='grid grid-cols-5 gap-4  w-full items-center'>
               {search.filters.map((filter, index) => (
                 <Filter {...filter} key={index} />
@@ -42,7 +42,7 @@ const Page = ({ data }: { data: FrontendItemProps[] }) => {
             return <Card {...item} key={index} />;
           })}
         </div>
-        <div className='px-2 my-4 w-full text-center'>
+        <div className='px-1 my-4 w-full text-center'>
           <span>{data.length} Einträg(e)</span>
           <span>&nbsp;&#183;&nbsp;</span>
           <span>

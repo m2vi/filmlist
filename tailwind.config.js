@@ -56,6 +56,7 @@ module.exports = {
         default: 'red',
         white: 'white',
         dark: '#21222c',
+        divider: 'var(--color-divider)',
         primary: {
           100: 'var(--color-primary-100)',
           200: 'var(--color-primary-200)',
@@ -68,8 +69,6 @@ module.exports = {
           900: 'var(--color-primary-900)',
         },
         accent: {
-          s: '#ffa55c',
-          t: '#73c5ee',
           DEFAULT: 'var(--color-accent)',
           hover: 'var(--color-accent-hover)',
           disabled: 'var(--color-accent-disabled)',

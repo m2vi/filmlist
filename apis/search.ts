@@ -40,7 +40,7 @@ class Search {
 
     console.log(query);
 
-    items = query ? matchSorter(items, query, { keys: ['name', 'id_db', 'details.fileName'] }) : items;
+    items = query ? matchSorter(items, query, { keys: ['name'] }) : items;
 
     return items;
   }

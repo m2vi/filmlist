@@ -13,7 +13,7 @@ const CardLarge = ({ poster_path, details, name, type, id_db }: FrontendItemProp
     ?.filter((val) => val);
 
   return (
-    <div className='block article overflow-hidden'>
+    <div className='block py-8 overflow-hidden'>
       <div className='mr-4 float-left w-200 block'>
         <Link href={`/${type ? 'movie' : 'tv'}/[id]`} as={`/${type ? 'movie' : 'tv'}/${id_db}`}>
           <a>
@@ -34,30 +34,30 @@ const CardLarge = ({ poster_path, details, name, type, id_db }: FrontendItemProp
       <div className='block' style={{ marginLeft: '220px' }}>
         <Link href={`/${type ? 'movie' : 'tv'}/[id]`} as={`/${type ? 'movie' : 'tv'}/${id_db}`}>
           <a>
-            <h2 className='leading-22'>{name}</h2>
+            <h2 className='leading-none text-2xl text-white'>{name}</h2>
           </a>
         </Link>
-        <span className='text-white opacity-60 text-tiny leading-22'>{details?.fileName}</span>
-        <p className='mb-3 text-xs italic leading-5' style={{ color: 'rgba(255, 255, 255, 0.3)' }}>
-          Eingetragen am <span className='text-accent-s'>{moment(details?.date_added).format('DD.MM.YYYY')}</span> um{' '}
-          <span className='text-accent-s'>{moment(details?.date_added).format('HH:mm [Uhr]')}</span>
+        <span className='text-white text-opacity-60 text-tiny leading-22'>{details?.path}</span>
+        <p className='mb-3 text-xs italic leading-5 text-white text-opacity-30'>
+          Eingetragen am <span className='text-accent-hover'>{moment(details?.date_added).format('DD.MM.YYYY')}</span> um{' '}
+          <span className='text-accent-hover'>{moment(details?.date_added).format('HH:mm [Uhr]')}</span>
         </p>
         <div className='flex flex-wrap'>
           <div className='w-1/2'>
-            <ul className='release-infos'>
-              <li className=''>
-                <span>Größe</span>
+            <ul className='p-0 text-white leading-6 list-none'>
+              <li>
+                <span className='inline-block w-75 font-bold'>Größe</span>
                 {details?.rsize?.text?.replace(/\./g, ',')}
               </li>
-              <li className=''>
-                <span>Codec</span>
+              <li>
+                <span className='inline-block w-75 font-bold'>Codec</span>
                 {details?.videoCodec?.name
                   ?.replace(/ *\([^)]*\) */g, '')
                   ?.split('/')?.[0]
                   ?.trim()}
               </li>
-              <li className=''>
-                <span>Source</span>
+              <li>
+                <span className='inline-block w-75 font-bold'>Source</span>
                 {details?.source ? details?.source : 'Unkown source'}
               </li>
               {/*     <li className='whitespace-nowrap'>
@@ -65,7 +65,7 @@ const CardLarge = ({ poster_path, details, name, type, id_db }: FrontendItemProp
                 {details?.releaser}
               </li> */}
               <li className='overflow-hidden overflow-ellipsis whitespace-nowrap'>
-                <span>Sprache</span>
+                <span className='inline-block w-75 font-bold'>Sprache</span>
                 {details?.audioCodec
                   ?.map((track) => {
                     const language = iso6392.find((val) => [val.iso6392B, val.iso6392T, val.iso6391].includes(track?.language!));
@@ -75,23 +75,23 @@ const CardLarge = ({ poster_path, details, name, type, id_db }: FrontendItemProp
                   .join(', ')}
               </li>
               <li className='overflow-hidden overflow-ellipsis whitespace-nowrap'>
-                <span>Untertitel</span>
+                <span className='inline-block w-75 font-bold'>Untertitel</span>
                 {subtitles?.length! > 0 ? removeDuplicates(subtitles!).join(', ') : '-'}
               </li>
             </ul>
           </div>
           <div className='w-1/2'>
-            <ul className='release-infos'>
-              <li className=''>
-                <span>Auflösung</span>
+            <ul className='p-0 text-white leading-6 list-none'>
+              <li>
+                <span className='inline-block w-75 font-bold'>Auflösung</span>
                 {details?.resolution}
               </li>
-              <li className=''>
-                <span>Laufzeit</span>
+              <li>
+                <span className='inline-block w-75 font-bold'>Laufzeit</span>
                 {convertMinutes(details?.runtime!)}
               </li>
-              <li className=''>
-                <span>Bitrate</span>
+              <li>
+                <span className='inline-block w-75 font-bold'>Bitrate</span>
                 {`${details?.bit_rate?.toString()?.replace(/\./g, ',')} MB/s`}
               </li>
             </ul>
