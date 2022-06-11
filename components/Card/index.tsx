@@ -10,7 +10,7 @@ export interface CardProps extends FrontendItemProps {
 
 const Card = ({ name, poster_path, release_date, id_db, ratings, type, isLoading = false, details }: CardProps) => {
   return (
-    <Wrapper id_db={id_db} isLoading={isLoading} type={type} user_rating={null}>
+    <Wrapper isLoading={isLoading} id_db={id_db} type={type} user_rating={null}>
       <Poster poster_path={poster_path} />
 
       <div className='absolute w-full h-full top-0 left-0 z-10 overlay-child flex items-end justify-start px-2'>

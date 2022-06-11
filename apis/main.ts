@@ -10,15 +10,14 @@ import {
   isValidId,
   isValidType,
 } from '@helper/main';
-import { removeEmpty, sortByKey, stringToBoolean } from '@m2vi/iva';
-import { Filter, RawDetails } from '@Types/info';
+import { removeEmpty, sortByKey } from '@m2vi/iva';
+import { RawDetails } from '@Types/info';
 import {
   BaseResponse,
   FilmlistGenres,
   FilmlistProductionCompany,
   FindOneOptions,
   FindOptions,
-  FrontendItemProps,
   GetBaseOptions,
   GetOptions,
   GetTabProps,
@@ -30,7 +29,6 @@ import {
   TabsType,
 } from '@Types/items';
 import sift from 'sift';
-import info from './info';
 import mongodb from './mongodb';
 import filter from 'lodash/filter';
 import { ProviderProps } from '@Types/justwatch';
@@ -47,7 +45,7 @@ import find from 'lodash/find';
 import sample from 'lodash/sample';
 import genres from './genres';
 import attr from './attr';
-import { sortBy } from 'lodash';
+import get from 'lodash/get';
 
 class Main {
   async getBase(id: number, type: MovieDbTypeEnum, options?: GetBaseOptions): Promise<BaseResponse> {
@@ -297,12 +295,14 @@ class Main {
 
     const info = await tmdb.api.personInfo({ id, language: locale, append_to_response: 'external_ids' });
 
+    const ignore = ['In Memory Of', 'Thanks'];
+
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
 
-      if (find(item.credits?.cast!, { id }) || find(item.credits?.crew!, { id })) {
-        itemsWP.push(item);
-      }
+      const curr = find(item.credits?.cast!, { id }) || find(item.credits?.crew!, { id });
+
+      if (curr) if (!ignore.includes(get(curr, 'job'))) itemsWP.push(item);
     }
 
     return {

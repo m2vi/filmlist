@@ -1,6 +1,25 @@
 import { isAnime, isMovie, parseExternalIds } from '@helper/main';
 import { BaseResponse, FrontendItemProps, ItemProps } from '@Types/items';
 import info from './info';
+import posters from '@data/posters.json';
+import { SimpleObject } from '@Types/common';
+
+const getAlternativePoster = ({
+  id_db,
+  type,
+  poster_path,
+  locale,
+}: {
+  id_db: number;
+  type: number;
+  poster_path: string | null;
+  locale: string;
+}) => {
+  const list = posters as SimpleObject<SimpleObject<string>>;
+  const alt = list?.[type === 1 ? 'movie' : 'tv']?.[id_db.toString()];
+
+  return locale === 'de' ? (alt ? alt : poster_path) : poster_path;
+};
 
 const FromBaseToItem = (data: BaseResponse): ItemProps => {
   const { tmdb_item, translation_de, certificate, isMovie, watchProviders, trailers, ratings, imdb_item, rt_item, imdb_keywords } = data;
@@ -86,7 +105,7 @@ export const FromItemToFrontend = (
     id_db: id_db,
     genre_ids: genre_ids ? genre_ids : [],
     name: name?.[locale] ? name?.[locale] : 'Invalid name',
-    poster_path: poster_path?.[locale] ? poster_path?.[locale] : null,
+    poster_path: getAlternativePoster({ id_db, type, poster_path: poster_path?.[locale] ? poster_path?.[locale] : null, locale }),
     backdrop_path: backdrop_path?.[locale] ? backdrop_path?.[locale] : null,
     release_date: release_date ? release_date : new Date().getTime(),
     runtime: runtime ? runtime : null,

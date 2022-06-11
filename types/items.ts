@@ -1,5 +1,5 @@
 import { FilterQuery } from 'mongoose';
-import { Cast, Crew, SimplePerson, Video } from 'moviedb-promise/dist/request-types';
+import { Cast, Crew, Person, SimplePerson, Video } from 'moviedb-promise/dist/request-types';
 import { ProductionCompany } from 'moviedb-promise/dist/types';
 import { Movie, Series } from 'vimdb';
 import { SimpleObject } from './common';
@@ -217,3 +217,8 @@ export interface FilmlistGenre {
 }
 
 export type TabsType = SimpleObject<TabFilterOptions>;
+
+export interface GetPersonResponse {
+  info: Person;
+  items: FrontendItemProps[];
+}

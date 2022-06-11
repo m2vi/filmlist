@@ -1,1 +1,6 @@
 @import url('https://fluxi.me/api/css');
+
+:root {
+  --color-primary-900: hsl(240, 20%, 10%);
+  --color-primary-800: hsl(240, 20%, 15%);
+}
