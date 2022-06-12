@@ -1,5 +1,7 @@
-import '../styles/globals.css';
+import '../styles/colors.css';
+import '../styles/common.css';
 import '../styles/components.css';
+import '../styles/globals.css';
 import 'tailwindcss/tailwind.css';
 import 'nprogress/nprogress.css';
 import 'swiper/css';

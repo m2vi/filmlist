@@ -7,10 +7,10 @@ const PCCarousel = ({ items, title }: { items: FilmlistProductionCompany[]; titl
   const { t } = useTranslation();
 
   return (
-    <div className='mb-8 h-auto'>
+    <div className='mb-4 h-auto'>
       {title ? <span className='text-3xl leading-relaxed font-bold'>{t(`company.default`).toString()}</span> : null}
 
-      <Swiper spaceBetween={20} slidesPerView={4} className='mt-2'>
+      <Swiper spaceBetween={20} slidesPerView={4}>
         {(items ? items : []).map((props, index) => {
           return (
             <SwiperSlide key={index}>

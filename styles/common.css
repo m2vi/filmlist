@@ -1,0 +1,58 @@
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #9ab1c7;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #aac4dd;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 0px;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+p.bold {
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 3.85rem;
+}
+
+h2 {
+  font-size: 2.8rem;
+}
+
+h3 {
+  font-size: 2rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+}
+
+p {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.small {
+  font-size: 12px;
+}

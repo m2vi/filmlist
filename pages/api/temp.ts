@@ -11,6 +11,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       locale: 'de',
       purpose: 'items_l',
       tab: 'und',
+      custom_config: {
+        sort_key: false,
+      },
     })
   ).items;
   const client = user.getIdFromRequest(req);

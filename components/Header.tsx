@@ -14,7 +14,7 @@ const Header = () => {
   useEffect(() => setAvatar(userClient.getAvatarUrl()), []);
 
   return (
-    <div className='absolute top-0 left-0 right-0 z-10 w-full flex justify-center bg-primary-900'>
+    <div className='absolute top-0 left-0 right-0 z-10 w-full flex justify-center'>
       <div className='w-full max-w-screen-2xl px-120 py-1 '>
         <header className='text-primary-200 w-full flex justify-between items-center h-80'>
           <div className='flex justify-start items-center'>

@@ -6,10 +6,10 @@ const ProductionCompanyCard = ({ id, logo_path, backdrop_path }: FilmlistProduct
   return (
     <Link href={`/company/${id}`} key={id}>
       <a
-        className='block cursor-pointer w-full relative overflow-hidden rounded-10 aspect-video'
+        className='block cursor-pointer w-full relative overflow-hidden rounded-10 aspect-video my-2'
         style={{
           width: config.pCCardWidth,
-          boxShadow: '0px 8.25px 9px rgba(0, 0, 0, 0.25)',
+          boxShadow: '0px 4px 9px rgba(0, 0, 0, 0.2)',
         }}
       >
         <div
