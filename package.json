@@ -42,7 +42,7 @@
     "react-modal": "^3.15.1",
     "sift": "^16.0.0",
     "smb2": "^0.2.11",
-    "swiper": "^8.2.2",
+    "swiper": "^8.2.3",
     "vimdb": "^4.0.6"
   },
   "devDependencies": {
